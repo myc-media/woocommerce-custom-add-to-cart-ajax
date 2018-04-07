@@ -1,4 +1,5 @@
 # Usage of Plugin
+## Works with Salient Theme and Extra Product Options for now
 
 ### MAKE LINK INTO AJAX CALL
 
