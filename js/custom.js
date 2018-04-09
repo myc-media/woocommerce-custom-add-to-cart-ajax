@@ -10,22 +10,27 @@ jQuery('document').ready(function($){
         // });
         // $('a.yith-wcqv-button').css('cursor', 'pointer');
     }));
-    
+
     var buttonURL, buttonID, thisButton, post_id;
     var productArray = [];
-    
-    
+
+
     $('.ajaxModal').click(function(e){
         $('.ajaxColumn').addClass('ajaxClass');
         $('.closeAjaxBox').show();
-        
+
+        $('html, body').animate({
+            scrollTop: $(".ajaxColumn").offset().top - 180
+        }, 500);
+
+
         e.preventDefault();
-        
+
         buttonURL = $(this).attr('href');
         buttonID = $(this).attr('id');
         thisButton = $(this);
         // console.log(thisButton);
-        
+
         $.ajax({
             type: 'GET',
             url:  modalAjaxURL.ajaxurl,
@@ -38,21 +43,21 @@ jQuery('document').ready(function($){
                 $('.ModalRow.row').html(result);
                 $('section.related.products').remove();
                 $('.product-sharing').remove();
-                
+
                 // post_id = result['post_id'];
                 post_id = $('button.single_add_to_cart_button').attr('value');
                 // console.log(post_id);
-                
+
                 $('.modalContent a').click(function(e){
                     e.preventDefault();
                 });
-                
+
                 $('button.ajaxButton').removeClass('hideOnNoAJAX');
                 $('button.ajaxButton').addClass('showOnAJAX');
                 $('button.ajaxButton').attr('value', post_id);
                 $('.ModalRow').append('<div class="result"></div>');
-                
-            
+
+
             var tm_lazyload_container = $('.ModalRow');
             var loop_temp = function () {
                 var t = $( this );
@@ -63,14 +68,14 @@ jQuery('document').ready(function($){
             var epo_selector = '.tc-extra-product-options';
             var product_id = tm_lazyload_container.find( epo_selector ).attr( "data-product-id" ),
                             epo_id = tm_lazyload_container.find( epo_selector ).attr( "data-epo-id" );
- 
+
                         $.tcepo.tm_init_epo( tm_lazyload_container, true, product_id, epo_id );
                         $( window ).trigger( "tmlazy" );
                         $( window ).trigger( 'tm_epo_loaded_quickview' );
                         if ( $.jMaskGlobals ) {
                             tm_lazyload_container.find( $.jMaskGlobals.maskElements ).each( loop_temp );
                         }
- 
+
             },
             beforeSend: function(){
                 $('.redLoader').show();
@@ -90,7 +95,7 @@ jQuery('document').ready(function($){
             }
         });
     });
-    
+
     $('.closeAjaxBox').on('click', function(e){
         $('.ajaxColumn').removeClass('ajaxClass');
         $('.ModalRow.row').html('<h1 style="text-align: center;">Please Click a Part</h1>');
@@ -98,21 +103,21 @@ jQuery('document').ready(function($){
         $('button.ajaxButton').removeClass('showOnAJAX');
         $('button.ajaxButton').addClass('hideOnNoAJAX');
     })
-    
-    
+
+
     $('button.ajaxButton').click(function(e){
         // e.preventDefault();
          $('.cart-menu-wrap').addClass('has-products first-load');
-        
+
         var productObj ={};
-        
+
         var itemURL = thisButton.attr('href');
-        
+
         var quantity = $('form input[name="quantity"]').val();
-       
+
         var label, varQuantity, varImage, varPrice, varFinalPrice;
-        
-        
+
+
         $('li.tmcp-field-wrap').each(function(index, value){
             productArray.push($(this));
             if($(this).hasClass('tc-active')){
@@ -128,7 +133,7 @@ jQuery('document').ready(function($){
         // console.log(varQuantity);
         // console.log(varImage);
         console.log(productObj);
-        
+
         // $.ajax({
         //     type: 'POST',
         //     url: modalAjaxURL.ajaxurl,
@@ -139,9 +144,9 @@ jQuery('document').ready(function($){
         //     },
         //     success: function(result){
         //         console.log($.parseJSON(result));
-                
+
                 // AJAX CALL
-                
+
                 $.ajax({
                     type: 'POST',
                     url: modalAjaxURL.ajaxurl,
@@ -150,16 +155,16 @@ jQuery('document').ready(function($){
                         'action': 'add_to_cart',
                         'quantity' : quantity,
                         'productData' : productObj
-                        
+
                     },
                     success: function(results){
                         console.log(results);
                         // console.log(result[1]['label']);
                         $('.cart-menu').html(results.count['a.cart-contents']);
                         $('.result').html(results);
-                        
+
                         // AJAX CALL
-                        
+
                         $.ajax({
                             type: 'GET',
                             url: modalAjaxURL.ajaxurl,
@@ -167,11 +172,11 @@ jQuery('document').ready(function($){
                                 'action': 'custom_mini_cart_update'
                             },
                             success: function(response){
-        
+
                                 $('.widget_shopping_cart_content').html(response);
                             }
                         });
-        
+
                     },
                     beforeSend: function(){
                         $('.redLoader').show();
@@ -185,6 +190,6 @@ jQuery('document').ready(function($){
             // }
         // });
     });
-    
-    
+
+
 });
