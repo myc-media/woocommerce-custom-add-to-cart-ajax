@@ -1,5 +1,5 @@
 jQuery('document').ready(function($){
-    $('li.product').each(function(){
+    $('.page-template-default').find($('li.product').each(function(){
         // $(this).find('a.woocommerce-LoopProduct-link').removeAttr('href');
         $(this).find('a.woocommerce-LoopProduct-link').addClass('ajaxModal');
         // $(this).find('div.product-wrap a').removeAttr('href');
@@ -9,13 +9,15 @@ jQuery('document').ready(function($){
         //     event.preventDefault();
         // });
         // $('a.yith-wcqv-button').css('cursor', 'pointer');
-    });
+    }));
     
     var buttonURL, buttonID, thisButton, post_id;
     var productArray = [];
     
     
     $('.ajaxModal').click(function(e){
+        $('.ajaxColumn').addClass('ajaxClass');
+        $('.closeAjaxBox').show();
         
         e.preventDefault();
         
@@ -87,8 +89,15 @@ jQuery('document').ready(function($){
                 alert('error');
             }
         });
-        
     });
+    
+    $('.closeAjaxBox').on('click', function(e){
+        $('.ajaxColumn').removeClass('ajaxClass');
+        $('.ModalRow.row').html('<h1 style="text-align: center;">Please Click a Part</h1>');
+        $(this).hide();
+        $('button.ajaxButton').removeClass('showOnAJAX');
+        $('button.ajaxButton').addClass('hideOnNoAJAX');
+    })
     
     
     $('button.ajaxButton').click(function(e){
