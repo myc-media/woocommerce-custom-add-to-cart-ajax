@@ -11,45 +11,46 @@ Author URI: https://jgdesigns.ca
 */
 
 class MYCAjax{
-    
+
     /********Load JS and register Ajax URL*******/
-    
+
     public static function theme_js() {
         wp_enqueue_script( 'theme_js', plugin_dir_url(__FILE__) . '/js/custom.js', array( 'jquery' ), '1.0', true );
+        wp_enqueue_style('plugin_style', plugin_dir_url(__FILE__) . '/css/style.css');
         wp_localize_script('theme_js', 'modalAjaxURL', array('ajaxurl'=>admin_url('admin-ajax.php')));
     }
-    
-    
+
+
     /*******Load Product Info Via Ajax on Page*******/
-    
-    
+
+
     public static function get_modal_content_func() {
-    
-    
+
+
         global $post;
-    
+
         $postURL = $_GET['post_url'];
         $postID = url_to_postid($postURL);
         $product = get_product($postID);
         $buttonURL = "<a href='" . $product->add_to_cart_url() ."'>add to cart</a>";
         $thePost;
-    
-    
-    
+
+
+
         if ($postID == 0){
             echo "Invalid Input";
             die();
         }
-    
+
         $thispost = get_post($postID);
-    
+
         if(!is_object($thispost)){
             echo 'There is no post with the ID' . $postID;
             die();
         }
-    
+
         $the_query = new WP_query(array('p' => $postID, 'post_type' => 'product'));
-        
+
         if ($the_query->have_posts()) : while ($the_query->have_posts()) : $the_query->the_post();
             get_template_part( 'woocommerce/content', 'single-product' );
             endwhile;
@@ -58,11 +59,11 @@ class MYCAjax{
         endif;
         die();
     }
-    
-    
-    
+
+
+
     /*******EPO LOAD INFO ON AJAX **********/
-    
+
     function wc_epo_is_quickview($qv){
         // this will disable only flatsome quickview
         $custom_view = ( isset( $_GET['action'] ) && ($_GET['action'] == 'get_modal_content') );
@@ -71,40 +72,51 @@ class MYCAjax{
         }
         return $qv;
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     /**ADD TO CART****/
-    
+
     public static function add_to_cart_func() {
-        
+
         /***********GET PRODUCT INFO AND SEND TO WORDPERSS AS META INFO***********/
-    
+
         global $woocommerce;
-    
+
             $product_id         = $_POST['button_id'];
             $quantity           = $_POST['quantity'];
             $passed_validation  = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
             $product_status     = get_post_status( $product_id );
             $productData        = $_POST['productData'];
-    
+
             $cart_item_meta = array();
-    
-            for($x = 0; $x <= count($productData)+1; $x++){
+            $count = 0;
+            foreach($productData as $key=>$value){
+              $count = $key;
+            }
+
+            // for($x = 0; $x <= count($productData)+1; $x++){
+            //     $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
+            //     $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
+            //     $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
+            //     $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
+            //     $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
+            // }
+            for($x = 0; $x <= $count; $x++){
                 $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
                 $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
                 $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
                 $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
                 $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
             }
-    
-    
-    
+
+
+
             /************ADD TO CART V2*********/
-            
+
             if($woocommerce->cart->add_to_cart($product_id, $quantity, $variation_id="", $variation = "", $cart_item_meta)){
                 $data= array('count'=>apply_filters('woocommerce_add_to_cart_fragments', array()));
                 do_action('woocommerce_ajax_added_to_cart', $product_id);
@@ -112,33 +124,39 @@ class MYCAjax{
             $response = json_encode($data);
             header("Content-Type: application/json");
             echo $response;
-    
+
+
+            // // header("Content-Type: application/json");
+            // // echo json_encode($cart_item_meta);
+            //
+            // echo $count;
+
             die();
     }
-    
-    
-    
+
+
+
     /**********UPDATE MINI CART***********/
-    
+
     public static function custom_mini_cart_update(){
         echo wc_get_template('cart/mini-cart.php');
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     /********GET CART INFO AFTER ADD TO CART BUTTON IS PRESSED********/
-    
+
     public static function myc_get_cart_item_from_session($cart_item, $values){
         $countVar = 0;
         foreach($cart_item as $k => $v){
             if (strpos($k, 'custom_data_') !== false){
                 $countVar += 1;
             }
-    
+
         }
-    
+
         for($x = 0; $x <= $countVar; $x++){
             if(isset($values["custom_data_{$x}"])){
                 $cart_item["custom_data_{$x}"]['Option'] = $values["custom_data_{$x}"]['Option'];
@@ -147,45 +165,45 @@ class MYCAjax{
                 $cart_item["custom_data_{$x}"]['Image'] = $values["custom_data_{$x}"]['Image'];
             }
         }
-    
+
         return $cart_item;
-    
+
     }
-    
-    
+
+
     /*******ADD CUSTOM CALCULATIONS BEFORE CALCULATING TOTAL*********/
-    
-    
+
+
     public static function myc_before_calculate_totals($cart_object){
-        
+
         $finalPrice;
         $product;
         foreach($cart_object->cart_contents as $key=>$value){
-            
+
             foreach($value['tmpost_data']['productData'] as $k=>$v){
-            
+
                 $product += $v['price'] * $v['quantity'];
                 $value['data']->set_price($product);
-            
+
             }
             $product = 0;
-        
+
         }
     }
-    
-    
-    
+
+
+
     /********GET CUSTOM META INFO AND SET TEMPLATE FOR OUTPUT********/
-    
+
     public static function myc_get_item_data($other_data, $cart_item){
         $countVar = 0;
         foreach($cart_item as $k => $v){
             if (strpos($k, 'custom_data_') !== false){
                 $countVar += 1;
             }
-    
+
         }
-    
+
         for($x = 0; $x <= $countVar; $x++){
             if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
                 $other_data[] = array(
@@ -198,30 +216,33 @@ class MYCAjax{
                 );
             }
         }
-    
+
         return $other_data;
     }
-    
-    
-    
+
+
+
     /********ADD CUSTOM META INFO TO ORDER********/
-    
+
     public static function myc_order_item_meta($item_meta, $cart_item){
         $countVar = 0;
         foreach($cart_item as $k => $v){
             if (strpos($k, 'custom_data_') !== false){
                 $countVar += 1;
             }
-    
+
         }
-    
+
         for($x = 0; $x <= $countVar; $x++){
             if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"]){
                 $item_meta->add('Options', 'Test');
             }
         }
-    
+
     }
+
+
+
 }
 
 /***********REGISTER ACTIONS AND FILTERS***********/
@@ -238,4 +259,5 @@ add_action('woocommerce_get_cart_item_from_session', array('MYCAjax', 'myc_get_c
 add_action('woocommerce_before_calculate_totals', array('MYCAjax', 'myc_before_calculate_totals'));
 add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 10, 2);
 add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
+
 ?>
