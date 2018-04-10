@@ -91,7 +91,7 @@ jQuery('document').ready(function($){
                     tm_lazyload_container.find( $.jMaskGlobals.maskElements ).each( loop_temp );
                 }
                 $('.hideOnClick').hide();
-                $('.tabbed').hide();
+                $('.productSet .tabbed').hide();
 
             },
             beforeSend: function(){
@@ -124,7 +124,7 @@ jQuery('document').ready(function($){
         $(this).hide();
         $('button.ajaxButton').removeClass('showOnAJAX');
         $('button.ajaxButton').addClass('hideOnNoAJAX');
-        $('.tabbed').show();
+        $('.productSet .tabbed').show();
         $('.hideOnClick').show();
     })
 
