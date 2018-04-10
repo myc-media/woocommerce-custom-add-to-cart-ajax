@@ -1,6 +1,6 @@
 # Usage of Plugin
 ## Works with Salient Theme and Extra Product Options for now
-## CSS files not included for now.
+
 - Need to set rules for permanently hiding template add-to-cart button
 - Need to set rules for hiding button in the markup below initiall and to show it on first ajax call that displays product info
 
