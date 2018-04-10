@@ -109,14 +109,6 @@ NEW flex
 .fiveHundredD3 ul.products li:nth-of-type(2) {
     flex-basis: 15% !important;
 }
-/*
-.page-template-default ul.products.columns-1 li.post-1405,
-.page-template-default ul.products.columns-1 li.post-1411,
-.page-template-default ul.products.columns-1 li.post-1412,
-.page-template-default ul.products.columns-1 li.post-1413 {
-    flex-basis: 25% !important;
-}
-*/
 .page-template-default ul.products.columns-1 li.post-1415,
 .page-template-default ul.products.columns-1 li.post-1509 {
     flex-basis: 85% !important;
