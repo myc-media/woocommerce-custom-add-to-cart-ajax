@@ -93,8 +93,19 @@ class MYCAjax{
             $productData        = $_POST['productData'];
 
             $cart_item_meta = array();
+            $count = 0;
+            foreach($productData as $key=>$value){
+              $count = $key;
+            }
 
-            for($x = 0; $x <= count($productData)+1; $x++){
+            // for($x = 0; $x <= count($productData)+1; $x++){
+            //     $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
+            //     $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
+            //     $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
+            //     $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
+            //     $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
+            // }
+            for($x = 0; $x <= $count; $x++){
                 $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
                 $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
                 $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
@@ -113,6 +124,12 @@ class MYCAjax{
             $response = json_encode($data);
             header("Content-Type: application/json");
             echo $response;
+
+
+            // // header("Content-Type: application/json");
+            // // echo json_encode($cart_item_meta);
+            //
+            // echo $count;
 
             die();
     }
@@ -223,6 +240,9 @@ class MYCAjax{
         }
 
     }
+
+
+
 }
 
 /***********REGISTER ACTIONS AND FILTERS***********/
@@ -239,4 +259,5 @@ add_action('woocommerce_get_cart_item_from_session', array('MYCAjax', 'myc_get_c
 add_action('woocommerce_before_calculate_totals', array('MYCAjax', 'myc_before_calculate_totals'));
 add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 10, 2);
 add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
+
 ?>
