@@ -1,5 +1,5 @@
 jQuery('document').ready(function($){
-    $('li.product').each(function(){
+    $('.page-template-default').find($('li.product').each(function(){
         // $(this).find('a.woocommerce-LoopProduct-link').removeAttr('href');
         $(this).find('a.woocommerce-LoopProduct-link').addClass('ajaxModal');
         // $(this).find('div.product-wrap a').removeAttr('href');
@@ -9,21 +9,31 @@ jQuery('document').ready(function($){
         //     event.preventDefault();
         // });
         // $('a.yith-wcqv-button').css('cursor', 'pointer');
-    });
-    
+    }));
+
+	var pageTitle = $('.ModalRow.row > h1').text();
+	var pageSubTitle = $('.ModalRow.row > p.addToCartText').text();
+
     var buttonURL, buttonID, thisButton, post_id;
     var productArray = [];
-    
-    
+
+
     $('.ajaxModal').click(function(e){
-        
+        $('.ajaxColumn').addClass('ajaxClass');
+        $('.closeAjaxBox').show();
+
+        $('html, body').animate({
+            scrollTop: $(".ajaxColumn").offset().top - 180
+        }, 500);
+
+
         e.preventDefault();
-        
+
         buttonURL = $(this).attr('href');
         buttonID = $(this).attr('id');
         thisButton = $(this);
         // console.log(thisButton);
-        
+
         $.ajax({
             type: 'GET',
             url:  modalAjaxURL.ajaxurl,
@@ -34,45 +44,61 @@ jQuery('document').ready(function($){
             success: function(result){
                 // $('.modalTitle').html(result['post_title']);
                 $('.ModalRow.row').html(result);
+
                 $('section.related.products').remove();
                 $('.product-sharing').remove();
-                
+                $('span.tm-epo-required').text('* Required');
+
+
+                /*******FLEX BASIS FOR PRODUCTS********/
+                var liCount;
+                $('li.tmcp-field-wrap').each(function(index, value){
+                  liCount = index + 1;
+                });
+                // console.log(liCount);
+                var flexBasis = 100/liCount;
+                $('li.tmcp-field-wrap').css('flex-basis', flexBasis + '%');
+
                 // post_id = result['post_id'];
                 post_id = $('button.single_add_to_cart_button').attr('value');
                 // console.log(post_id);
-                
+
                 $('.modalContent a').click(function(e){
                     e.preventDefault();
                 });
-                
+
                 $('button.ajaxButton').removeClass('hideOnNoAJAX');
                 $('button.ajaxButton').addClass('showOnAJAX');
                 $('button.ajaxButton').attr('value', post_id);
                 $('.ModalRow').append('<div class="result"></div>');
-                
-            
-            var tm_lazyload_container = $('.ModalRow');
-            var loop_temp = function () {
-                var t = $( this );
-                if ( t.attr( 'data-mask' ) ) {
-                    t.mask( t.attr( 'data-mask' ) );
+
+
+                var tm_lazyload_container = $('.ModalRow');
+                var loop_temp = function () {
+                    var t = $( this );
+                    if ( t.attr( 'data-mask' ) ) {
+                        t.mask( t.attr( 'data-mask' ) );
+                    }
+                };
+                var epo_selector = '.tc-extra-product-options';
+                var product_id = tm_lazyload_container.find( epo_selector ).attr( "data-product-id" ),
+                                epo_id = tm_lazyload_container.find( epo_selector ).attr( "data-epo-id" );
+
+                $.tcepo.tm_init_epo( tm_lazyload_container, true, product_id, epo_id );
+                $( window ).trigger( "tmlazy" );
+                $( window ).trigger( 'tm_epo_loaded_quickview' );
+                if ( $.jMaskGlobals ) {
+                    tm_lazyload_container.find( $.jMaskGlobals.maskElements ).each( loop_temp );
                 }
-            };
-            var epo_selector = '.tc-extra-product-options';
-            var product_id = tm_lazyload_container.find( epo_selector ).attr( "data-product-id" ),
-                            epo_id = tm_lazyload_container.find( epo_selector ).attr( "data-epo-id" );
- 
-                        $.tcepo.tm_init_epo( tm_lazyload_container, true, product_id, epo_id );
-                        $( window ).trigger( "tmlazy" );
-                        $( window ).trigger( 'tm_epo_loaded_quickview' );
-                        if ( $.jMaskGlobals ) {
-                            tm_lazyload_container.find( $.jMaskGlobals.maskElements ).each( loop_temp );
-                        }
- 
+                $('.hideOnClick').hide();
+                $('.productSet .tabbed').hide();
+
             },
             beforeSend: function(){
                 $('.redLoader').show();
                 $('.redLoader').addClass('loaderPosition');
+                $('.ModalRow.row h1').text('Loading');
+                $('.ModalRow.row p.addToCartText').text("");
             },
             complete: function(){
                 $('.redLoader').hide();
@@ -87,52 +113,45 @@ jQuery('document').ready(function($){
                 alert('error');
             }
         });
-        
+
     });
-    
-    
+
+    $('.closeAjaxBox').on('click', function(e){
+        var headingText = "<h1 style='text-align: center;'>" + pageTitle + "</h1><p class='addToCartText' style='text-align: center;'>" + pageSubTitle + "</p>";
+
+        $('.ajaxColumn').removeClass('ajaxClass');
+        $('.ModalRow.row').html(headingText);
+        $(this).hide();
+        $('button.ajaxButton').removeClass('showOnAJAX');
+        $('button.ajaxButton').addClass('hideOnNoAJAX');
+        $('.productSet .tabbed').show();
+        $('.hideOnClick').show();
+    })
+
+
     $('button.ajaxButton').click(function(e){
         // e.preventDefault();
          $('.cart-menu-wrap').addClass('has-products first-load');
-        
+
         var productObj ={};
-        
         var itemURL = thisButton.attr('href');
-        
         var quantity = $('form input[name="quantity"]').val();
-       
         var label, varQuantity, varImage, varPrice, varFinalPrice;
-        
-        
+
         $('li.tmcp-field-wrap').each(function(index, value){
             productArray.push($(this));
             if($(this).hasClass('tc-active')){
                 label = $(this).find('span.tc-label').text();
                 varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/\D/g, '');
-                varQuantity = $(this).find('input.tm-qty').val();
+//                 varQuantity = $(this).find('input.tm-qty').val();
+				varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
                 varImage = $(this).find('label img').attr('src');
                 varFinalPrice = $('.price.amount.final');
                 productObj[index]={'label':label, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
             }
         });
-        // console.log(label);
-        // console.log(varQuantity);
-        // console.log(varImage);
-        console.log(productObj);
-        
-        // $.ajax({
-        //     type: 'POST',
-        //     url: modalAjaxURL.ajaxurl,
-        //     data: {
-        //         'product_id' : post_id,
-        //         'action': 'add_info_to_cart',
-        //         'productData' : productObj
-        //     },
-        //     success: function(result){
-        //         console.log($.parseJSON(result));
-                
-                // AJAX CALL
-                
+
+		console.log(productObj);
                 $.ajax({
                     type: 'POST',
                     url: modalAjaxURL.ajaxurl,
@@ -141,16 +160,17 @@ jQuery('document').ready(function($){
                         'action': 'add_to_cart',
                         'quantity' : quantity,
                         'productData' : productObj
-                        
+
                     },
                     success: function(results){
-                        console.log(results);
+                        // console.log(results);
                         // console.log(result[1]['label']);
                         $('.cart-menu').html(results.count['a.cart-contents']);
                         $('.result').html(results);
-                        
+                        // console.log(results);
+
                         // AJAX CALL
-                        
+
                         $.ajax({
                             type: 'GET',
                             url: modalAjaxURL.ajaxurl,
@@ -158,11 +178,11 @@ jQuery('document').ready(function($){
                                 'action': 'custom_mini_cart_update'
                             },
                             success: function(response){
-        
+
                                 $('.widget_shopping_cart_content').html(response);
                             }
                         });
-        
+
                     },
                     beforeSend: function(){
                         $('.redLoader').show();
@@ -173,9 +193,7 @@ jQuery('document').ready(function($){
                         $('.redLoader').removeClass('loaderPosition');
                     },
                 });
-            // }
-        // });
     });
-    
-    
+
+
 });
