@@ -26,6 +26,12 @@ jQuery('document').ready(function($){
 
   /***********AJAX MODAL SHOW************/
 
+  //ADD ajaxModal class to colum link
+
+  $('.ajaxColumnLink a.column-link').addClass('ajaxModal');
+
+  //AJAX CLICK FUNCTION
+
   $('.ajaxModal').click(function(e){
       $('.ajaxColumn').addClass('ajaxClass');
       $('.closeAjaxBox').show();
@@ -79,11 +85,14 @@ jQuery('document').ready(function($){
                   e.preventDefault();
               });
 
+              /**************SHOW ADD TO CART BUTTON*****************/
+
               $('button.ajaxButton').removeClass('hideOnNoAJAX');
               $('button.ajaxButton').addClass('showOnAJAX');
               $('button.ajaxButton').attr('value', post_id);
               $('.ModalRow').append('<div class="result"></div>');
 
+              /*************LOOP THROUGH EPO OPTIONS AND DISPLAY**************/
 
               var tm_lazyload_container = $('.ModalRow');
               var loop_temp = function () {
@@ -105,6 +114,32 @@ jQuery('document').ready(function($){
               $('.hideOnClick').hide();
               $('.productSet .tabbed').hide();
 
+
+              /**********************
+              ESSO SETS
+              ***********************/
+              //WAIT FOR ELEMENT TO LOAD
+              var checkExist = setInterval(function(){
+                if($('.tc-active').length){
+                  clearInterval(checkExist);
+                  if($('.ajaxColumnLink').length > 0 && checkExist){
+                    $('.cpf-section').each(function(index, val) {
+                      // console.log($(val).find('div.cpf-type-radio'));
+                      $(val).find('div.cpf-type-radio').each(function(i, option){
+                        $(option).find('div.tm-extra-product-options-container').each(function(ulDivNum, ulDiv){
+                          $(ulDiv).find('ul.tm-extra-product-options-radio').each(function(liUlNum, liUl){
+                            $(liUl).find('.tc-active label img').each(function(listNum, labelLi){
+                              console.log($(labelLi));
+                            });
+                          });
+                        });
+                      });
+                    });
+                  }
+                }
+              }, 100);
+
+
           },
           /*************************
           AJAX MODAL BEFORE IT LOADS
@@ -125,6 +160,9 @@ jQuery('document').ready(function($){
               $('figure.woocommerce-product-gallery__wrapper > div > a').on('click', function(e){
                   e.preventDefault();
                   $(this).css('cursor', 'initial');
+              });
+              $('.tc-active').each(function(){
+                $(this).addClass('activeTab');
               });
           },
           /*************************
