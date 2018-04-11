@@ -130,6 +130,7 @@ jQuery('document').ready(function($){
                           $(ulDiv).find('ul.tm-extra-product-options-radio').each(function(liUlNum, liUl){
                             $(liUl).find('.tc-active label img').each(function(listNum, labelLi){
                               console.log($(labelLi));
+
                             });
                           });
                         });
