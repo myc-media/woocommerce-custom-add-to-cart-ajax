@@ -3,6 +3,7 @@
 
 - Need to set rules for permanently hiding template add-to-cart button
 - Need to set rules for hiding button in the markup below initiall and to show it on first ajax call that displays product info
+- Most of CSS rules have been included with the CSS file but it needs clean up over time
 
 ### MAKE LINK INTO AJAX CALL
 
