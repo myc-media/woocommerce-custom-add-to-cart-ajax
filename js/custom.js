@@ -121,21 +121,56 @@ jQuery('document').ready(function($){
               //WAIT FOR ELEMENT TO LOAD
               var checkExist = setInterval(function(){
                 if($('.tc-active').length){
-                  clearInterval(checkExist);
-                  if($('.ajaxColumnLink').length > 0 && checkExist){
-                    $('.cpf-section').each(function(index, val) {
-                      // console.log($(val).find('div.cpf-type-radio'));
-                      $(val).find('div.cpf-type-radio').each(function(i, option){
-                        $(option).find('div.tm-extra-product-options-container').each(function(ulDivNum, ulDiv){
-                          $(ulDiv).find('ul.tm-extra-product-options-radio').each(function(liUlNum, liUl){
-                            $(liUl).find('.tc-active label img').each(function(listNum, labelLi){
-                              console.log($(labelLi));
+					clearInterval(checkExist);
+					
+					if($('.ajaxColumnLink').length > 0 && checkExist){
+						
+						$('img.attachment-woocommerce_thumbnail').each(function(index, val){
+							$(this).addClass('image-change'+index);
+						});
 
-                            });
-                          });
-                        });
-                      });
-                    });
+						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+							$(this).find('li label img').addClass('image-change'+index);
+						});
+						
+						$('li.tmcp-field-wrap').on('click', function(){
+							var thisLi = $(this);
+							var imageChange = $(this).find('label img').attr('src');
+							var classToChange;
+							
+							$('li.tc-active').each(function(index){
+								classToChange = 'image-change'+index;
+								if($(thisLi).find('img').hasClass(classToChange)){
+									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
+									console.log($(imgToChange).attr('srcset'));
+// 									console.log('true');
+// 									console.log($('img.attachment-woocommerce_thumbnail')[index]);
+// 									$('img.attachment-woocommerce_thumbnail')[index].attr('src', imageChange);
+									$(imgToChange).attr('src', imageChange);
+									$(imgToChange).attr('srcset', imageChange);
+								}
+							});
+							
+						});
+						
+// 						FOR DIV TO SCREENSHOT
+/*
+						$(function() { 
+						    $("#btnSave").click(function() { 
+						        html2canvas($("#widget"), {
+						            onrendered: function(canvas) {
+						                theCanvas = canvas;
+						                document.body.appendChild(canvas);
+						
+						                canvas.toBlob(function(blob) {
+											saveAs(blob, "Dashboard.png"); 
+										});
+						            }
+						        });
+						    });
+						}); 
+*/
+
                   }
                 }
               }, 100);
@@ -175,7 +210,7 @@ jQuery('document').ready(function($){
       });
 
   });
-
+  
 
   /******************************
   AJAX BUTTON FOR ADD TO CART
