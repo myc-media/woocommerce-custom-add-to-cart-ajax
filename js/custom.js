@@ -26,6 +26,12 @@ jQuery('document').ready(function($){
 
   /***********AJAX MODAL SHOW************/
 
+  //ADD ajaxModal class to colum link
+
+  $('.ajaxColumnLink a.column-link').addClass('ajaxModal');
+
+  //AJAX CLICK FUNCTION
+
   $('.ajaxModal').click(function(e){
       $('.ajaxColumn').addClass('ajaxClass');
       $('.closeAjaxBox').show();
@@ -79,11 +85,14 @@ jQuery('document').ready(function($){
                   e.preventDefault();
               });
 
+              /**************SHOW ADD TO CART BUTTON*****************/
+
               $('button.ajaxButton').removeClass('hideOnNoAJAX');
               $('button.ajaxButton').addClass('showOnAJAX');
               $('button.ajaxButton').attr('value', post_id);
               $('.ModalRow').append('<div class="result"></div>');
 
+              /*************LOOP THROUGH EPO OPTIONS AND DISPLAY**************/
 
               var tm_lazyload_container = $('.ModalRow');
               var loop_temp = function () {
@@ -104,6 +113,68 @@ jQuery('document').ready(function($){
               }
               $('.hideOnClick').hide();
               $('.productSet .tabbed').hide();
+
+
+              /**********************
+              ESSO SETS
+              ***********************/
+              //WAIT FOR ELEMENT TO LOAD
+              var checkExist = setInterval(function(){
+                if($('.tc-active').length){
+					clearInterval(checkExist);
+					
+					if($('.ajaxColumnLink').length > 0 && checkExist){
+						
+						$('img.attachment-woocommerce_thumbnail').each(function(index, val){
+							$(this).addClass('image-change'+index);
+						});
+
+						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+							$(this).find('li label img').addClass('image-change'+index);
+						});
+						
+						$('li.tmcp-field-wrap').on('click', function(){
+							var thisLi = $(this);
+							var imageChange = $(this).find('label img').attr('src');
+							var classToChange;
+							
+							$('li.tc-active').each(function(index){
+								classToChange = 'image-change'+index;
+								if($(thisLi).find('img').hasClass(classToChange)){
+									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
+									console.log($(imgToChange).attr('srcset'));
+// 									console.log('true');
+// 									console.log($('img.attachment-woocommerce_thumbnail')[index]);
+// 									$('img.attachment-woocommerce_thumbnail')[index].attr('src', imageChange);
+									$(imgToChange).attr('src', imageChange);
+									$(imgToChange).attr('srcset', imageChange);
+								}
+							});
+							
+						});
+						
+// 						FOR DIV TO SCREENSHOT
+/*
+						$(function() { 
+						    $("#btnSave").click(function() { 
+						        html2canvas($("#widget"), {
+						            onrendered: function(canvas) {
+						                theCanvas = canvas;
+						                document.body.appendChild(canvas);
+						
+						                canvas.toBlob(function(blob) {
+											saveAs(blob, "Dashboard.png"); 
+										});
+						            }
+						        });
+						    });
+						}); 
+*/
+
+                  }
+                }
+              }, 100);
+
 
           },
           /*************************
@@ -126,6 +197,9 @@ jQuery('document').ready(function($){
                   e.preventDefault();
                   $(this).css('cursor', 'initial');
               });
+              $('.tc-active').each(function(){
+                $(this).addClass('activeTab');
+              });
           },
           /*************************
           AJAX MODAL ERROR
@@ -136,7 +210,7 @@ jQuery('document').ready(function($){
       });
 
   });
-
+  
 
   /******************************
   AJAX BUTTON FOR ADD TO CART
