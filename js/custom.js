@@ -142,7 +142,7 @@ jQuery('document').ready(function($){
 								classToChange = 'image-change'+index;
 								if($(thisLi).find('img').hasClass(classToChange)){
 									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
-									console.log($(imgToChange).attr('srcset'));
+// 									console.log($(imgToChange).attr('srcset'));
 // 									console.log('true');
 // 									console.log($('img.attachment-woocommerce_thumbnail')[index]);
 // 									$('img.attachment-woocommerce_thumbnail')[index].attr('src', imageChange);
@@ -242,7 +242,7 @@ jQuery('document').ready(function($){
           }
       });
 
-      console.log(productObj);
+//       console.log(productObj);
 
       /************************
       AJAX POST TO CART
