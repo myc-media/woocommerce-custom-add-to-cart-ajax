@@ -10,9 +10,12 @@ Author URI: https://jgdesigns.ca
 
 */
 
+// MAIN CLASS FOR AJAX ADD TO CART
 class MYCAjax{
 
-    /********Load JS and register Ajax URL*******/
+    /********Load JS, CSSand register Ajax URL*******/
+
+    // ajaxURL is: modalAjaxURL.ajaxurl
 
     public static function theme_js() {
         wp_enqueue_script( 'theme_js', plugin_dir_url(__FILE__) . '/js/custom.js', array( 'jquery' ), '1.0', true );
@@ -26,8 +29,14 @@ class MYCAjax{
 
     public static function get_modal_content_func() {
 
+        /*********LOAD GLOBAL POST**********/
 
         global $post;
+
+        /************************
+        GET POST URL, SET POST ID,
+        GET PRODUCT, GET BUTTON URL
+        ***********************/
 
         $postURL = $_GET['post_url'];
         $postID = url_to_postid($postURL);
@@ -35,25 +44,24 @@ class MYCAjax{
         $buttonURL = "<a href='" . $product->add_to_cart_url() ."'>add to cart</a>";
         $thePost;
 
-
+        /*******************
+        POST EXISTS VALIDATION
+        *******************/
 
         if ($postID == 0){
             echo "Invalid Input";
             die();
         }
 
-        $thispost = get_post($postID);
-
-        if(!is_object($thispost)){
-            echo 'There is no post with the ID' . $postID;
-            die();
-        }
+        /****************
+        QUERY DB FOR PRODUCT
+        ******************/
 
         $the_query = new WP_query(array('p' => $postID, 'post_type' => 'product'));
 
         if ($the_query->have_posts()) : while ($the_query->have_posts()) : $the_query->the_post();
             get_template_part( 'woocommerce/content', 'single-product' );
-            endwhile;
+        endwhile;
         else :
             echo "There were no posts found";
         endif;
@@ -62,7 +70,7 @@ class MYCAjax{
 
 
 
-    /*******EPO LOAD INFO ON AJAX **********/
+    /*******LOAD EPO INFO ON AJAX **********/
 
     function wc_epo_is_quickview($qv){
         // this will disable only flatsome quickview
@@ -74,81 +82,82 @@ class MYCAjax{
     }
 
 
-
-
-
-
     /**ADD TO CART****/
 
     public static function add_to_cart_func() {
 
-        /***********GET PRODUCT INFO AND SEND TO WORDPERSS AS META INFO***********/
+        /*********************CALL GLOBAL WOOCOMMERCE VAR****************************/
 
         global $woocommerce;
 
-            $product_id         = $_POST['button_id'];
-            $quantity           = $_POST['quantity'];
-            $passed_validation  = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
-            $product_status     = get_post_status( $product_id );
-            $productData        = $_POST['productData'];
+        /***********GET PRODUCT INFO AND SEND TO WORDPERSS AS META INFO***********/
+        /************************************
+        GET Product
+        GET Quantity
+        GET Produc Data
+        GET count of total number of products sent through ajax
+        SET Array of products & product info in cart_item_meta array
+        SUBMIT To Cart
+        *************************************/
 
-            $cart_item_meta = array();
-            $count = 0;
-            foreach($productData as $key=>$value){
-              $count = $key;
-            }
+        $product_id         = $_POST['button_id'];
+        $quantity           = $_POST['quantity'];
+        $productData        = $_POST['productData'];
 
-            // for($x = 0; $x <= count($productData)+1; $x++){
-            //     $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
-            //     $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
-            //     $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
-            //     $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
-            //     $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
-            // }
-            for($x = 0; $x <= $count; $x++){
-                $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
-                $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
-                $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
-                $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
-                $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
-            }
+        $cart_item_meta = array();
 
+        //COUNT NUMBER OF PRODUCTS SENT THROUGH AJAX
+        $count = 0;
+        foreach($productData as $key=>$value){
+          $count = $key;
+        }
 
+        //PRODUCT VALIDATION
+        $passed_validation  = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
 
-            /************ADD TO CART V2*********/
+        for($x = 0; $x <= $count; $x++){
+            $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
+            $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
+            $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
+            $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
+            $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
+        }
 
-            if($woocommerce->cart->add_to_cart($product_id, $quantity, $variation_id="", $variation = "", $cart_item_meta)){
-                $data= array('count'=>apply_filters('woocommerce_add_to_cart_fragments', array()));
-                do_action('woocommerce_ajax_added_to_cart', $product_id);
-            }
-            $response = json_encode($data);
-            header("Content-Type: application/json");
-            echo $response;
+        /************ADD TO CART V2*********/
+        if($woocommerce->cart->add_to_cart($product_id, $quantity, $variation_id="", $variation = "", $cart_item_meta)){
+            //UPDATE CART QUANTITY AND FRAGMENTS
+            $data = array('count'=>apply_filters('woocommerce_add_to_cart_fragments', array()));
+            do_action('woocommerce_ajax_added_to_cart', $product_id);
+        }
 
+        /***********SEND RESPONSE VIA AJAX**************/
 
-            // // header("Content-Type: application/json");
-            // // echo json_encode($cart_item_meta);
-            //
-            // echo $count;
+        $response = json_encode($data);
+        header("Content-Type: application/json");
+        echo $response;
 
-            die();
+        die();
     }
 
 
 
-    /**********UPDATE MINI CART***********/
+    /**********
+    UPDATE MINI CART
+    ***********/
 
     public static function custom_mini_cart_update(){
         echo wc_get_template('cart/mini-cart.php');
     }
 
 
-
-
-
-    /********GET CART INFO AFTER ADD TO CART BUTTON IS PRESSED********/
+    /***********************************************
+    GET CART INFO AFTER ADD TO CART BUTTON IS PRESSED
+    ************************************************/
 
     public static function myc_get_cart_item_from_session($cart_item, $values){
+
+        /************GET NUMBER OF PRODUCTS SUBMITTED TO CART**************/
+
         $countVar = 0;
         foreach($cart_item as $k => $v){
             if (strpos($k, 'custom_data_') !== false){
@@ -157,8 +166,12 @@ class MYCAjax{
 
         }
 
+        /*******LOOP THROUGH ARRAY OF PRODUCTS IN SESSION********/
+
         for($x = 0; $x <= $countVar; $x++){
+            /****CHECK IF PRODUCT IS SET/EXISTS****/
             if(isset($values["custom_data_{$x}"])){
+                /*******SET ARRAY OF OPTIONS SET TO CART********/
                 $cart_item["custom_data_{$x}"]['Option'] = $values["custom_data_{$x}"]['Option'];
                 $cart_item["custom_data_{$x}"]['Quantity'] = $values["custom_data_{$x}"]['Quantity'];
                 $cart_item["custom_data_{$x}"]['Price'] = $values["custom_data_{$x}"]['Price'];
@@ -166,26 +179,46 @@ class MYCAjax{
             }
         }
 
-        return $cart_item;
+        /********RETURN CART ITEM*********/
 
+        return $cart_item;
     }
 
 
-    /*******ADD CUSTOM CALCULATIONS BEFORE CALCULATING TOTAL*********/
+    /*****************************
+    ADD CUSTOM CALCULATIONS BEFORE CALCULATING TOTAL
+    *******************************/
 
 
     public static function myc_before_calculate_totals($cart_object){
 
+        /************************
+        GET Product Price and Quantity before setting cart total
+        Calculate Price by Multiplying Quantity and Price
+        ************************/
+
         $finalPrice;
         $product;
-        foreach($cart_object->cart_contents as $key=>$value){
 
+        /********************
+        Iterate through cart contents
+        Iterate through Product Data
+        Set price of product
+        IMPORTANT -> Reset price counter to 0 to calculate properly
+        **********************/
+
+        //ITERATE THROUGH PRODUCTS IN CART
+        foreach($cart_object->cart_contents as $key=>$value){
+            //ITERATE THROUGH PRODUCT DATA
             foreach($value['tmpost_data']['productData'] as $k=>$v){
 
+                //CALCULATE PRICE
                 $product += $v['price'] * $v['quantity'];
+                //SET PRICE
                 $value['data']->set_price($product);
 
             }
+            //RESET PRICE COUNTER TO 0
             $product = 0;
 
         }
@@ -193,9 +226,12 @@ class MYCAjax{
 
 
 
-    /********GET CUSTOM META INFO AND SET TEMPLATE FOR OUTPUT********/
+    /********************************************
+    GET CUSTOM META INFO AND SET TEMPLATE FOR OUTPUT
+    **********************************************/
 
     public static function myc_get_item_data($other_data, $cart_item){
+        //COUNT NUMBER OF PRODUCTS IN CART
         $countVar = 0;
         foreach($cart_item as $k => $v){
             if (strpos($k, 'custom_data_') !== false){
@@ -204,10 +240,15 @@ class MYCAjax{
 
         }
 
+        //LOOP THROUGH PRODUCTS
         for($x = 0; $x <= $countVar; $x++){
+            //VALIDATE IF PRODUCT EXISTS AND OPTION IS NOT NULL
             if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
+                //SET CUSTOM TEMPLATE OF OUTPUT
                 $other_data[] = array(
+                    //OUTPUT FIRST FIELD (PRODUCT NAME)
                     'name' => $cart_item["custom_data_{$x}"]['Option'],
+                    //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
                     'value' =>  '<p>
                                 <span class="cpf-img-on-cart">
                                 '.$cart_item["custom_data_{$x}"]['Image'].'
@@ -217,12 +258,13 @@ class MYCAjax{
             }
         }
 
+        //RETURN PRODUCT TEMPLATE WITH PRODUCT OPTIONS PRINTED TO CART & MINI CART
         return $other_data;
     }
 
 
 
-    /********ADD CUSTOM META INFO TO ORDER********/
+    /********ADD CUSTOM META INFO TO ORDER/CHECKOUT********/
 
     public static function myc_order_item_meta($item_meta, $cart_item){
         $countVar = 0;
@@ -246,18 +288,34 @@ class MYCAjax{
 }
 
 /***********REGISTER ACTIONS AND FILTERS***********/
-
+//REGISTER SCRIPTS -> JS AND CSS
 add_action('wp_enqueue_scripts', array('MYCAjax', 'theme_js'));
+
+//LOAD EPO OPTIONS ON PAGE
+add_filter( 'wc_epo_is_quickview', array('MYCAjax', 'wc_epo_is_quickview'), 10, 1 );
+
+//SET AJAX CALLBACK FUNCTION FOR MODAL CONTENT
 add_action('wp_ajax_get_modal_content', array('MYCAjax','get_modal_content_func'));
 add_action('wp_ajax_nopriv_get_modal_content', array('MYCAjax', 'get_modal_content_func'));
-add_filter( 'wc_epo_is_quickview', array('MYCAjax', 'wc_epo_is_quickview'), 10, 1 );
+
+//SET AJAX CALLBACK FUNCTION FOR ADD TO CART
 add_action('wp_ajax_add_to_cart', array('MYCAjax', 'add_to_cart_func'));
 add_action('wp_ajax_nopriv_add_to_cart', array('MYCAjax', 'add_to_cart_func'));
+
+//SET AJAX CALLBACK FUNCTION FOR MINI CART ECHO
 add_filter('wp_ajax_nopriv_custom_mini_cart_update', array('MYCAjax', 'custom_mini_cart_update'));
 add_filter('wp_ajax_custom_mini_cart_update', array('MYCAjax', 'custom_mini_cart_update'));
+
+//GET ITEM FROM SESSION
 add_action('woocommerce_get_cart_item_from_session', array('MYCAjax', 'myc_get_cart_item_from_session'), 10, 2);
+
+//CALCULATE OPTIONS AND PRICES BEFORE FINAL TOTAL CALCULATION
 add_action('woocommerce_before_calculate_totals', array('MYCAjax', 'myc_before_calculate_totals'));
+
+//GET ITEM INFO
 add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 10, 2);
+
+//ADD ITEM META INFO
 add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
 
 ?>

@@ -75,14 +75,40 @@ ul.wpb_tabs_nav.ui-tabs-nav.clearfix {
     flex-basis: 33% !important;
 }
 
-/*
-.page-template-default ul.products.columns-1 li.post-1405,
-.page-template-default ul.products.columns-1 li.post-1411,
-.page-template-default ul.products.columns-1 li.post-1412,
-.page-template-default ul.products.columns-1 li.post-1413 {
-    flex-basis: 25% !important;
+/*****************************
+NEW flex
+*****************************/
+.fiveHundredD ul.products li:nth-of-type(1),
+.fiveHundredD ul.products li:nth-of-type(5),
+.fiveHundredD2 ul.products li:nth-of-type(1),
+.fiveHundredD2 ul.products li:nth-of-type(2),
+.fiveHundredD3 ul.products li:nth-of-type(3){
+    flex-basis: 100% !important;
 }
-*/
+
+.fiveHundredD ul.products li:nth-of-type(2),
+.fiveHundredD ul.products li:nth-of-type(4) {
+    flex-basis: 21.5% !important;
+}
+.fiveHundredD ul.products li:nth-of-type(3) {
+    flex-basis: 57% !important;
+}
+.fiveHundredD ul.products li:nth-of-type(6),
+.fiveHundredD ul.products li:nth-of-type(7) {
+    flex-basis: 50% !important;
+}
+.fiveHundredD2 ul.products li:nth-of-type(3) {
+    flex-basis: 67% !important;
+}
+.fiveHundredD2 ul.products li:nth-of-type(4) {
+    flex-basis: 33% !important;
+}
+.fiveHundredD3 ul.products li:nth-of-type(1) {
+    flex-basis: 85% !important;
+}
+.fiveHundredD3 ul.products li:nth-of-type(2) {
+    flex-basis: 15% !important;
+}
 .page-template-default ul.products.columns-1 li.post-1415,
 .page-template-default ul.products.columns-1 li.post-1509 {
     flex-basis: 85% !important;
