@@ -121,59 +121,55 @@ jQuery('document').ready(function($){
               //WAIT FOR ELEMENT TO LOAD
               var checkExist = setInterval(function(){
                 if($('.tc-active').length){
-					clearInterval(checkExist);
+					        clearInterval(checkExist);
 					
-					if($('.ajaxColumnLink').length > 0 && checkExist){
-						
-						$('img.attachment-woocommerce_thumbnail').each(function(index, val){
-							$(this).addClass('image-change'+index);
-						});
+                  if($('.ajaxColumnLink').length > 0 && checkExist){
 
-						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
-							$(this).find('li label img').addClass('image-change'+index);
-						});
-						
-						$('li.tmcp-field-wrap').on('click', function(){
-							var thisLi = $(this);
-							var imageChange = $(this).find('label img').attr('src');
-							var classToChange;
-							
-							$('li.tc-active').each(function(index){
-								classToChange = 'image-change'+index;
-								if($(thisLi).find('img').hasClass(classToChange)){
-									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
-									console.log($(imgToChange).attr('srcset'));
-// 									console.log('true');
-// 									console.log($('img.attachment-woocommerce_thumbnail')[index]);
-// 									$('img.attachment-woocommerce_thumbnail')[index].attr('src', imageChange);
-									$(imgToChange).attr('src', imageChange);
-									$(imgToChange).attr('srcset', imageChange);
-								}
-							});
-							
-						});
-						
-// 						FOR DIV TO SCREENSHOT
-/*
-						$(function() { 
-						    $("#btnSave").click(function() { 
-						        html2canvas($("#widget"), {
-						            onrendered: function(canvas) {
-						                theCanvas = canvas;
-						                document.body.appendChild(canvas);
-						
-						                canvas.toBlob(function(blob) {
-											saveAs(blob, "Dashboard.png"); 
-										});
-						            }
-						        });
-						    });
-						}); 
-*/
+                    $('img.attachment-woocommerce_thumbnail').each(function(index, val){
+                      $(this).addClass('image-change'+index);
+                    });
+
+                    $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                      $(this).find('li label img').addClass('image-change'+index);
+                    });
+
+                    $('li.tmcp-field-wrap').on('click', function(){
+                      var thisLi = $(this);
+                      var imageChange = $(this).find('label img').attr('src');
+                      var classToChange;
+
+                      $('li.tc-active').each(function(index){
+                        classToChange = 'image-change'+index;
+                        if($(thisLi).find('img').hasClass(classToChange)){
+                          var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
+                          $(imgToChange).attr('src', imageChange);
+                          $(imgToChange).attr('srcset', imageChange);
+                        }
+                      });
+
+                    });
+
+        // 						FOR DIV TO SCREENSHOT
+        /*
+                    $(function() { 
+                        $("#btnSave").click(function() { 
+                            html2canvas($("#widget"), {
+                                onrendered: function(canvas) {
+                                    theCanvas = canvas;
+                                    document.body.appendChild(canvas);
+
+                                    canvas.toBlob(function(blob) {
+                              saveAs(blob, "Dashboard.png"); 
+                            });
+                                }
+                            });
+                        });
+                    }); 
+        */
 
                   }
                 }
-              }, 100);
+             }, 100);
 
 
           },
