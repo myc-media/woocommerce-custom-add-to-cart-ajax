@@ -170,7 +170,7 @@ jQuery('document').ready(function($){
                                       $(val).removeClass('tc-active');
                                     } else {
                                       var changeImg = $(val).find('label img').attr('src');
-                                      console.log(changeImg);
+                                      // console.log(changeImg);
                                       $(val).addClass('tc-active');
                                       var imgToChange = $('img.attachment-woocommerce_thumbnail')[index+1];
                                       $(imgToChange).attr('src', changeImg);
