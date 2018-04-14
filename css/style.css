@@ -200,8 +200,14 @@ p.price {
     margin-bottom: 0 !important;
     padding-bottom: 0;
 }
-.tc-active img.tmlazy.checkbox_image,
+/* .tc-active img.tmlazy.checkbox_image,
 .tm-extra-product-options input.use_images:checked+img.radio_image {
+    border-color: #ed1c24!important;
+    box-sizing: border-box;
+    border-width: 5px !important;
+    box-shadow: 0px 0px 23px 0px #ed1c24!important;
+} */
+.tc-active label img {
     border-color: #ed1c24!important;
     box-sizing: border-box;
     border-width: 5px !important;
@@ -312,4 +318,14 @@ h1.product_title.entry-title {
     justify-content: center;
     align-items: center;
     margin: 0;
+}
+
+
+
+/*******************HIDE LABELS AND PRICES***********************/
+.setClass span.tc-label.radio_image_label {
+    display: none;
+}
+.setClass span.price.tc-price {
+    display: none !important;
 }

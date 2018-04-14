@@ -121,51 +121,115 @@ jQuery('document').ready(function($){
               //WAIT FOR ELEMENT TO LOAD
               var checkExist = setInterval(function(){
                 if($('.tc-active').length){
-					        clearInterval(checkExist);
-					
-                  if($('.ajaxColumnLink').length > 0 && checkExist){
 
-                    $('img.attachment-woocommerce_thumbnail').each(function(index, val){
-                      $(this).addClass('image-change'+index);
-                    });
 
-                    $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
-                      $(this).find('li label img').addClass('image-change'+index);
-                    });
+                  //STOP THE INTERVAL CHECK
+                  clearInterval(checkExist);
 
-                    $('li.tmcp-field-wrap').on('click', function(){
-                      var thisLi = $(this);
-                      var imageChange = $(this).find('label img').attr('src');
-                      var classToChange;
+                  //IF .ajaxColumnLink has content
+          				if($('.ajaxColumnLink').length > 0 && checkExist){
+                    /******************************
+                    LOOP THROUGH ALL IMAGES ON THE LEFT AND RIGHT
+                    AND ASSIGN THE SAME CLASSES TO BOTH OF THEM
+                    ********************************/
+          						$('img.attachment-woocommerce_thumbnail').each(function(index, val){
+          							$(this).addClass('image-change'+index);
+          						});
 
-                      $('li.tc-active').each(function(index){
-                        classToChange = 'image-change'+index;
-                        if($(thisLi).find('img').hasClass(classToChange)){
-                          var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
-                          $(imgToChange).attr('src', imageChange);
-                          $(imgToChange).attr('srcset', imageChange);
+          						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+
+                      /**************
+                      CHANGE IMAGE ON CLICK
+                      ****************/
+
+          						$('li.tmcp-field-wrap').on('click', function(){
+                        var count;
+          							var thisLi = $(this);
+          							var imageChange = $(this).find('label img').attr('src');
+          							var classToChange;
+
+                        function syncSelect(list, index){
+                          var isPreviousDiv = thisLi.closest('.cpf-type-radio').hasClass('syncSelect') ? true : false;
+                          var isNextDiv = thisLi.closest('div.cpf-type-radio').hasClass('syncSelectBottom') ? true : false;
+                          var previousDiv = thisLi.closest('.cpf-type-radio');
+                          var nextDiv = thisLi.closest('.syncSelectBottom');
+
+                          if(isPreviousDiv){
+                            // console.log(previousDiv);
+                            previousDiv.find('li.tmcp-field-wrap').each(function(i, val){
+                              var stillExist = setInterval(function(){
+                                if($('.tc-active').length){
+                                  //STOP THE INTERVAL CHECK
+                                  clearInterval(stillExist);
+                                  if($(val).hasClass('tc-active')){
+                                    count = i;
+                                  }
+                                  $('.syncSelectBottom').find('li.tmcp-field-wrap').each(function(i, val){
+                                    if(i != count){
+                                      $(val).removeClass('tc-active');
+                                    } else {
+                                      var changeImg = $(val).find('label img').attr('src');
+                                      // console.log(changeImg);
+                                      $(val).addClass('tc-active');
+                                      var imgToChange = $('img.attachment-woocommerce_thumbnail')[index+1];
+                                      $(imgToChange).attr('src', changeImg);
+                                      $(imgToChange).attr('srcset', changeImg);
+                                    }
+                                  });
+                                }
+                              }, 100);
+                            });
+                          } else {
+                            // console.log(nextDiv);
+                          }
+                        }
+
+
+          							$('li.tc-active').each(function(index){
+          								classToChange = 'image-change'+index;
+          								if($(thisLi).find('img').hasClass(classToChange)){
+                            syncSelect(thisLi, index);
+          									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
+          									$(imgToChange).attr('src', imageChange);
+          									$(imgToChange).attr('srcset', imageChange);
+          								}
+          							});
+
+          						});
+
+
+                      /****************************
+                      Hide Options with Only one Option
+                      *****************************/
+
+                      $('ul.tmcp-ul-wrap').each(function(index, val){
+                        if($(this).find('li.tmcp-field-wrap').length <= 1){
+                          // console.log('true');
+                          $(this).closest('div.cpf-type-radio').css('display', 'none');
+                          $(this).closest('div.cpf-type-radio').prev('.cpf-type-radio').css('width', 100 + '%');
                         }
                       });
 
-                    });
 
-        // 						FOR DIV TO SCREENSHOT
-        /*
-                    $(function() { 
-                        $("#btnSave").click(function() { 
-                            html2canvas($("#widget"), {
-                                onrendered: function(canvas) {
-                                    theCanvas = canvas;
-                                    document.body.appendChild(canvas);
+          // 						FOR DIV TO SCREENSHOT
+          /*
+          						$(function() {
+          						    $("#btnSave").click(function() {
+          						        html2canvas($("#widget"), {
+          						            onrendered: function(canvas) {
+          						                theCanvas = canvas;
+          						                document.body.appendChild(canvas);
 
-                                    canvas.toBlob(function(blob) {
-                              saveAs(blob, "Dashboard.png"); 
-                            });
-                                }
-                            });
-                        });
-                    }); 
-        */
+          						                canvas.toBlob(function(blob) {
+          											saveAs(blob, "Dashboard.png");
+          										});
+          						            }
+          						        });
+          						    });
+          						});
+          */
 
                   }
                 }
@@ -206,7 +270,7 @@ jQuery('document').ready(function($){
       });
 
   });
-  
+
 
   /******************************
   AJAX BUTTON FOR ADD TO CART
@@ -238,7 +302,7 @@ jQuery('document').ready(function($){
           }
       });
 
-      console.log(productObj);
+//       console.log(productObj);
 
       /************************
       AJAX POST TO CART
