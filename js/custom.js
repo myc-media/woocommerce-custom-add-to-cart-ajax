@@ -174,8 +174,11 @@ jQuery('document').ready(function($){
                                       // console.log(changeImg);
                                       $(val).addClass('tc-active');
                                       var imgToChange = $('img.attachment-woocommerce_thumbnail')[index+1];
-                                      $(imgToChange).attr('src', changeImg);
-                                      $(imgToChange).attr('srcset', changeImg);
+                                      $(imgToChange).fadeOut('fast', function(){
+                                        $(imgToChange).attr('src', changeImg).fadeIn('fast');
+                                        $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
+                                      });
+
                                     }
                                   });
                                 }
@@ -192,8 +195,10 @@ jQuery('document').ready(function($){
           								if($(thisLi).find('img').hasClass(classToChange)){
                             syncSelect(thisLi, index);
           									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
-          									$(imgToChange).attr('src', imageChange);
-          									$(imgToChange).attr('srcset', imageChange);
+                            $(imgToChange).fadeOut('fast', function(){
+                              $(imgToChange).attr('src', imageChange).fadeIn('fast');
+            									$(imgToChange).attr('srcset', imageChange).fadeIn('fast');
+                            });
           								}
           							});
 
