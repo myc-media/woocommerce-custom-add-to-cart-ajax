@@ -122,7 +122,6 @@ jQuery('document').ready(function($){
               var checkExist = setInterval(function(){
                 if($('.tc-active').length){
 
-
                   //STOP THE INTERVAL CHECK
                   clearInterval(checkExist);
 
@@ -233,7 +232,7 @@ jQuery('document').ready(function($){
 
                   }
                 }
-             }, 100);
+              }, 100);
 
 
           },
