@@ -269,6 +269,7 @@ class MYCAjax{
         }
 
         //RETURN PRODUCT TEMPLATE WITH PRODUCT OPTIONS PRINTED TO CART & MINI CART
+
         return $other_data;
     }
 
@@ -331,5 +332,33 @@ add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 1
 
 //ADD ITEM META INFO
 add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
+
+
+/***********
+TESTING
+*************/
+
+add_filter( 'woocommerce_add_cart_item_data', 'aa_func_20170206100217', 10, 3 );
+
+function aa_func_20170206100217( $cart_item_data, $product_id, $variation_id ) {
+
+    return $cart_item_data;
+}
+
+add_filter( 'woocommerce_get_cart_item_from_session', function ( $cartItemData, $cartItemSessionData, $cartItemKey ) {
+
+    // $cartItemData['selected_date_event'] = $cartItemSessionData['selected_date_event'];
+    // return $cartItemData;
+    return $cartItemData;
+
+}, 10, 3 );
+
+add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key ) {
+    global $woocommerce;
+    global $wpdb;
+    debug::print_r($values);
+    wc_add_order_item_meta($itemId, $values["custom_data_0"]["Option"], $values["custom_data_0"]['Option']);
+
+}, 10, 3 );
 
 ?>
