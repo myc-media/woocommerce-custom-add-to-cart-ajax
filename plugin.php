@@ -23,9 +23,19 @@ class MYCAjax{
         wp_localize_script('theme_js', 'modalAjaxURL', array('ajaxurl'=>admin_url('admin-ajax.php')));
     }
 
+    //REDIRECT LOGGED OUT USERS
+
+    public static function protect_pages(){
+      global $post;
+      if($post->ID == 1599 || $post->ID ==1597 || $post->ID ==1591 || $post->ID ==1458){
+        if(! is_user_logged_in()){
+          wp_redirect(home_url() . '/wp-admin');
+        }
+      }
+    }
+
 
     /*******Load Product Info Via Ajax on Page*******/
-
 
     public static function get_modal_content_func() {
 
@@ -288,6 +298,10 @@ class MYCAjax{
 }
 
 /***********REGISTER ACTIONS AND FILTERS***********/
+
+//REDIRECT LOGGED OUT USERS
+add_action('template_redirect', array('MYCAjax', 'protect_pages'));
+
 //REGISTER SCRIPTS -> JS AND CSS
 add_action('wp_enqueue_scripts', array('MYCAjax', 'theme_js'));
 
