@@ -23,9 +23,19 @@ class MYCAjax{
         wp_localize_script('theme_js', 'modalAjaxURL', array('ajaxurl'=>admin_url('admin-ajax.php')));
     }
 
+    //REDIRECT LOGGED OUT USERS
+
+    public static function protect_pages(){
+      global $post;
+      if($post->ID == 1599 || $post->ID ==1597 || $post->ID ==1591 || $post->ID ==1458){
+        if(! is_user_logged_in()){
+          wp_redirect(home_url() . '/wp-admin');
+        }
+      }
+    }
+
 
     /*******Load Product Info Via Ajax on Page*******/
-
 
     public static function get_modal_content_func() {
 
@@ -259,6 +269,7 @@ class MYCAjax{
         }
 
         //RETURN PRODUCT TEMPLATE WITH PRODUCT OPTIONS PRINTED TO CART & MINI CART
+
         return $other_data;
     }
 
@@ -288,6 +299,10 @@ class MYCAjax{
 }
 
 /***********REGISTER ACTIONS AND FILTERS***********/
+
+//REDIRECT LOGGED OUT USERS
+add_action('template_redirect', array('MYCAjax', 'protect_pages'));
+
 //REGISTER SCRIPTS -> JS AND CSS
 add_action('wp_enqueue_scripts', array('MYCAjax', 'theme_js'));
 
@@ -317,5 +332,46 @@ add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 1
 
 //ADD ITEM META INFO
 add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
+
+
+/***********
+TESTING
+*************/
+
+add_filter( 'woocommerce_add_cart_item_data', 'aa_func_20170206100217', 10, 3 );
+
+function aa_func_20170206100217( $cart_item_data, $product_id, $variation_id ) {
+
+    return $cart_item_data;
+}
+
+add_filter( 'woocommerce_get_cart_item_from_session', function ( $cartItemData, $cartItemSessionData, $cartItemKey ) {
+
+    // $cartItemData['selected_date_event'] = $cartItemSessionData['selected_date_event'];
+    // return $cartItemData;
+    return $cartItemData;
+
+}, 10, 3 );
+
+add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key ) {
+    global $woocommerce;
+    global $wpdb;
+
+    $countVar = 0;
+    foreach($values as $k => $v){
+        if (strpos($k, 'custom_data_') !== false){
+            $countVar += 1;
+        }
+
+    }
+
+    for($x = 0; $x <= $countVar; $x++){
+    debug::print_r($values);
+      wc_add_order_item_meta($itemId, "Part", $values["custom_data_{$x}"]['Option']);
+      wc_add_order_item_meta($itemId, "Quantity", $values["custom_data_{$x}"]['Quantity']);
+      wc_add_order_item_meta($itemId, "Price", $values["custom_data_{$x}"]['Price']);
+      wc_add_order_item_meta($itemId, " ", $values["custom_data_{$x}"]['Image']);
+    }
+}, 10, 3 );
 
 ?>
