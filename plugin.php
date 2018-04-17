@@ -310,6 +310,7 @@ class MYCAjax{
 }
 
 /***********REGISTER ACTIONS AND FILTERS***********/
+add_filter('woocommerce_cart_item_permalink','__return_false');
 
 //REDIRECT LOGGED OUT USERS
 add_action('template_redirect', array('MYCAjax', 'protect_pages'));

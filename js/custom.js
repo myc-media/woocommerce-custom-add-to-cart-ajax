@@ -3,6 +3,10 @@ jQuery('document').ready(function($){
         $(this).find('a.woocommerce-LoopProduct-link').addClass('ajaxModal');
         $(this).find('div.product-wrap a').addClass('ajaxModal');
     }));
+    
+    if($('.ajaxModal').closest($('.ajaxColumnLink')).length > 0){
+        $('body').addClass('set');
+    }
 
 	var pageTitle = $('.ModalRow.row > h1').text();
 	var pageSubTitle = $('.ModalRow.row > p.addToCartText').text();
@@ -12,16 +16,25 @@ jQuery('document').ready(function($){
 
   /*******CLOSE AJAX BOX**********/
 
-  $('.closeAjaxBox').on('click', function(e){
-      var headingText = "<h1 style='text-align: center;'>" + pageTitle + "</h1><p class='addToCartText' style='text-align: center;'>" + pageSubTitle + "</p>";
+    function closeAjaxBox(){
+        var headingText = "<h1 style='text-align: center;'>" + pageTitle + "</h1><p class='addToCartText' style='text-align: center;'>" + pageSubTitle + "</p>";
+        
+        $('.ajaxColumn').removeClass('ajaxClass');
+        $('.ModalRow.row').html(headingText);
+        $(this).hide();
+        $('button.ajaxButton').removeClass('showOnAJAX');
+        $('button.ajaxButton').addClass('hideOnNoAJAX');
+        $('.productSet .tabbed').show();
+        $('.hideOnClick').show();
+        $('.closeAjaxBox').hide();
+    }
 
-      $('.ajaxColumn').removeClass('ajaxClass');
-      $('.ModalRow.row').html(headingText);
-      $(this).hide();
-      $('button.ajaxButton').removeClass('showOnAJAX');
-      $('button.ajaxButton').addClass('hideOnNoAJAX');
-      $('.productSet .tabbed').show();
-      $('.hideOnClick').show();
+  $('.closeAjaxBox').on('click', function(e){
+    closeAjaxBox();
+  });
+  
+  $('ul.wpb_tabs_nav a').on('click', function(){
+      closeAjaxBox();
   });
 
   /***********AJAX MODAL SHOW************/
@@ -144,11 +157,11 @@ jQuery('document').ready(function($){
                       CHANGE IMAGE ON CLICK
                       ****************/
 
-          						$('li.tmcp-field-wrap').on('click', function(){
+  					$('li.tmcp-field-wrap').on('click', function(){
                         var count;
-          							var thisLi = $(this);
-          							var imageChange = $(this).find('label img').attr('src');
-          							var classToChange;
+  						var thisLi = $(this);
+  						var imageChange = $(this).find('label img').attr('src');
+  						var classToChange;
 
                         function syncSelect(list, index){
                           var isPreviousDiv = thisLi.closest('.cpf-type-radio').hasClass('syncSelect') ? true : false;
@@ -170,14 +183,23 @@ jQuery('document').ready(function($){
                                     if(i != count){
                                       $(val).removeClass('tc-active');
                                     } else {
-                                      var changeImg = $(val).find('label img').attr('src');
-                                      // console.log(changeImg);
-                                      $(val).addClass('tc-active');
-                                      var imgToChange = $('img.attachment-woocommerce_thumbnail')[index+1];
-                                      $(imgToChange).fadeOut('fast', function(){
-                                        $(imgToChange).attr('src', changeImg).fadeIn('fast');
-                                        $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
-                                      });
+                                        var changeImg = $(val).find('label img').attr('src');
+                                        // console.log(changeImg);
+                                        $(val).addClass('tc-active');
+                                    //  console.log($("#tab-gas:visible").is(":visible") ? 'true' : 'false');
+                                        if($("#tab-gas:visible").is(":visible")){
+                                            var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail')[index+1];
+                                            $(imgToChange).fadeOut('fast', function(){
+                                                $(imgToChange).attr('src', changeImg).fadeIn('fast');
+                                                $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
+                                            });
+                                        } else {
+                                            var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail')[index+1];
+                                            $(imgToChange).fadeOut('fast', function(){
+                                                $(imgToChange).attr('src', changeImg).fadeIn('fast');
+                                                $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
+                                            });
+                                        }
 
                                     }
                                   });
@@ -190,52 +212,40 @@ jQuery('document').ready(function($){
                         }
 
 
-          							$('li.tc-active').each(function(index){
-          								classToChange = 'image-change'+index;
-          								if($(thisLi).find('img').hasClass(classToChange)){
-                            syncSelect(thisLi, index);
-          									var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
-                            $(imgToChange).fadeOut('fast', function(){
-                              $(imgToChange).attr('src', imageChange).fadeIn('fast');
-            									$(imgToChange).attr('srcset', imageChange).fadeIn('fast');
-                            });
-          								}
-          							});
+          				$('li.tc-active').each(function(index){
+          				    classToChange = 'image-change'+index;
+          					if($(thisLi).find('img').hasClass(classToChange)){
+                                syncSelect(thisLi, index);
+                                if($("#tab-gas:visible").is(":visible")){
+              						var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail')[index];
+                                    $(imgToChange).fadeOut('fast', function(){
+                                        $(imgToChange).attr('src', imageChange).fadeIn('fast');
+                						$(imgToChange).attr('srcset', imageChange).fadeIn('fast');
+                                    });
+                                } else {
+                                    var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail')[index];
+                                    $(imgToChange).fadeOut('fast', function(){
+                                        $(imgToChange).attr('src', imageChange).fadeIn('fast');
+                						$(imgToChange).attr('srcset', imageChange).fadeIn('fast');
+                                    });
+                                }
+          					}
+          				});
 
-          						});
+          			});
 
 
                       /****************************
                       Hide Options with Only one Option
                       *****************************/
 
-                      $('ul.tmcp-ul-wrap').each(function(index, val){
+                    $('ul.tmcp-ul-wrap').each(function(index, val){
                         if($(this).find('li.tmcp-field-wrap').length <= 1){
-                          // console.log('true');
-                          $(this).closest('div.cpf-type-radio').css('display', 'none');
-                          $(this).closest('div.cpf-type-radio').prev('.cpf-type-radio').css('width', 100 + '%');
+                            // console.log('true');
+                            $(this).closest('div.cpf-type-radio').css('display', 'none');
+                            $(this).closest('div.cpf-type-radio').prev('.cpf-type-radio').css('width', 100 + '%');
                         }
-                      });
-
-
-          // 						FOR DIV TO SCREENSHOT
-          /*
-          						$(function() {
-          						    $("#btnSave").click(function() {
-          						        html2canvas($("#widget"), {
-          						            onrendered: function(canvas) {
-          						                theCanvas = canvas;
-          						                document.body.appendChild(canvas);
-
-          						                canvas.toBlob(function(blob) {
-          											saveAs(blob, "Dashboard.png");
-          										});
-          						            }
-          						        });
-          						    });
-          						});
-          */
-
+                    });
                   }
                 }
              }, 100);

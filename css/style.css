@@ -1,3 +1,47 @@
+/********CART***********/
+td.product-name a {
+    display: none;
+}
+.woocommerce-cart-form__cart-item > td {
+    vertical-align: top !important;
+}
+.woocommerce table.cart .woocommerce-cart-form__cart-item td img {
+    height: auto !important;
+    max-width: 100px !important;
+}
+/***FLEX BASIS OVERRIDE SETS****/
+.set li.tmcp-field-wrap {
+    flex-basis: 100% !important;
+}
+.set div[id*="product-"] > * {
+    flex-basis: 100% !important;
+}
+.set .halfFlex-ul li {
+    flex-basis: 50% !important;
+}
+.set .quarterFlex-ul li {
+    flex-basis: 25% !important;
+}
+.set .thirdFlex-ul li {
+    flex-basis: 33.33% !important;
+}
+.set .ajaxColumnLink > a{
+    z-index: 1000;
+}
+.set .ajaxColumnLink > .vc_column-inner {
+    z-index: 0;
+}
+
+.set span.tm-epo-required {
+    display: none;
+}
+.set .cpf_hide_element.tm-cell.cpf-type-radio {
+    border: 1px solid #ececec;
+}
+/**********NOMODAL FOR SETS***********/
+.set .ajaxClass {
+    position: relative !important;
+}
 .page-template-default .summary-content {
   display: flex;
   flex-wrap: wrap;
