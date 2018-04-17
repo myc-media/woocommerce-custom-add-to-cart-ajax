@@ -356,9 +356,22 @@ add_filter( 'woocommerce_get_cart_item_from_session', function ( $cartItemData, 
 add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key ) {
     global $woocommerce;
     global $wpdb;
-    debug::print_r($values);
-    wc_add_order_item_meta($itemId, $values["custom_data_0"]["Option"], $values["custom_data_0"]['Option']);
 
+    $countVar = 0;
+    foreach($values as $k => $v){
+        if (strpos($k, 'custom_data_') !== false){
+            $countVar += 1;
+        }
+
+    }
+
+    for($x = 0; $x <= $countVar; $x++){
+    debug::print_r($values);
+      wc_add_order_item_meta($itemId, "Part", $values["custom_data_{$x}"]['Option']);
+      wc_add_order_item_meta($itemId, "Quantity", $values["custom_data_{$x}"]['Quantity']);
+      wc_add_order_item_meta($itemId, "Price", $values["custom_data_{$x}"]['Price']);
+      wc_add_order_item_meta($itemId, " ", $values["custom_data_{$x}"]['Image']);
+    }
 }, 10, 3 );
 
 ?>

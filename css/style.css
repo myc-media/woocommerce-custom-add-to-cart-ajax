@@ -134,6 +134,8 @@
   opacity: 1 !important; }
 .page-template-default .tc-extra-product-options {
   visibility: visible; }
+  .page-template-default .tc-extra-product-options .syncSelectBottom {
+    display: none; }
 .page-template-default a.yith-wcqv-button.button {
   position: absolute;
   z-index: 10000;
@@ -263,3 +265,22 @@ h1.product_title.entry-title {
   display: none; }
 .setClass span.price.tc-price {
   display: none !important; }
+
+  ul.wc-item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+  }
+  .wc-item-meta li {
+    flex-basis: 100%;
+}
+.wc-item-meta li:last-of-type {
+    display: flex;
+    flex-wrap: wrap;
+}
+.wc-item-meta li:last-of-type p {
+    flex-basis: 100%;
+}
+.wc-item-meta li p {
+    padding-bottom: 0;
+}
