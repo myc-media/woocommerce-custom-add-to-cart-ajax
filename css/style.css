@@ -198,6 +198,9 @@
   padding-bottom: 0; }
   .ModalRow.row > h1 {
     color: #ed1c24; }
+  .ModalRow.parts .tm-final-totals {
+      display: none !important;
+  }
 
 ul.wpb_tabs_nav.ui-tabs-nav.clearfix {
   margin-bottom: 45px !important; }

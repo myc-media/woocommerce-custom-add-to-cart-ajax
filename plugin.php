@@ -124,11 +124,15 @@ class MYCAjax{
 
         //PRODUCT VALIDATION
         $passed_validation  = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
-
+        
         for($x = 0; $x <= $count; $x++){
             $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
             $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
-            $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
+            if(isset($productData[$x]['setPrice'])){
+                $cart_item_meta["custom_data_{$x}"]['Price'] = 0;
+            } else {
+                    $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
+                }
             $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
             $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
         }
@@ -216,16 +220,23 @@ class MYCAjax{
         Set price of product
         IMPORTANT -> Reset price counter to 0 to calculate properly
         **********************/
-
+        // debug::print_r($cart_object);
         //ITERATE THROUGH PRODUCTS IN CART
         foreach($cart_object->cart_contents as $key=>$value){
             //ITERATE THROUGH PRODUCT DATA
             foreach($value['tmpost_data']['productData'] as $k=>$v){
 
                 //CALCULATE PRICE
-                $product += $v['price'] * $v['quantity'];
-                //SET PRICE
-                $value['data']->set_price($product);
+                if(isset($v['price']) && $v['price']>0){
+                    $product += $v['price'] * $v['quantity'];
+                    //SET PRICE
+                    $value['data']->set_price($product);
+                } else {
+                    $product = $v['setPrice'];
+                }
+                // $product += $v['price'] * $v['quantity'];
+                // //SET PRICE
+                // $value['data']->set_price($product);
 
             }
             //RESET PRICE COUNTER TO 0
