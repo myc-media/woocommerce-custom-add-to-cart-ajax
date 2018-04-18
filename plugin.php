@@ -27,7 +27,7 @@ class MYCAjax{
 
     public static function protect_pages(){
       global $post;
-      if($post->ID == 1599 || $post->ID ==1597 || $post->ID ==1591 || $post->ID ==1458){
+      if($post->ID == 1599 || $post->ID ==1597 || $post->ID ==1591 || $post->ID ==1458 || $post->ID ==1516 || $post->ID ==1315 || $post->ID ==1345 || $post->ID ==1344 || $post->ID ==1343){
         if(! is_user_logged_in()){
           wp_redirect(home_url() . '/wp-admin');
         }
@@ -124,7 +124,7 @@ class MYCAjax{
 
         //PRODUCT VALIDATION
         $passed_validation  = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
-        
+
         for($x = 0; $x <= $count; $x++){
             $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
             $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
@@ -221,7 +221,7 @@ class MYCAjax{
         Set price of product
         IMPORTANT -> Reset price counter to 0 to calculate properly
         **********************/
-        
+
         //ITERATE THROUGH PRODUCTS IN CART
         foreach($cart_object->cart_contents as $key=>$value){
             //ITERATE THROUGH PRODUCT DATA
@@ -239,7 +239,7 @@ class MYCAjax{
                     //SET PRICE
                     $value['data']->set_price($product);
                 }
-                
+
 
             }
             //RESET PRICE COUNTER TO 0
@@ -291,22 +291,22 @@ class MYCAjax{
 
     /********ADD CUSTOM META INFO TO ORDER/CHECKOUT********/
 
-    public static function myc_order_item_meta($item_meta, $cart_item){
-        $countVar = 0;
-        foreach($cart_item as $k => $v){
-            if (strpos($k, 'custom_data_') !== false){
-                $countVar += 1;
-            }
-
-        }
-
-        for($x = 0; $x <= $countVar; $x++){
-            if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"]){
-                $item_meta->add('Options', 'Test');
-            }
-        }
-
-    }
+    // public static function myc_order_item_meta($item_meta, $cart_item){
+    //     $countVar = 0;
+    //     foreach($cart_item as $k => $v){
+    //         if (strpos($k, 'custom_data_') !== false){
+    //             $countVar += 1;
+    //         }
+    //
+    //     }
+    //
+    //     for($x = 0; $x <= $countVar; $x++){
+    //         if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"]){
+    //             $item_meta->add('Options', 'Test');
+    //         }
+    //     }
+    //
+    // }
 
 
 
@@ -346,27 +346,27 @@ add_action('woocommerce_before_calculate_totals', array('MYCAjax', 'myc_before_c
 add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 10, 2);
 
 //ADD ITEM META INFO
-add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
+// add_action('wc_add_order_item_meta', array('MYCAjax', 'myc_order_item_meta'), 10, 2);
 
 
 /***********
 TESTING
 *************/
 
-add_filter( 'woocommerce_add_cart_item_data', 'aa_func_20170206100217', 10, 3 );
-
-function aa_func_20170206100217( $cart_item_data, $product_id, $variation_id ) {
-
-    return $cart_item_data;
-}
-
-add_filter( 'woocommerce_get_cart_item_from_session', function ( $cartItemData, $cartItemSessionData, $cartItemKey ) {
-
-    // $cartItemData['selected_date_event'] = $cartItemSessionData['selected_date_event'];
-    // return $cartItemData;
-    return $cartItemData;
-
-}, 10, 3 );
+// add_filter( 'woocommerce_add_cart_item_data', 'aa_func_20170206100217', 10, 3 );
+//
+// function aa_func_20170206100217( $cart_item_data, $product_id, $variation_id ) {
+//
+//     return $cart_item_data;
+// }
+//
+// add_filter( 'woocommerce_get_cart_item_from_session', function ( $cartItemData, $cartItemSessionData, $cartItemKey ) {
+//
+//     // $cartItemData['selected_date_event'] = $cartItemSessionData['selected_date_event'];
+//     // return $cartItemData;
+//     return $cartItemData;
+//
+// }, 10, 3 );
 
 add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key ) {
     global $woocommerce;
@@ -379,12 +379,13 @@ add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key
         }
 
     }
+
     ?><pre><?php print_r($values); ?></pre><?php
-    
+
     foreach($values['tmpost_data']['productData'] as $key => $value){
-        
+
         $renderImage = "<img src='" . $value['image'] . "' />";
-        
+
         wc_add_order_item_meta($itemId, "Part", $value["label"]);
         wc_add_order_item_meta($itemId, "Quantity", $value["quantity"]);
         if(isset($valu['setPrice'])){
@@ -392,17 +393,9 @@ add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key
         } else {
             wc_add_order_item_meta($itemId, "Price", $value["price"]);
         }
-        
+
         wc_add_order_item_meta($itemId, " ", $renderImage);
     }
-
-    // for($x = 0; $x <= $countVar; $x++){
-    
-    //   wc_add_order_item_meta($itemId, "Part", $values["custom_data_{$x}"]['Option']);
-    //   wc_add_order_item_meta($itemId, "Quantity", $values["custom_data_{$x}"]['Quantity']);
-    //   wc_add_order_item_meta($itemId, "Price", $values["custom_data_{$x}"]['Price']);
-    //   wc_add_order_item_meta($itemId, " ", $values["custom_data_{$x}"]['Image']);
-    // }
 }, 10, 3 );
 
 ?>
