@@ -267,19 +267,31 @@ class MYCAjax{
         //LOOP THROUGH PRODUCTS
         for($x = 0; $x <= $countVar; $x++){
             //VALIDATE IF PRODUCT EXISTS AND OPTION IS NOT NULL
-            if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
-                //SET CUSTOM TEMPLATE OF OUTPUT
-                $other_data[] = array(
-                    //OUTPUT FIRST FIELD (PRODUCT NAME)
-                    'name' => $cart_item["custom_data_{$x}"]['Option'],
-                    //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
-                    'value' =>  '<p>
-                                <span class="cpf-img-on-cart">
-                                '.$cart_item["custom_data_{$x}"]['Image'].'
-                                '.$cart_item["custom_data_{$x}"]['Quantity'].'<small> x $'.$cart_item["custom_data_{$x}"]['Price'].' = $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</small>
-                                </span>'
-                );
+          if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
+            if($cart_item["custom_data_${x}"]['Price'] > 0){
+              $other_data[] = array(
+                  //OUTPUT FIRST FIELD (PRODUCT NAME)
+                  'name' => $cart_item["custom_data_{$x}"]['Option'],
+                  //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
+                  'value' =>  '<p>
+                              <span class="cpf-img-on-cart">
+                              '.$cart_item["custom_data_{$x}"]['Image'].'
+                              '.$cart_item["custom_data_{$x}"]['Quantity'].'<small> x $'.$cart_item["custom_data_{$x}"]['Price'].' = $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</small>
+                              </span>'
+              );
+            } else {
+              //SET CUSTOM TEMPLATE OF OUTPUT
+              $other_data[] = array(
+                  //OUTPUT FIRST FIELD (PRODUCT NAME)
+                  'name' => $cart_item["custom_data_{$x}"]['Option'],
+                  //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
+                  'value' =>  '<p>
+                              <span class="cpf-img-on-cart">
+                              '.$cart_item["custom_data_{$x}"]['Image'].'
+                              </span>'
+              );
             }
+          }
         }
 
         //RETURN PRODUCT TEMPLATE WITH PRODUCT OPTIONS PRINTED TO CART & MINI CART
@@ -379,8 +391,6 @@ add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key
         }
 
     }
-
-    ?><pre><?php print_r($values); ?></pre><?php
 
     foreach($values['tmpost_data']['productData'] as $key => $value){
 

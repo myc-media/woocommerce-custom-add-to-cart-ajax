@@ -3,7 +3,7 @@ jQuery('document').ready(function($){
         $(this).find('a.woocommerce-LoopProduct-link').addClass('ajaxModal');
         $(this).find('div.product-wrap a').addClass('ajaxModal');
     }));
-    
+
     if($('.ajaxModal').closest($('.ajaxColumnLink')).length > 0){
         $('body').addClass('set');
     }
@@ -14,11 +14,43 @@ jQuery('document').ready(function($){
   var buttonURL, buttonID, thisButton, post_id;
   var productArray = [];
 
+  /**********REMOVE LINK FROM CHECKOUT PAGE TO PRODUCT ON THUMBNAIL****************/
+
+
+  var checkoutExist = setInterval(function(){
+    if($('#order_review').length){
+      //STOP THE INTERVAL CHECK
+      clearInterval(riserExist);
+      $('.product-iamge a').removeAttr('href');
+    }
+  }, 100);
+
+  /*********RISER CSS FOR COLUMN LINK********/
+
+  var riserExist = setInterval(function(){
+
+    if($('.riserLeft').length){
+      //STOP THE INTERVAL CHECK
+      clearInterval(riserExist);
+      var riserLinkHeight = $('.riserLeft li.product.type-product').css('height');
+      $('.riserLeft a.column-link.ajaxModal').height(riserLinkHeight);
+      $('.riserRight a.column-link.ajaxModal').height(riserLinkHeight);
+      $('.riserLeft a.column-link.ajaxModal').css('left', '10%');
+      $('.riserRight a.column-link.ajaxModal').css('left', '-10%');
+      $(window).on('resize', function(){
+        riserLinkHeight = $('.riserLeft li.product.type-product').css('height');
+        $('.riserLeft a.column-link.ajaxModal').height(riserLinkHeight);
+        $('.riserRight a.column-link.ajaxModal').height(riserLinkHeight);
+        $('.riserLeft a.column-link.ajaxModal').css('left', '10%');
+        $('.riserRight a.column-link.ajaxModal').css('left', '-10%');
+      });
+    }
+  }, 100);
   /*******CLOSE AJAX BOX**********/
 
     function closeAjaxBox(){
         var headingText = "<h1 style='text-align: center;'>" + pageTitle + "</h1><p class='addToCartText' style='text-align: center;'>" + pageSubTitle + "</p>";
-        
+
         $('.ajaxColumn').removeClass('ajaxClass');
         $('.ModalRow.row').html(headingText);
         $(this).hide();
@@ -32,7 +64,7 @@ jQuery('document').ready(function($){
   $('.closeAjaxBox').on('click', function(e){
     closeAjaxBox();
   });
-  
+
   $('ul.wpb_tabs_nav a').on('click', function(){
       closeAjaxBox();
   });
@@ -136,121 +168,118 @@ jQuery('document').ready(function($){
                 if($('.tc-active').length){
 
 
-                  //STOP THE INTERVAL CHECK
-                  clearInterval(checkExist);
+                //STOP THE INTERVAL CHECK
+                clearInterval(checkExist);
 
-                  //IF .ajaxColumnLink has content
-          				if($('.ajaxColumnLink').length > 0 && checkExist){
+                //IF .ajaxColumnLink has content
+        				if($('.ajaxColumnLink').length > 0 && checkExist){
                     /******************************
                     LOOP THROUGH ALL IMAGES ON THE LEFT AND RIGHT
                     AND ASSIGN THE SAME CLASSES TO BOTH OF THEM
                     ********************************/
-          						$('img.attachment-woocommerce_thumbnail').each(function(index, val){
-          							$(this).addClass('image-change'+index);
-          						});
+        						$('img.attachment-woocommerce_thumbnail').each(function(index, val){
+        							$(this).addClass('image-change'+index);
+        						});
 
-          						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
-          							$(this).find('li label img').addClass('image-change'+index);
-          						});
+        						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+        							$(this).find('li label img').addClass('image-change'+index);
+        						});
 
-                      /**************
-                      CHANGE IMAGE ON CLICK
-                      ****************/
+                  /**************
+                  CHANGE IMAGE ON CLICK
+                  ****************/
 
-  					$('li.tmcp-field-wrap').on('click', function(){
-                        var count;
-  						var thisLi = $(this);
-  						var imageChange = $(this).find('label img').attr('src');
-  						var classToChange;
+        					$('li.tmcp-field-wrap').on('click', function(){
+                    var count;
+        						var thisLi = $(this);
+        						var imageChange = $(this).find('label img').attr('src');
+        						var classToChange;
 
-                        function syncSelect(list, index){
-                          var isPreviousDiv = thisLi.closest('.cpf-type-radio').hasClass('syncSelect') ? true : false;
-                          var isNextDiv = thisLi.closest('div.cpf-type-radio').hasClass('syncSelectBottom') ? true : false;
-                          var previousDiv = thisLi.closest('.cpf-type-radio');
-                          var nextDiv = thisLi.closest('.syncSelectBottom');
+                    function syncSelect(list, index){
+                      var isPreviousDiv = thisLi.closest('.cpf-type-radio').hasClass('syncSelect') ? true : false;
+                      var isNextDiv = thisLi.closest('div.cpf-type-radio').hasClass('syncSelectBottom') ? true : false;
+                      var previousDiv = thisLi.closest('.cpf-type-radio');
+                      var nextDiv = thisLi.closest('.syncSelectBottom');
 
-                          if(isPreviousDiv){
-                            // console.log(previousDiv);
-                            previousDiv.find('li.tmcp-field-wrap').each(function(i, val){
-                              var stillExist = setInterval(function(){
-                                if($('.tc-active').length){
-                                  //STOP THE INTERVAL CHECK
-                                  clearInterval(stillExist);
-                                  if($(val).hasClass('tc-active')){
-                                    count = i;
-                                  }
-                                  $('.syncSelectBottom').find('li.tmcp-field-wrap').each(function(i, val){
-                                    if(i != count){
-                                      $(val).removeClass('tc-active');
+                      if(isPreviousDiv){
+                        // console.log(previousDiv);
+                        previousDiv.find('li.tmcp-field-wrap').each(function(i, val){
+                          var stillExist = setInterval(function(){
+                            if($('.tc-active').length){
+                              //STOP THE INTERVAL CHECK
+                              clearInterval(stillExist);
+
+                              if($(val).hasClass('tc-active')){
+                                count = i;
+                              }
+                              $('.syncSelectBottom').find('li.tmcp-field-wrap').each(function(i, val){
+                                if(i != count){
+                                  $(val).removeClass('tc-active');
+                                } else {
+                                    var changeImg = $(val).find('label img').attr('src');
+                                    // console.log(changeImg);
+                                    $(val).addClass('tc-active');
+                                //  console.log($("#tab-gas:visible").is(":visible") ? 'true' : 'false');
+                                    if($("#tab-gas:visible").is(":visible")){
+                                        var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail')[index+1];
+                                        $(imgToChange).fadeOut('fast', function(){
+                                            $(imgToChange).attr('src', changeImg).fadeIn('fast');
+                                            $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
+                                        });
                                     } else {
-                                        var changeImg = $(val).find('label img').attr('src');
-                                        // console.log(changeImg);
-                                        $(val).addClass('tc-active');
-                                    //  console.log($("#tab-gas:visible").is(":visible") ? 'true' : 'false');
-                                        if($("#tab-gas:visible").is(":visible")){
-                                            var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail')[index+1];
-                                            $(imgToChange).fadeOut('fast', function(){
-                                                $(imgToChange).attr('src', changeImg).fadeIn('fast');
-                                                $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
-                                            });
-                                        } else {
-                                            var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail')[index+1];
-                                            $(imgToChange).fadeOut('fast', function(){
-                                                $(imgToChange).attr('src', changeImg).fadeIn('fast');
-                                                $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
-                                            });
-                                        }
-
+                                        var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail')[index+1];
+                                        $(imgToChange).fadeOut('fast', function(){
+                                            $(imgToChange).attr('src', changeImg).fadeIn('fast');
+                                            $(imgToChange).attr('srcset', changeImg).fadeIn('fast');
+                                        });
                                     }
-                                  });
                                 }
-                              }, 100);
+                              });
+                            }
+                          }, 100);
+                        });
+                      } else {
+                        // console.log(nextDiv);
+                      }
+                    }
+
+
+            				$('li.tc-active').each(function(index){
+            				    classToChange = 'image-change'+index;
+                        if($(thisLi).find('img').hasClass(classToChange)){
+                          syncSelect(thisLi, index);
+                          if($("#tab-gas:visible").is(":visible")){
+                            var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail')[index];
+                            $(imgToChange).fadeOut('fast', function(){
+                              $(imgToChange).attr('src', imageChange).fadeIn('fast');
+                              $(imgToChange).attr('srcset', imageChange).fadeIn('fast');
                             });
                           } else {
-                            // console.log(nextDiv);
+                            var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail')[index];
+                            $(imgToChange).fadeOut('fast', function(){
+                              $(imgToChange).attr('src', imageChange).fadeIn('fast');
+                              $(imgToChange).attr('srcset', imageChange).fadeIn('fast');
+                            });
                           }
                         }
+                      });
+                    });
 
 
-          				$('li.tc-active').each(function(index){
-          				    classToChange = 'image-change'+index;
-          					if($(thisLi).find('img').hasClass(classToChange)){
-                                syncSelect(thisLi, index);
-                                if($("#tab-gas:visible").is(":visible")){
-              						var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail')[index];
-                                    $(imgToChange).fadeOut('fast', function(){
-                                        $(imgToChange).attr('src', imageChange).fadeIn('fast');
-                						$(imgToChange).attr('srcset', imageChange).fadeIn('fast');
-                                    });
-                                } else {
-                                    var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail')[index];
-                                    $(imgToChange).fadeOut('fast', function(){
-                                        $(imgToChange).attr('src', imageChange).fadeIn('fast');
-                						$(imgToChange).attr('srcset', imageChange).fadeIn('fast');
-                                    });
-                                }
-          					}
-          				});
-
-          			});
-
-
-                      /****************************
-                      Hide Options with Only one Option
-                      *****************************/
+                    /****************************
+                    Hide Options with Only one Option
+                    *****************************/
 
                     $('ul.tmcp-ul-wrap').each(function(index, val){
-                        if($(this).find('li.tmcp-field-wrap').length <= 1){
-                            // console.log('true');
-                            $(this).closest('div.cpf-type-radio').css('display', 'none');
-                            $(this).closest('div.cpf-type-radio').prev('.cpf-type-radio').css('width', 100 + '%');
-                        }
+                      if($(this).find('li.tmcp-field-wrap').length <= 1){
+                    // console.log('true');
+                        $(this).closest('div.cpf-type-radio').css('display', 'none');
+                        $(this).closest('div.cpf-type-radio').prev('.cpf-type-radio').css('width', 100 + '%');
+                      }
                     });
                   }
                 }
-             }, 100);
-
-
+              }, 100);
           },
           /*************************
           AJAX MODAL BEFORE IT LOADS
@@ -308,14 +337,18 @@ jQuery('document').ready(function($){
         if($(this).hasClass('tc-active')){
             var checkPrice = $('.tc-totals-form input.cpf-product-price').attr('value');
             label = $(this).find('span.tc-label').text();
-           
-            varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/[\[\]"]+/g, '');
-           
-			varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
 
-            varImage = $(this).find('label img').attr('src');
+            varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/[\[\]"]+/g, '');
+
+            varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
+
+            if($(this).find('label input.tmcp-field').attr('data-imagep')){
+              varImage = $(this).find('label input.tmcp-field').attr('data-imagep');
+            } else {
+              varImage = $(this).find('label input.tmcp-field').attr('data-image');
+            }
             varFinalPrice = $('.price.amount.final');
-            
+
             if(checkPrice > 10){
                 var tempPrice = $('#tm-epo-totals span.price.amount.final').text().replace(/[\[\]"$]+/g, '');
                 finalPrice = tempPrice;
