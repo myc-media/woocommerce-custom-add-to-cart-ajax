@@ -128,11 +128,12 @@ class MYCAjax{
         for($x = 0; $x <= $count; $x++){
             $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
             $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
-            if(isset($productData[$x]['setPrice'])){
+            if(isset($productData[$x]['setPrice']) && $productData[$x]['price'] < 1){
                 $cart_item_meta["custom_data_{$x}"]['Price'] = 0;
+                $cart_item_meta["custom_data_{$x}"]['setPrice'] = $productData[$x]['setPrice'];
             } else {
-                    $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
-                }
+                $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
+            }
             $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
             $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
         }
@@ -220,7 +221,7 @@ class MYCAjax{
         Set price of product
         IMPORTANT -> Reset price counter to 0 to calculate properly
         **********************/
-        // debug::print_r($cart_object);
+        
         //ITERATE THROUGH PRODUCTS IN CART
         foreach($cart_object->cart_contents as $key=>$value){
             //ITERATE THROUGH PRODUCT DATA
@@ -228,15 +229,17 @@ class MYCAjax{
 
                 //CALCULATE PRICE
                 if(isset($v['price']) && $v['price']>0){
+                    // debug::print_r($v);
                     $product += $v['price'] * $v['quantity'];
                     //SET PRICE
                     $value['data']->set_price($product);
                 } else {
+                    // debug::print_r($v);
                     $product = $v['setPrice'];
+                    //SET PRICE
+                    $value['data']->set_price($product);
                 }
-                // $product += $v['price'] * $v['quantity'];
-                // //SET PRICE
-                // $value['data']->set_price($product);
+                
 
             }
             //RESET PRICE COUNTER TO 0
@@ -376,14 +379,30 @@ add_action( 'woocommerce_add_order_item_meta', function ( $itemId, $values, $key
         }
 
     }
-
-    for($x = 0; $x <= $countVar; $x++){
-    debug::print_r($values);
-      wc_add_order_item_meta($itemId, "Part", $values["custom_data_{$x}"]['Option']);
-      wc_add_order_item_meta($itemId, "Quantity", $values["custom_data_{$x}"]['Quantity']);
-      wc_add_order_item_meta($itemId, "Price", $values["custom_data_{$x}"]['Price']);
-      wc_add_order_item_meta($itemId, " ", $values["custom_data_{$x}"]['Image']);
+    ?><pre><?php print_r($values); ?></pre><?php
+    
+    foreach($values['tmpost_data']['productData'] as $key => $value){
+        
+        $renderImage = "<img src='" . $value['image'] . "' />";
+        
+        wc_add_order_item_meta($itemId, "Part", $value["label"]);
+        wc_add_order_item_meta($itemId, "Quantity", $value["quantity"]);
+        if(isset($valu['setPrice'])){
+            wc_add_order_item_meta($itemId, "Price", $value["setPrice"]);
+        } else {
+            wc_add_order_item_meta($itemId, "Price", $value["price"]);
+        }
+        
+        wc_add_order_item_meta($itemId, " ", $renderImage);
     }
+
+    // for($x = 0; $x <= $countVar; $x++){
+    
+    //   wc_add_order_item_meta($itemId, "Part", $values["custom_data_{$x}"]['Option']);
+    //   wc_add_order_item_meta($itemId, "Quantity", $values["custom_data_{$x}"]['Quantity']);
+    //   wc_add_order_item_meta($itemId, "Price", $values["custom_data_{$x}"]['Price']);
+    //   wc_add_order_item_meta($itemId, " ", $values["custom_data_{$x}"]['Image']);
+    // }
 }, 10, 3 );
 
 ?>

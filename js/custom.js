@@ -297,38 +297,38 @@ jQuery('document').ready(function($){
       var productObj ={};
       var itemURL = thisButton.attr('href');
       var quantity = $('form input[name="quantity"]').val();
-      var label, varQuantity, varImage, varPrice, varFinalPrice;
+      var label, varQuantity, varImage, varPrice, finalPrice;
 
       /**********************************
       LOOP THROUGH ACTIVE/SELECTED OPTIONS
       **********************************/
 
-      $('li.tmcp-field-wrap').each(function(index, value){
-          productArray.push($(this));
-          if($(this).hasClass('tc-active')){
-              var checkPrice = $('.tc-totals-form input.cpf-product-price').attr('value');
-              label = $(this).find('span.tc-label').text();
-            //   if(checkPrice > 2){
-            //       varPrice = checkPrice
-            //   } else {
-                    varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/[\[\]"]+/g, '');
-                // }
-                console.log(varPrice);
-            //   console.log($('.tc-totals-form input.cpf-product-price').attr('value'));
-              // console.log(varPrice);
-              // console.log(parseFloat(varPrice));
-//                 varQuantity = $(this).find('input.tm-qty').val();
-			        varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
+    $('li.tmcp-field-wrap').each(function(index, value){
+        productArray.push($(this));
+        if($(this).hasClass('tc-active')){
+            var checkPrice = $('.tc-totals-form input.cpf-product-price').attr('value');
+            label = $(this).find('span.tc-label').text();
+           
+            varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/[\[\]"]+/g, '');
+           
+			varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
 
-              varImage = $(this).find('label img').attr('src');
-              varFinalPrice = $('.price.amount.final');
-              if(checkPrice > 10){
-                  productObj[index]={'label':label, 'setPrice':checkPrice, 'image': varImage, 'quantity': varQuantity};
-              } else {
-                    productObj[index]={'label':label, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
-                }
-          }
-      });
+            varImage = $(this).find('label img').attr('src');
+            varFinalPrice = $('.price.amount.final');
+            
+            if(checkPrice > 10){
+                var tempPrice = $('#tm-epo-totals span.price.amount.final').text().replace(/[\[\]"$]+/g, '');
+                finalPrice = tempPrice;
+                console.log(finalPrice);
+                console.log(varPrice);
+                varPrice = 0;
+                $('.tc-totals-form input.cpf-product-price').attr('value', finalPrice);
+                  productObj[index]={'label':label, 'setPrice':finalPrice, 'image': varImage, 'quantity': varQuantity};
+            } else {
+                productObj[index]={'label':label, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
+            }
+        }
+    });
 
 //       console.log(productObj);
 
