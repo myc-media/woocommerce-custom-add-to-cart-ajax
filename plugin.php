@@ -411,6 +411,92 @@ class MYCAjax{
       }
     }
 
+/*
+    public static function myc_email_order_meta_fields($fields, $sent_to_admin, $order){
+
+      $fields['customer_install_name'] = array(
+        'label'   => __('Customer Install Name'),
+        'value'   => get_post_meta($order->id, '_customer_install_name', true)
+      );
+      $fields['customer_install_address'] = array(
+        'label'   => __('Customer Install Address'),
+        'value'   => get_post_meta($order->id, '_customer_install_address', true)
+      );
+      $fields['customer_install_address_2'] = array(
+        'label'   => __('Customer Install Address 2'),
+        'value'   => get_post_meta($order->id, '_customer_install_address_2', true)
+      );
+      $fields['customer_po_number'] = array(
+        'label'   => __('PO Number'),
+        'value'   => get_post_meta($order->id, '_customer_po_number', true)
+      );
+      return $fields;
+    }
+*/
+
+
+
+    public static function myc_checkout_update_user_meta($user_id){
+      if($user_id && $_POST['customer_install_name']){
+        update_user_meta($user_id, 'customer_install_name', sanitize_text_field($_POST['customer_install_name']));
+      }
+      if($user_id && $_POST['customer_install_address']){
+        update_user_meta($user_id, 'customer_install_address', sanitize_text_field($_POST['customer_install_address']));
+      }
+      if($user_id && $_POST['customer_install_address_2']){
+        update_user_meta($user_id, 'customer_install_address_2', sanitize_text_field($_POST['customer_install_address_2']));
+      }
+      if($user_id && $_POST['customer_po_number']){
+        update_user_meta($user_id, 'customer_po_number', sanitize_text_field($_POST['customer_po_number']));
+      }
+    }
+
+    public static function myc_order_thank_you_pages($order){
+	    	?>
+		    	<div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
+
+
+					<h2 class="woocommerce-column__title">Customer Install Info</h2>
+
+					<table>
+						<tbody>
+							<tr>
+								<td>Customer Install Name</td>
+								<td><?php echo $order->get_meta('_customer_install_name'); ?></td>
+							</tr>
+							<tr>
+								<td>Customer Address Line 1</td>
+								<td><?php echo $order->get_meta('_customer_install_address'); ?></td>
+							</tr>
+							<tr>
+								<td>Customer Address Line 2</td>
+								<td><?php echo $order->get_meta('_customer_install_address_2'); ?></td>
+							</tr>
+							<tr>
+								<td>Customer PO</td>
+								<td><?php echo $order->get_meta('_customer_po_number'); ?></td>
+							</tr>
+						</tbody>
+					</table>
+
+
+				</div>
+
+		    <?php
+
+
+    }
+
+    public static function myc_email_order_meta_keys($keys){
+
+      $keys['Customer Install Name'] = '_customer_install_name';
+      $keys['Customer Address'] = '_customer_install_address';
+      $keys['Customer Address Two'] = '_customer_install_address_2';
+      $keys['Customer PO'] = '_customer_po_number';
+      return $keys;
+    }
+
+
 
     public static function myc_admin_order_data_after_billing_address($order){
       ?>
