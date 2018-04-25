@@ -190,11 +190,21 @@ jQuery('document').ready(function($){
                   ****************/
 
         					$('li.tmcp-field-wrap').on('click', function(){
-                    console.log($(this));
+
                     var count;
         						var thisLi = $(this);
         						var imageChange = $(this).find('label img').attr('src');
         						var classToChange;
+
+                    var checkActive = setInterval(function(){
+                      if($('.tc-active').length){
+
+                        clearInterval(checkActive);
+
+                        var totalActive = $('.tc-active').length;
+                        console.log(totalActive);
+                      }
+                    }, 100);
 
                     function syncSelect(list, index){
                       var previousDiv = list.closest('.cpf-type-radio');
@@ -250,8 +260,13 @@ jQuery('document').ready(function($){
                       }
                     }
 
-
+                    /********************
+                    CHANGE THIS SECTION TO CHECK BY ALL LI's
+                    INSTEAD OF CHECKING BY ACTIVE LI's
+                    SO WE CAN CHECK BY CLASS INSTEAD OF INDEX
+                    **********************/
             				$('li.tc-active').each(function(index){
+
             				    classToChange = 'image-change'+index;
                         if($(thisLi).find('img').hasClass(classToChange)){
                           syncSelect(thisLi, index);
@@ -271,7 +286,6 @@ jQuery('document').ready(function($){
                               $(imgToChange).attr('srcset', imageChange).fadeIn('fast');
                             });
                           } else {
-                            console.log($('.tc-active')[16]);
                             var imgToChange = $('img.attachment-woocommerce_thumbnail')[index];
                             var imgSrc = $(thisLi).find('label img').attr('src');
                             if($(thisLi).find('label img').hasClass(classToChange) && $(imgToChange).hasClass(classToChange)){
