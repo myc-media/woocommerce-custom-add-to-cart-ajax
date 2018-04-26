@@ -144,14 +144,9 @@ class MYCAjax{
         for($x = 0; $x <= $count; $x++){
             $cart_item_meta["custom_data_{$x}"]['Option'] = $productData[$x]['label'];
             $cart_item_meta["custom_data_{$x}"]['Quantity'] = $productData[$x]['quantity'];
-            if(isset($productData[$x]['setPrice']) && $productData[$x]['price'] < 1){
-                $cart_item_meta["custom_data_{$x}"]['Price'] = 0;
                 $cart_item_meta["custom_data_{$x}"]['setPrice'] = $productData[$x]['setPrice'];
-            } else {
                 $cart_item_meta["custom_data_{$x}"]['Price'] = $productData[$x]['price'];
-            }
             $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
-            $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
         }
             $cart_item_meta['canvas'] = $canvasImage;
 
@@ -233,7 +228,7 @@ class MYCAjax{
 
         }
 
-        ?><pre><?php print_r($cart_item); ?></pre><?php
+
 
         /*******LOOP THROUGH ARRAY OF PRODUCTS IN SESSION********/
 
@@ -243,8 +238,10 @@ class MYCAjax{
                 /*******SET ARRAY OF OPTIONS SET TO CART********/
                 $cart_item["custom_data_{$x}"]['Option'] = $values["custom_data_{$x}"]['Option'];
                 $cart_item["custom_data_{$x}"]['Quantity'] = $values["custom_data_{$x}"]['Quantity'];
+                $cart_item["custom_data_{$x}"]['setPrice'] = $values["custom_data_{$x}"]['setPrice'];
                 $cart_item["custom_data_{$x}"]['Price'] = $values["custom_data_{$x}"]['Price'];
                 $cart_item["custom_data_{$x}"]['Image'] = $values["custom_data_{$x}"]['Image'];
+                $cart_item['canvas'] = $values['canvas'];
             }
         }
 
@@ -281,19 +278,19 @@ class MYCAjax{
             //ITERATE THROUGH PRODUCT DATA
             foreach($value['tmpost_data']['productData'] as $k=>$v){
 
-                //CALCULATE PRICE
-                if(isset($v['price']) && $v['price']>0){
-                    // debug::print_r($v);
-                    $product += $v['price'] * $v['quantity'];
-                    //SET PRICE
-                    $value['data']->set_price($product);
-                } else {
-                    // debug::print_r($v);
-                    $product = $v['setPrice'];
-                    //SET PRICE
-                    $value['data']->set_price($product);
-                }
+                if($v['setPrice'] > 100){
 
+                    $product = $v['setPrice'] / $value['quantity'];
+                    //SET PRICE
+                    $value['data']->set_price($product);
+
+                } else if($v['setPrice'] > 100 and $v['price'] <1){
+                  $product += ($v['price'] * $v['quantity']) + $v['setPrice'];
+                  $value['data']->set_price($product);
+                } else {
+                  $product += ($v['price'] * $v['quantity']);
+                  $value['data']->set_price($product);
+                }
 
             }
             //RESET PRICE COUNTER TO 0
@@ -370,18 +367,55 @@ class MYCAjax{
             $renderImage = "<img src='" . $value['image'] . "' />";
 
             wc_add_order_item_meta($itemId, "Part", $value["label"]);
-            wc_add_order_item_meta($itemId, "Quantity", $value["quantity"]);
-            if(isset($valu['setPrice'])){
-                wc_add_order_item_meta($itemId, "Price", $value["setPrice"]);
-            } else {
-                wc_add_order_item_meta($itemId, "Price", $value["price"]);
+            // wc_add_order_item_meta($itemId, "Quantity", $value["quantity"]);
+            // if(isset($valu['setPrice'])){
+            //     wc_add_order_item_meta($itemId, "Price", $value["setPrice"]);
+            // } else {
+            //     wc_add_order_item_meta($itemId, "Price", $value["price"]);
+            // }
+            if(empty($values['canvas'])){
+              wc_add_order_item_meta($itemId, "Part-Image", $renderImage);
             }
-
-            wc_add_order_item_meta($itemId, " ", $renderImage);
+            // wc_add_order_item_meta($itemId, " ", $renderImage);
         }
+        if(!empty($values['canvas'])){
+          $canvas = '<img src="'.$values['canvas'].'" />';
+          wc_add_order_item_meta($itemId, 'Set-Image', $canvas);
+        }
+        return $itemId;
     }
 
+    /******REMOVE LINK FROM PRODUCT NAME ON ORDER DETAILS********/
 
+    public static function myc_order_item_name( $name, $item, $order ) {
+       $name = $item['name'];
+       return $name;
+    }
+
+    public static function myc_email_order_items_table( $output, $order ) {
+
+    	// set a flag so we don't recursively call this filter
+    	static $run = 0;
+
+    	// if we've already run this filter, bail out
+    	if ( $run ) {
+    		return $output;
+    	}
+
+      $args = array(
+          'show_sku'      => true,
+          'show_image'    => false,
+          'image_size'    => array( 100, 100 ),
+      );
+
+    	// increment our flag so we don't run again
+    	$run++;
+
+    	// if first run, give WooComm our updated table
+    	return $order->email_order_items_table( $args );
+    }
+
+    /**********CUSTOM CHECKOUT FORM FIELDS**************/
     public static function myc_before_checkout_form($checkout){
 
       date_default_timezone_set('America/New_York');
@@ -492,6 +526,7 @@ class MYCAjax{
     }
 
     public static function myc_order_thank_you_pages($order){
+
 	    	?>
 		    	<div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
 
@@ -545,6 +580,42 @@ class MYCAjax{
 
 
 }
+
+/*********WOOCOMMERCE TEMPLATE REDIRECT************/
+// function woo_adon_plugin_template( $template, $template_name, $template_path ) {
+//   global $woocommerce;
+//   $_template = $template;
+//   if ( ! $template_path )
+//      $template_path = $woocommerce->template_url;
+//
+//   $plugin_path  = untrailingslashit( plugin_dir_path( __FILE__ ) )  . '/template/woocommerce/';
+//
+//  // Look within passed path within the theme - this is priority
+//  $template = locate_template(
+//  array(
+//    $template_path . $template_name,
+//    $template_name
+//  )
+// );
+//
+// if( ! $template && file_exists( $plugin_path . $template_name ) )
+//  $template = $plugin_path . $template_name;
+//
+// if ( ! $template )
+//  $template = $_template;
+//
+// return $template;
+// }
+//
+//
+// add_filter( 'woocommerce_locate_template', 'woo_adon_plugin_template', 1, 3 );
+
+
+/******REMOVE LINK FROM ORDER DETAILS PRODUCT NAME**********/
+add_filter( 'woocommerce_order_item_name', array('MYCAjax', 'myc_order_item_name'), 10, 3 );
+
+/********ADD PRODUCT THUMBNAIL TO EMAIL*******/
+add_filter('woocommerce_email_order_items_table', array('MYCAjax', 'myc_email_order_items_table'), 10, 2);
 
 /***********REGISTER ACTIONS AND FILTERS***********/
 add_filter('woocommerce_cart_item_permalink','__return_false');
@@ -608,5 +679,9 @@ add_action('woocommerce_order_details_after_order_table', array('MYCAjax', 'myc_
 
 add_filter('woocommerce_email_order_meta_keys', array('MYCAjax', 'myc_email_order_meta_keys'));
 
-
+// function testmail($object){
+//
+// }
+//
+// add_action('woocommerce_email_before_order_table', 'testmail');
 ?>
