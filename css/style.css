@@ -1,3 +1,11 @@
+/*******HTML2CANVAS********/
+.ajaxColumnLink canvas {
+    width: 100px !important;
+    height: auto !important;
+    position: fixed;
+    right: 4%;
+    top: 20%;
+}
 /********CHECKOUT**********/
 div#ui-datepicker-div td a {
     color: white;
@@ -101,6 +109,11 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
 body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
     width: auto !important;
     height: auto !important;
+}
+
+/*******ZINDEX*********/
+.productZIndex {
+  z-index: 0 !important;
 }
 /******SASS OUTPUT*********/
 .twentyPercent {

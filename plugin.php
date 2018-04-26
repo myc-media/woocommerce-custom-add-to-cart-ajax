@@ -22,6 +22,7 @@ function enabling_date_picker() {
 // MAIN CLASS FOR AJAX ADD TO CART
 class MYCAjax{
 
+
     /********Load JS, CSSand register Ajax URL*******/
 
     // ajaxURL is: modalAjaxURL.ajaxurl
@@ -30,6 +31,9 @@ class MYCAjax{
         wp_enqueue_script( 'theme_js', plugin_dir_url(__FILE__) . '/js/custom.js', array( 'jquery' ), '1.0', true );
         wp_enqueue_style('plugin_style', plugin_dir_url(__FILE__) . '/css/style.css');
         wp_localize_script('theme_js', 'modalAjaxURL', array('ajaxurl'=>admin_url('admin-ajax.php')));
+    }
+    public static function htmlCanvas() {
+        wp_enqueue_script( 'htmlCanvas', plugin_dir_url(__FILE__) . '/js/html2canvas.js', array(), '1.0', true );
     }
 
     //REDIRECT LOGGED OUT USERS
@@ -122,7 +126,10 @@ class MYCAjax{
         $product_id         = $_POST['button_id'];
         $quantity           = $_POST['quantity'];
         $productData        = $_POST['productData'];
+        $canvasImage        = $_POST['canvasImage'];
 
+        //PATH TO FILE: /home/myccom/public_html/mycgraphics/photos/1524712465.png
+        // $canvasImage = str_replace('/home/myccom/public_html/mycgraphics', 'https://www.mycgraphics.com', $canvasImage);
         $cart_item_meta = array();
 
         //COUNT NUMBER OF PRODUCTS SENT THROUGH AJAX
@@ -146,6 +153,7 @@ class MYCAjax{
             $cart_item_meta["custom_data_{$x}"]['Image'] = '<img src="'.$productData[$x]['image'].'"/>';
             $cart_item_meta["custom_data_{$x}"]['FinalPrice'] = $productData[$x]['price'] * $productData[$x]['quantity'];
         }
+            $cart_item_meta['canvas'] = $canvasImage;
 
         /************ADD TO CART V2*********/
         if($woocommerce->cart->add_to_cart($product_id, $quantity, $variation_id="", $variation = "", $cart_item_meta)){
@@ -173,6 +181,41 @@ class MYCAjax{
         echo wc_get_template('cart/mini-cart.php');
     }
 
+    public static function htmlCanvasFunc(){
+
+      /*****************
+      POST DATA
+      'htmlImg' : canvasVar,
+      'action' : 'htmlCanvas',
+      'htmlImgName' : 'test'
+      ***************/
+      $htmlCanvas = $_POST['htmlImg'];
+      $htmlCanvasName = $_POST['test'];
+
+      $htmlImage = str_replace('data:image/png;base64,', '', $htmlCanvas);
+      $htmlImage = str_replace(' ', '+', $htmlImage);
+      $htmlImageDecoded = base64_decode($htmlImage);
+      mkdir($_SERVER['DOCUMENT_ROOT']."/photos");
+      $upload_dir = $_SERVER['DOCUMENT_ROOT']."/photos/";
+      $file = $upload_dir . mktime() . '.png';
+
+      $success = file_put_contents($file, $htmlImageDecoded);
+
+      // function replace_product_image(){
+      //   remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
+      //   function wc_template_loop_product_replaced_thumb(){
+      //     echo $file;
+      //   }
+      // }
+      //
+      // add_action('woocommerce_init', 'replace_product_image');
+      // $response = json_encode($file);
+      // header("Content-Type: application/json");
+      // echo $response;
+      echo $file;
+
+      die();
+    }
 
     /***********************************************
     GET CART INFO AFTER ADD TO CART BUTTON IS PRESSED
@@ -189,6 +232,8 @@ class MYCAjax{
             }
 
         }
+
+        ?><pre><?php print_r($cart_item); ?></pre><?php
 
         /*******LOOP THROUGH ARRAY OF PRODUCTS IN SESSION********/
 
@@ -411,92 +456,6 @@ class MYCAjax{
       }
     }
 
-/*
-    public static function myc_email_order_meta_fields($fields, $sent_to_admin, $order){
-
-      $fields['customer_install_name'] = array(
-        'label'   => __('Customer Install Name'),
-        'value'   => get_post_meta($order->id, '_customer_install_name', true)
-      );
-      $fields['customer_install_address'] = array(
-        'label'   => __('Customer Install Address'),
-        'value'   => get_post_meta($order->id, '_customer_install_address', true)
-      );
-      $fields['customer_install_address_2'] = array(
-        'label'   => __('Customer Install Address 2'),
-        'value'   => get_post_meta($order->id, '_customer_install_address_2', true)
-      );
-      $fields['customer_po_number'] = array(
-        'label'   => __('PO Number'),
-        'value'   => get_post_meta($order->id, '_customer_po_number', true)
-      );
-      return $fields;
-    }
-*/
-
-
-
-    public static function myc_checkout_update_user_meta($user_id){
-      if($user_id && $_POST['customer_install_name']){
-        update_user_meta($user_id, 'customer_install_name', sanitize_text_field($_POST['customer_install_name']));
-      }
-      if($user_id && $_POST['customer_install_address']){
-        update_user_meta($user_id, 'customer_install_address', sanitize_text_field($_POST['customer_install_address']));
-      }
-      if($user_id && $_POST['customer_install_address_2']){
-        update_user_meta($user_id, 'customer_install_address_2', sanitize_text_field($_POST['customer_install_address_2']));
-      }
-      if($user_id && $_POST['customer_po_number']){
-        update_user_meta($user_id, 'customer_po_number', sanitize_text_field($_POST['customer_po_number']));
-      }
-    }
-
-    public static function myc_order_thank_you_pages($order){
-	    	?>
-		    	<div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
-
-
-					<h2 class="woocommerce-column__title">Customer Install Info</h2>
-
-					<table>
-						<tbody>
-							<tr>
-								<td>Customer Install Name</td>
-								<td><?php echo $order->get_meta('_customer_install_name'); ?></td>
-							</tr>
-							<tr>
-								<td>Customer Address Line 1</td>
-								<td><?php echo $order->get_meta('_customer_install_address'); ?></td>
-							</tr>
-							<tr>
-								<td>Customer Address Line 2</td>
-								<td><?php echo $order->get_meta('_customer_install_address_2'); ?></td>
-							</tr>
-							<tr>
-								<td>Customer PO</td>
-								<td><?php echo $order->get_meta('_customer_po_number'); ?></td>
-							</tr>
-						</tbody>
-					</table>
-
-
-				</div>
-
-		    <?php
-
-
-    }
-
-    public static function myc_email_order_meta_keys($keys){
-
-      $keys['Customer Install Name'] = '_customer_install_name';
-      $keys['Customer Address'] = '_customer_install_address';
-      $keys['Customer Address Two'] = '_customer_install_address_2';
-      $keys['Customer PO'] = '_customer_po_number';
-      return $keys;
-    }
-
-
 
     public static function myc_admin_order_data_after_billing_address($order){
       ?>
@@ -595,6 +554,7 @@ add_action('template_redirect', array('MYCAjax', 'protect_pages'));
 
 //REGISTER SCRIPTS -> JS AND CSS
 add_action('wp_enqueue_scripts', array('MYCAjax', 'theme_js'));
+add_action('wp_enqueue_scripts', array('MYCAjax', 'htmlCanvas'));
 
 //LOAD EPO OPTIONS ON PAGE
 add_filter( 'wc_epo_is_quickview', array('MYCAjax', 'wc_epo_is_quickview'), 10, 1 );
@@ -610,6 +570,11 @@ add_action('wp_ajax_nopriv_add_to_cart', array('MYCAjax', 'add_to_cart_func'));
 //SET AJAX CALLBACK FUNCTION FOR MINI CART ECHO
 add_filter('wp_ajax_nopriv_custom_mini_cart_update', array('MYCAjax', 'custom_mini_cart_update'));
 add_filter('wp_ajax_custom_mini_cart_update', array('MYCAjax', 'custom_mini_cart_update'));
+
+//SET AJAX CALLBACK FUNCTION FOR HTMLCANVAS
+add_filter('wp_ajax_nopriv_htmlCanvas', array('MYCAjax', 'htmlCanvasFunc'));
+add_filter('wp_ajax_htmlCanvas', array('MYCAjax', 'htmlCanvasFunc'));
+
 
 //GET ITEM FROM SESSION
 add_action('woocommerce_get_cart_item_from_session', array('MYCAjax', 'myc_get_cart_item_from_session'), 10, 2);
