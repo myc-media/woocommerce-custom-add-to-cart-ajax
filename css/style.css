@@ -158,65 +158,66 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   align-items: center; }
 .page-template-default ul.products.columns-4 li.classic {
   margin-right: 0 !important;}
-  .page-template-default ul.products.columns-1 li.post-1348 {
+  .page-template-default ul.products li.post-1348,
+  .page-template-default ul.products li.post-1500,
+  .page-template-default ul.products li.post-1783 {
     flex-basis: 57% !important; }
-  .page-template-default ul.products.columns-1 li.post-1500 {
-    flex-basis: 57% !important; }
-  .page-template-default ul.products.columns-1 li.post-1783 {
-    flex-basis: 57% !important; }
-  .page-template-default ul.products.columns-1 li.post-1349 {
+  .page-template-default ul.products li.post-1349,
+  .page-template-default ul.products li.post-1346,
+  .page-template-default ul.products li.classic.post-1499,
+  .page-template-default ul.products li.classic.post-1501,
+  .page-template-default ul.products li.classic.post-1781,
+  .page-template-default ul.products li.classic.post-1785 {
     flex-basis: 21.5% !important; }
-  .page-template-default ul.products.columns-1 li.post-1346 {
-    flex-basis: 21.5% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1499 {
-    flex-basis: 21.5% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1501 {
-    flex-basis: 21.5% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1781 {
-    flex-basis: 21.5% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1785 {
-    flex-basis: 21.5% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1358 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1360 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1503 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1504 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1791 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products.columns-1 li.classic.post-1796 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products li.classic.post-1774 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products li.classic.post-1776 {
-    flex-basis: 50% !important; }
-  .page-template-default ul.products.columns-1 li.post-1401 {
+  .page-template-default ul.products li.classic.post-1961,
+  .page-template-default ul.products li.classic.post-1962,
+  .page-template-default ul.products li.classic.post-1985,
+  .page-template-default ul.products li.classic.post-1986,
+  .page-template-default ul.products li.classic.post-2017,
+  .page-template-default ul.products li.classic.post-2020 {
+    flex-basis: 25% !important; }
+  .page-template-default ul.products li.classic.post-2012 {
+    flex-basis: 30% !important; }
+  .page-template-default ul.products li.classic.post-2011,
+  .page-template-default ul.products li.classic.post-2013 {
+    flex-basis: 35% !important; }
+  .page-template-default ul.products li.classic.post-1358,
+  .page-template-default ul.products li.classic.post-1360,
+  .page-template-default ul.products li.classic.post-1503,
+  .page-template-default ul.products li.classic.post-1504,
+  .page-template-default ul.products li.classic.post-1791,
+  .page-template-default ul.products li.classic.post-1796,
+  .page-template-default ul.products li.classic.post-1774,
+  .page-template-default ul.products li.classic.post-1776,
+  .page-template-default ul.products li.classic.post-1924,
+  .page-template-default ul.products li.classic.post-1951,
+  .page-template-default ul.products li.classic.post-1960,
+  .page-template-default ul.products li.classic.post-1978,
+  .page-template-default ul.products li.classic.post-1979,
+  .page-template-default ul.products li.classic.post-1980,
+  .page-template-default ul.products li.classic.post-1981,
+  .page-template-default ul.products li.classic.post-1984 {
+      flex-basis: 50% !important; }
+  .page-template-default ul.products li.classic.post-2019 {
+      flex-basis: 50% !important; }
+  .page-template-default ul.products li.post-1401,
+  .page-template-default ul.products li.post-1507,
+  .page-template-default ul.products li.post-1808 {
     flex-basis: 67% !important; }
-  .page-template-default ul.products.columns-1 li.post-1507 {
-    flex-basis: 67% !important; }
-  .page-template-default ul.products.columns-1 li.post-1808 {
-    flex-basis: 67% !important; }
-  .page-template-default ul.products.columns-1 li.post-1404 {
+  .page-template-default ul.products li.post-1404,
+  .page-template-default ul.products li.post-1508,
+  .page-template-default ul.products li.post-1810 {
     flex-basis: 33% !important; }
-  .page-template-default ul.products.columns-1 li.post-1508 {
-    flex-basis: 33% !important; }
-  .page-template-default ul.products.columns-1 li.post-1810 {
-    flex-basis: 33% !important; }
-  .page-template-default ul.products.columns-1 li.post-1415 {
+  .page-template-default ul.products li.post-1415,
+  .page-template-default ul.products li.post-1509 {
     flex-basis: 85% !important; }
-  .page-template-default ul.products.columns-1 li.post-1509 {
-    flex-basis: 85% !important; }
-  .page-template-default ul.products.columns-1 li.post-1418 {
+  .page-template-default ul.products li.post-1418,
+  .page-template-default ul.products li.post-1510 {
     flex-basis: 15% !important; }
-  .page-template-default ul.products.columns-1 li.post-1510 {
-    flex-basis: 15% !important; }
-  .page-template-default ul.products.columns-1 li.post-1812 {
+  .page-template-default ul.products li.post-1812,
+  .page-template-default ul.products li.post-1819 {
     flex-basis: 7.5% !important; }
-  .page-template-default ul.products.columns-1 li.post-1819 {
-    flex-basis: 7.5% !important; }
-  .page-template-default ul.products.columns-1 li.post-1814 {
+  .page-template-default ul.products li.post-1814 {
     flex-basis: 85% !important; }
 .page-template-default ul.tmcp-ul-wrap.tmcp-elements {
   display: flex;
