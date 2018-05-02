@@ -162,6 +162,7 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template-default ul.products li.post-1500,
   .page-template-default ul.products li.post-1783 {
     flex-basis: 57% !important; }
+<<<<<<< HEAD
   .page-template-default ul.products li.post-2312,
   .page-template-default ul.products li.post-2343,
   .page-template-default ul.products li.post-2356,
@@ -173,6 +174,8 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template-default ul.products li.post-2342,
   .page-template-default ul.products li.post-2374 {
     flex-basis: 64% !important; }
+=======
+>>>>>>> 4318f49d0fe0c15e1f93d52f7888a05e7dc2f3cd
   .page-template-default ul.products li.post-1349,
   .page-template-default ul.products li.post-1346,
   .page-template-default ul.products li.classic.post-1499,
