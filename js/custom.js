@@ -172,28 +172,93 @@ jQuery('document').ready(function($){
                 clearInterval(checkExist);
 
                 //IF .ajaxColumnLink has content
-        				if($('.ajaxColumnLink').length > 0 && checkExist){
+        				if($('.ajaxColumnLink').length > 0 ){
                     /******************************
                     LOOP THROUGH ALL IMAGES ON THE LEFT AND RIGHT
                     AND ASSIGN THE SAME CLASSES TO BOTH OF THEM
                     ********************************/
-                    if($("#tab-gas:visible").is(":visible") && $("#tab-gas").length){
+                    $('.wpb_tabs_nav').on('click', function(){
+                      if($("#tab-gas:visible").is(":visible")){
+                        $('#tab-gas img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      } else if($("#tab-diesel:visible").is(":visible")){
+                        $('#tab-diesel img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      } else if($("#tab-blue:visible").is(":visible")){
+                        $('#tab-blue img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      } else if($("#tab-whiteblack:visible").is(":visible")){
+                        $('#tab-whiteblack img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      } else if($("#tab-diesel-other:visible").is(":visible")){
+                        $('#tab-diesel-other img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      }
+                    });
+                    if($("#tab-gas:visible").is(":visible")){
                       $('#tab-gas img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
           							$(this).addClass('image-change'+index);
           						});
-                    } else if($("#tab-diesel:visible").is(":visible") && $("#tab-gas").length){
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-diesel:visible").is(":visible")){
                       $('#tab-diesel img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
           							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-blue:visible").is(":visible")){
+                      $('#tab-blue img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-whiteblack:visible").is(":visible")){
+                      $('#tab-whiteblack img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-diesel-other:visible").is(":visible")){
+                      $('#tab-diesel-other img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
           						});
                     } else {
                       $('img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
           							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
           						});
                     }
 
-        						$('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
-        							$(this).find('li label img').addClass('image-change'+index);
-        						});
+        						// $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+        						// 	$(this).find('li label img').addClass('image-change'+index);
+        						// });
 
                   /**************
                   CHANGE IMAGE ON CLICK
@@ -236,28 +301,160 @@ jQuery('document').ready(function($){
                                   } else {
                                     $(val).addClass('tc-active');
                                   }
-                                  var imgToChange = $('img.attachment-woocommerce_thumbnail');
-                                  for(var x = 0; x <= imgToChange.length; x++){
-                                    if($(val).hasClass('tc-active')){
-                                      $(val).find('label img').each(function(i, value){
-                                          classToChange = 'image-change'+(x);
-                                          var leftImg = $(imgToChange)[x];
-                                          if($(value).hasClass(classToChange)){
-                                            $(leftImg).fadeOut('fast', function(){
-                                              $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
-                                              $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
-                                            });
-                                          }
-                                      });
-                                    }
-                                    else {
-                                      var leftImg = $(imgToChange)[x];
-                                      classToChange = 'image-change'+(x);
-                                      if($(this).find('label img').hasClass(classToChange)){
-                                        $(leftImg).fadeOut('fast', function(){
-                                          $(leftImg).attr('src', "#").fadeIn('fast');
-                                          $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                  if($("#tab-gas:visible").is(":visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")){
+                                    var imgToChange = $('#tab-gas img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
                                         });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-diesel:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")){
+                                    var imgToChange = $('#tab-diesel img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-blue:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")){
+                                    var imgToChange = $('#tab-blue img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-whiteblack:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")){
+                                    var imgToChange = $('#tab-whiteblack img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-diesel-other:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible")){
+                                    var imgToChange = $('#tab-diesel-other img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else {
+                                    var imgToChange = $('img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
                                       }
                                     }
                                   }
@@ -278,9 +475,10 @@ jQuery('document').ready(function($){
                       $('li.tmcp-field-wrap').each(function(index, val){
             				    classToChange = 'image-change'+index;
                         if($(thisLi).find('img').hasClass(classToChange)){
-                          syncSelect(thisLi, index);
+                          // syncSelect(thisLi, index);
 
-                          if($("#tab-gas:visible").is(":visible") && $("#tab-gas").length){
+                          if($("#tab-gas:visible").is(":visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue-other:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")){
+                            syncSelect(thisLi, index);
                             $(thisLi).on('click', function(){
                               var stillActive = setInterval(function(){
                                 if($('.tc-active').length){
@@ -301,7 +499,8 @@ jQuery('document').ready(function($){
                                 }
                               }, 100);
                             });
-                          } else if($("#tab-diesel:visible").is(":visible") && $("#tab-diesel").length) {
+                          } else if($("#tab-diesel:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")) {
+                            syncSelect(thisLi, index);
                             $(thisLi).on('click', function(){
                               var stillActive = setInterval(function(){
                                 if($('.tc-active').length){
@@ -322,8 +521,74 @@ jQuery('document').ready(function($){
                                 }
                               }, 100);
                             });
-                          } else {
+                          } else if($("#tab-blue:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")) {
+                            syncSelect(thisLi, index);
+                            $(thisLi).on('click', function(){
+                              var stillActive = setInterval(function(){
+                                if($('.tc-active').length){
+                                  clearInterval(stillActive);
 
+                                  if($(thisLi).hasClass('tc-active')){
+                                    classToChange = 'image-change'+index;
+
+                                    var imgToChange = $('#tab-blue img.attachment-woocommerce_thumbnail')[index];
+                                    var imgSrc = $(thisLi).find('label img').attr('src');
+                                    if($(thisLi).find('label img').hasClass(classToChange) && $(imgToChange).hasClass(classToChange)){
+                                      $(imgToChange).fadeOut('fast', function(){
+                                        $(imgToChange).attr('src', imgSrc).fadeIn('fast');
+                                        $(imgToChange).attr('srcset', imgSrc).fadeIn('fast');
+                                      });
+                                    }
+                                  }
+                                }
+                              }, 100);
+                            });
+                          } else if($("#tab-whiteblack:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")) {
+                            syncSelect(thisLi, index);
+                            $(thisLi).on('click', function(){
+                              var stillActive = setInterval(function(){
+                                if($('.tc-active').length){
+                                  clearInterval(stillActive);
+
+                                  if($(thisLi).hasClass('tc-active')){
+                                    classToChange = 'image-change'+index;
+
+                                    var imgToChange = $('#tab-whiteblack img.attachment-woocommerce_thumbnail')[index];
+                                    var imgSrc = $(thisLi).find('label img').attr('src');
+                                    if($(thisLi).find('label img').hasClass(classToChange) && $(imgToChange).hasClass(classToChange)){
+                                      $(imgToChange).fadeOut('fast', function(){
+                                        $(imgToChange).attr('src', imgSrc).fadeIn('fast');
+                                        $(imgToChange).attr('srcset', imgSrc).fadeIn('fast');
+                                      });
+                                    }
+                                  }
+                                }
+                              }, 100);
+                            });
+                          } else if($("#tab-diesel-other:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible")) {
+                            syncSelect(thisLi, index);
+                            $(thisLi).on('click', function(){
+                              var stillActive = setInterval(function(){
+                                if($('.tc-active').length){
+                                  clearInterval(stillActive);
+
+                                  if($(thisLi).hasClass('tc-active')){
+                                    classToChange = 'image-change'+index;
+
+                                    var imgToChange = $('#tab-diesel-other img.attachment-woocommerce_thumbnail')[index];
+                                    var imgSrc = $(thisLi).find('label img').attr('src');
+                                    if($(thisLi).find('label img').hasClass(classToChange) && $(imgToChange).hasClass(classToChange)){
+                                      $(imgToChange).fadeOut('fast', function(){
+                                        $(imgToChange).attr('src', imgSrc).fadeIn('fast');
+                                        $(imgToChange).attr('srcset', imgSrc).fadeIn('fast');
+                                      });
+                                    }
+                                  }
+                                }
+                              }, 100);
+                            });
+                          } else if(!$("#tab-diesel:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-diesel-other:visible").is("visible")){
+                            syncSelect(thisLi, index);
                             $(thisLi).on('click', function(){
                               var stillActive = setInterval(function(){
                                 if($('.tc-active').length){
