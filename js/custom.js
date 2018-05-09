@@ -1,5 +1,5 @@
 jQuery('document').ready(function($){
-    $('.page-template-default').find($('li.product').each(function(){
+    $('.page-template').find($('li.product').each(function(){
         $(this).find('a.woocommerce-LoopProduct-link').addClass('ajaxModal');
         $(this).find('div.product-wrap a').addClass('ajaxModal');
     }));

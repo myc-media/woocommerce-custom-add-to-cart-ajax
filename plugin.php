@@ -577,6 +577,65 @@ class MYCAjax{
     }
 
 
+    public static function myc_user_list_tab_endpoint_register(){
+      add_rewrite_endpoint('user-list', EP_ROOT | EP_PAGES);
+    }
+
+    public static function myc_query_vars($vars){
+      $vars[] = 'user-list';
+      return $vars;
+    }
+
+    public static function myc_woocommerce_account_menu_items($items){
+      if(current_user_can('administrator') || current_user_can('supercustomer')){
+        $items['user-list'] = 'Users';
+        return $items;
+      } else {
+        if(isset($items['user-list'])){
+          unset($items['user-list']);
+        }
+        return $items;
+      }
+    }
+
+    public static function myc_redirect(){
+      global $wp;
+      if(current_user_can('administrator') || current_user_can('supercustomer')){
+        return;
+      }
+        $currentURL = trailingslashit(home_url($wp->request));
+        $blocked_end_points = wc_get_endpoint_url('user-list');
+        if($currentURL == $blocked_end_points){
+          $myURL = wc_get_endpoint_url('my-account');
+          wp_redirect($myURL);
+          die;
+        }
+    }
+
+    public static function myc_user_list_content(){
+      echo '<h3>Users List</h3>';
+
+      function pumpUsers($users,$company){
+        echo '<table><thead><tr><th>User</th><th>Company</th></tr></thead><tbody>';
+        foreach($users as $user){
+          echo '<tr><td>' . $user->display_name . '</td><td>'.$company.'</td></tr>';
+        }
+        echo '</tbody></table>';
+      }
+      //'customer_on_account'
+      //'mobile-customer-on-account'
+      $essoUsers = get_users(array('role' => 'customer_on_account'));
+      $mobilUsers = get_users(array('role' => 'mobile-customer-on-account'));
+      echo '<div class="usersReport">';
+      echo '<div class="userReportSection">';
+      $renderEsso = pumpUsers($essoUsers, 'Esso');
+      echo '</div>';
+      echo '<div class="userReportSection">';
+      $renderMobil = pumpUsers($mobilUsers, 'Mobil');
+      echo '</div>';
+      echo '</div>';
+    }
+
 
 
 }
@@ -659,29 +718,42 @@ add_filter('woocommerce_get_item_data', array('MYCAjax', 'myc_get_item_data'), 1
 //ADD ITEM META INFO
 add_action( 'woocommerce_add_order_item_meta', array('MYCAjax', 'myc_add_order_item_meta'), 10, 3 );
 
-
-/***********
-TESTING
-*************/
-
+//ADD FORM BEFORE ORDEDR NOTES
 add_action('woocommerce_before_order_notes', array('MYCAjax', 'myc_before_checkout_form'));
 
+//UPDATE ORDER META FROM CHECKOUT PAGE
 add_action('woocommerce_checkout_update_order_meta', array('MYCAjax', 'myc_checkout_update_order_meta'), 10, 2);
 
+//ADD CUSTOM INFO AFTER BILLING ADDRESS
 add_action( 'woocommerce_admin_order_data_after_order_details', array('MYCAjax', 'myc_admin_order_data_after_billing_address'));
 
+//UPDATE META ON CHECKOUT
 add_action('woocommerce_checkout_update_user_meta', array('MYCAjax', 'myc_checkout_update_user_meta'));
+
 
 // add_filter('woocommerce_email_order_meta_fields', array('MYCAjax', 'myc_email_order_meta_fields'), 10, 3);
 
+//THANK YOU PAGE UPDATE
 add_action('woocommerce_order_details_after_order_table', array('MYCAjax', 'myc_order_thank_you_pages'));
 
-
+//EMAIL UPDATE WITH META FROM CHECKOUT
 add_filter('woocommerce_email_order_meta_keys', array('MYCAjax', 'myc_email_order_meta_keys'));
 
-// function testmail($object){
-//
-// }
-//
-// add_action('woocommerce_email_before_order_table', 'testmail');
+//REGISTER NEW ENDPOINT FOR MY ACCOUNT PAGE
+add_action('init', array('MYCAjax', 'myc_user_list_tab_endpoint_register'));
+
+
+//ADD NEW QUERY VAR
+add_filter('query_vars', array('MYCAjax', 'myc_query_vars'), 0);
+
+
+//ADD ENDPOINT TO MY ACCOUNT MENU
+add_filter('woocommerce_account_menu_items', array('MYCAjax', 'myc_woocommerce_account_menu_items'));
+
+
+//ADD CONTENT TO NEW ENDPOINTS
+add_action('woocommerce_account_user-list_endpoint', array('MYCAjax', 'myc_user_list_content'));
+
+
+add_action('template_redirect', array('MYCAjax', 'myc_redirect'));
 ?>
