@@ -1,0 +1,673 @@
+<pre>
+-------------------------------------------------------------------------------
+/home/myccom/public_html/mycgraphics/inc/plugins/Product_Ajax/plugin.php:[359]
+
+Array
+(
+    [custom_data_0] => Array
+        (
+            [Option] => Part 2
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0006_Layer-0.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_1] => Array
+        (
+            [Option] => Part 3L
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0005_Untitled-4-02.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_2] => Array
+        (
+            [Option] => Part 3M
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0004_Untitled-4-03.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_3] => Array
+        (
+            [Option] => Part 3R
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0003_Untitled-4-04.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_4] => Array
+        (
+            [Option] => Part 4
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0002_Untitled-4-05.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_5] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_6] => Array
+        (
+            [Option] => Part 5
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0001_Untitled-4-06-2.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_7] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_8] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_9] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_10] => Array
+        (
+            [Option] => Part 9
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/03/parts_0000_Untitled-4-07-2.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_11] => Array
+        (
+            [Option] => Part 14
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part14Final-300x272.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_12] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_13] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_14] => Array
+        (
+            [Option] => Parts 32/33/34/36
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part-32-37.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_15] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_16] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_17] => Array
+        (
+            [Option] => Part 11
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part11L.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_18] => Array
+        (
+            [Option] => Part 11R
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part11R.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_19] => Array
+        (
+            [Option] => Part 12
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part12L.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_20] => Array
+        (
+            [Option] =>
+            [Quantity] =>
+            [Price] =>
+            [Image] => <img src=""/>
+            [FinalPrice] => 0
+        )
+
+    [custom_data_21] => Array
+        (
+            [Option] => Part 12R
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part12-R2.png"/>
+            [FinalPrice] => 1
+        )
+
+    [custom_data_22] => Array
+        (
+            [Option] => Part 25
+            [Quantity] => 1
+            [Price] => 1
+            [Image] => <img src="https://www.mycgraphics.com/file/2018/04/part25.png"/>
+            [FinalPrice] => 1
+        )
+
+    [tmhasepo] => 1
+    [epo_price_override] => 1
+    [tmcartepo] => Array
+        (
+        )
+
+    [tmsubscriptionfee] => 0
+    [tmcartfee] => Array
+        (
+        )
+
+    [tmpost_data] => Array
+        (
+            [button_id] => 1513
+            [action] => add_to_cart
+            [quantity] => 1
+            [productData] => Array
+                (
+                    [0] => Array
+                        (
+                            [label] => Part 2
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0006_Layer-0.png
+                            [quantity] => 1
+                        )
+
+                    [1] => Array
+                        (
+                            [label] => Part 3L
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0005_Untitled-4-02.png
+                            [quantity] => 1
+                        )
+
+                    [2] => Array
+                        (
+                            [label] => Part 3M
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0004_Untitled-4-03.png
+                            [quantity] => 1
+                        )
+
+                    [3] => Array
+                        (
+                            [label] => Part 3R
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0003_Untitled-4-04.png
+                            [quantity] => 1
+                        )
+
+                    [4] => Array
+                        (
+                            [label] => Part 4
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0002_Untitled-4-05.png
+                            [quantity] => 1
+                        )
+
+                    [6] => Array
+                        (
+                            [label] => Part 5
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0001_Untitled-4-06-2.png
+                            [quantity] => 1
+                        )
+
+                    [10] => Array
+                        (
+                            [label] => Part 9
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/03/parts_0000_Untitled-4-07-2.png
+                            [quantity] => 1
+                        )
+
+                    [11] => Array
+                        (
+                            [label] => Part 14
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part14Final-300x272.png
+                            [quantity] => 1
+                        )
+
+                    [14] => Array
+                        (
+                            [label] => Parts 32/33/34/36
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part-32-37.png
+                            [quantity] => 1
+                        )
+
+                    [17] => Array
+                        (
+                            [label] => Part 11
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part11L.png
+                            [quantity] => 1
+                        )
+
+                    [18] => Array
+                        (
+                            [label] => Part 11R
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part11R.png
+                            [quantity] => 1
+                        )
+
+                    [19] => Array
+                        (
+                            [label] => Part 12
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part12L.png
+                            [quantity] => 1
+                        )
+
+                    [21] => Array
+                        (
+                            [label] => Part 12R
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part12-R2.png
+                            [quantity] => 1
+                        )
+
+                    [22] => Array
+                        (
+                            [label] => Part 25
+                            [price] => 1
+                            [image] => https://www.mycgraphics.com/file/2018/04/part25.png
+                            [quantity] => 1
+                        )
+
+                )
+
+        )
+
+    [tmdata] => Array
+        (
+            [tmcp_post_fields] => Array
+                (
+                )
+
+            [product_id] => 1513
+            [per_product_pricing] => 1
+            [cpf_product_price] =>
+            [variation_id] =>
+            [form_prefix] =>
+        )
+
+    [key] => e1f3587fa348fc94ff8e4dc947077d71
+    [product_id] => 1513
+    [variation_id] => 0
+    [variation] =>
+    [quantity] => 1
+    [tm_epo_product_original_price] => 1
+    [tm_epo_options_prices] => 0
+    [tm_epo_product_price_with_options] => 1
+    [tm_cart_item_key] => e1f3587fa348fc94ff8e4dc947077d71
+    [line_tax_data] => Array
+        (
+            [subtotal] => Array
+                (
+                )
+
+            [total] => Array
+                (
+                )
+
+        )
+
+    [line_subtotal] => 14
+    [line_subtotal_tax] => 0
+    [line_total] => 14
+    [line_tax] => 0
+    [data] => WC_Product_Simple Object
+        (
+            [object_type:protected] => product
+            [post_type:protected] => product
+            [cache_group:protected] => products
+            [data:protected] => Array
+                (
+                    [name] => Gilbarco Encore 500/300
+                    [slug] => gilbarco-encore-500-300-set
+                    [date_created] => WC_DateTime Object
+                        (
+                            [utc_offset:protected] => 0
+                            [date] => 2018-04-10 05:10:57.000000
+                            [timezone_type] => 1
+                            [timezone] => +00:00
+                        )
+
+                    [date_modified] => WC_DateTime Object
+                        (
+                            [utc_offset:protected] => 0
+                            [date] => 2018-04-13 19:22:17.000000
+                            [timezone_type] => 1
+                            [timezone] => +00:00
+                        )
+
+                    [status] => publish
+                    [featured] =>
+                    [catalog_visibility] => visible
+                    [description] =>
+                    [short_description] =>
+                    [sku] =>
+                    [price] => 1
+                    [regular_price] => 1
+                    [sale_price] =>
+                    [date_on_sale_from] =>
+                    [date_on_sale_to] =>
+                    [total_sales] => 16
+                    [tax_status] => taxable
+                    [tax_class] =>
+                    [manage_stock] =>
+                    [stock_quantity] =>
+                    [stock_status] => instock
+                    [backorders] => no
+                    [sold_individually] =>
+                    [weight] =>
+                    [length] =>
+                    [width] =>
+                    [height] =>
+                    [upsell_ids] => Array
+                        (
+                        )
+
+                    [cross_sell_ids] => Array
+                        (
+                        )
+
+                    [parent_id] => 0
+                    [reviews_allowed] =>
+                    [purchase_note] =>
+                    [attributes] => Array
+                        (
+                        )
+
+                    [default_attributes] => Array
+                        (
+                        )
+
+                    [menu_order] => 0
+                    [virtual] =>
+                    [downloadable] =>
+                    [category_ids] => Array
+                        (
+                            [0] => 80
+                        )
+
+                    [tag_ids] => Array
+                        (
+                        )
+
+                    [shipping_class_id] => 0
+                    [downloads] => Array
+                        (
+                        )
+
+                    [image_id] => 1463
+                    [gallery_image_ids] => Array
+                        (
+                        )
+
+                    [download_limit] => -1
+                    [download_expiry] => -1
+                    [rating_counts] => Array
+                        (
+                        )
+
+                    [average_rating] => 0
+                    [review_count] => 0
+                )
+
+            [supports:protected] => Array
+                (
+                    [0] => ajax_add_to_cart
+                )
+
+            [id:protected] => 1513
+            [changes:protected] => Array
+                (
+                    [price] => 14
+                )
+
+            [object_read:protected] => 1
+            [extra_data:protected] => Array
+                (
+                )
+
+            [default_data:protected] => Array
+                (
+                    [name] =>
+                    [slug] =>
+                    [date_created] =>
+                    [date_modified] =>
+                    [status] =>
+                    [featured] =>
+                    [catalog_visibility] => visible
+                    [description] =>
+                    [short_description] =>
+                    [sku] =>
+                    [price] =>
+                    [regular_price] =>
+                    [sale_price] =>
+                    [date_on_sale_from] =>
+                    [date_on_sale_to] =>
+                    [total_sales] => 0
+                    [tax_status] => taxable
+                    [tax_class] =>
+                    [manage_stock] =>
+                    [stock_quantity] =>
+                    [stock_status] => instock
+                    [backorders] => no
+                    [sold_individually] =>
+                    [weight] =>
+                    [length] =>
+                    [width] =>
+                    [height] =>
+                    [upsell_ids] => Array
+                        (
+                        )
+
+                    [cross_sell_ids] => Array
+                        (
+                        )
+
+                    [parent_id] => 0
+                    [reviews_allowed] => 1
+                    [purchase_note] =>
+                    [attributes] => Array
+                        (
+                        )
+
+                    [default_attributes] => Array
+                        (
+                        )
+
+                    [menu_order] => 0
+                    [virtual] =>
+                    [downloadable] =>
+                    [category_ids] => Array
+                        (
+                        )
+
+                    [tag_ids] => Array
+                        (
+                        )
+
+                    [shipping_class_id] => 0
+                    [downloads] => Array
+                        (
+                        )
+
+                    [image_id] =>
+                    [gallery_image_ids] => Array
+                        (
+                        )
+
+                    [download_limit] => -1
+                    [download_expiry] => -1
+                    [rating_counts] => Array
+                        (
+                        )
+
+                    [average_rating] => 0
+                    [review_count] => 0
+                )
+
+            [data_store:protected] => WC_Data_Store Object
+                (
+                    [instance:WC_Data_Store:private] => WC_Product_Data_Store_CPT Object
+                        (
+                            [internal_meta_keys:protected] => Array
+                                (
+                                    [0] => _visibility
+                                    [1] => _sku
+                                    [2] => _price
+                                    [3] => _regular_price
+                                    [4] => _sale_price
+                                    [5] => _sale_price_dates_from
+                                    [6] => _sale_price_dates_to
+                                    [7] => total_sales
+                                    [8] => _tax_status
+                                    [9] => _tax_class
+                                    [10] => _manage_stock
+                                    [11] => _stock
+                                    [12] => _stock_status
+                                    [13] => _backorders
+                                    [14] => _sold_individually
+                                    [15] => _weight
+                                    [16] => _length
+                                    [17] => _width
+                                    [18] => _height
+                                    [19] => _upsell_ids
+                                    [20] => _crosssell_ids
+                                    [21] => _purchase_note
+                                    [22] => _default_attributes
+                                    [23] => _product_attributes
+                                    [24] => _virtual
+                                    [25] => _downloadable
+                                    [26] => _download_limit
+                                    [27] => _download_expiry
+                                    [28] => _featured
+                                    [29] => _downloadable_files
+                                    [30] => _wc_rating_count
+                                    [31] => _wc_average_rating
+                                    [32] => _wc_review_count
+                                    [33] => _variation_description
+                                    [34] => _thumbnail_id
+                                    [35] => _file_paths
+                                    [36] => _product_image_gallery
+                                    [37] => _product_version
+                                    [38] => _wp_old_slug
+                                    [39] => _edit_last
+                                    [40] => _edit_lock
+                                )
+
+                            [extra_data_saved:protected] =>
+                            [updated_props:protected] => Array
+                                (
+                                )
+
+                            [meta_type:protected] => post
+                            [object_id_field_for_meta:protected] =>
+                        )
+
+                    [stores:WC_Data_Store:private] => Array
+                        (
+                            [coupon] => WC_Coupon_Data_Store_CPT
+                            [customer] => WC_Customer_Data_Store
+                            [customer-download] => WC_Customer_Download_Data_Store
+                            [customer-download-log] => WC_Customer_Download_Log_Data_Store
+                            [customer-session] => WC_Customer_Data_Store_Session
+                            [order] => WC_Order_Data_Store_CPT
+                            [order-refund] => WC_Order_Refund_Data_Store_CPT
+                            [order-item] => WC_Order_Item_Data_Store
+                            [order-item-coupon] => WC_Order_Item_Coupon_Data_Store
+                            [order-item-fee] => WC_Order_Item_Fee_Data_Store
+                            [order-item-product] => WC_Order_Item_Product_Data_Store
+                            [order-item-shipping] => WC_Order_Item_Shipping_Data_Store
+                            [order-item-tax] => WC_Order_Item_Tax_Data_Store
+                            [payment-token] => WC_Payment_Token_Data_Store
+                            [product] => WC_Product_Data_Store_CPT
+                            [product-grouped] => WC_Product_Grouped_Data_Store_CPT
+                            [product-variable] => WC_Product_Variable_Data_Store_CPT
+                            [product-variation] => WC_Product_Variation_Data_Store_CPT
+                            [shipping-zone] => WC_Shipping_Zone_Data_Store
+                            [webhook] => WC_Webhook_Data_Store
+                        )
+
+                    [current_class_name:WC_Data_Store:private] => WC_Product_Data_Store_CPT
+                    [object_type:WC_Data_Store:private] => product-simple
+                )
+
+            [meta_data:protected] =>
+        )
+
+)
+
+-------------------------------------------------------------------------------
+</pre>
+{"result":"success","redirect":"https:\/\/www.mycgraphics.com\/checkout\/order-received\/1666\/?key=wc_order_5ad5192dd178e&utm_nooverride=1"}
