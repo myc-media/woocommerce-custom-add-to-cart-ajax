@@ -242,7 +242,16 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-2500,
   .page-template ul.products li.classic.post-2501,
   .page-template ul.products li.classic.post-2693,
-  .page-template ul.products li.classic.post-2694 {
+  .page-template ul.products li.classic.post-2694,
+  .page-template ul.products li.classic.post-3068,
+  .page-template ul.products li.classic.post-3071,
+  .page-template ul.products li.classic.post-3074,
+  .page-template ul.products li.classic.post-3076,
+  .page-template ul.products li.classic.post-3080,
+  .page-template ul.products li.classic.post-3081,
+  .page-template ul.products li.classic.post-3075,
+  .page-template ul.products li.classic.post-3089,
+  .page-template ul.products li.classic.post-3091 {
       flex-basis: 50% !important; }
   .page-template ul.products li.classic.post-2019 {
       flex-basis: 50% !important; }
