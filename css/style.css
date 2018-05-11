@@ -21,6 +21,23 @@ div#ui-datepicker-div {
 table.ui-datepicker-calendar {
     width: 200px;
 }
+
+div#customer_po_field {
+    background: #ed1c24;
+    box-sizing: border-box;
+    padding: 4%;
+    color: white !important;
+}
+div#customer_po_field h2 {
+    color: white;
+}
+div#customer_po_field label span {
+    color: white !important;
+    font-weight: bold;
+}
+div#customer_po_field input {
+    color: black !important;
+}
 /********CART***********/
 td.product-name a {
     display: none;

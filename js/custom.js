@@ -730,8 +730,8 @@ jQuery('document').ready(function($){
         var canvasVar;
         /********HTML2CANVAS************/
         html2canvas(htmlCanvas[0], {backgroundColor: null}).then(function(canvas) {
-          htmlCanvas[0].appendChild(canvas);
-          $('.ajaxColumnLink canvas').attr('id', 'canvasID');
+          // htmlCanvas[0].appendChild(canvas);
+          // $('.ajaxColumnLink canvas').attr('id', 'canvasID');
           canvasVar = canvas.toDataURL("image/png");
           // console.log(canvasVar);
           $.ajax({
