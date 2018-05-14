@@ -566,3 +566,26 @@ h1.product_title.entry-title {
     display: flex !important;
     flex-wrap: wrap !important;
 }
+.essoCheck, .mobilCheck {
+    font-weight: bold;
+}
+
+.mobilCheck {
+    color: #0266b4;
+}
+.essoCheck {
+    color: #ed2d34;
+}
+
+tbody tr td:last-of-type {
+    background: #2b6fb7;
+}
+tbody tr td:nth-of-type(2) {
+    background: #ed2d34;
+}
+span.essoCheck, span.mobilCheck {
+    color: white;
+    width: 100%;
+    text-align: center;
+    display: block;
+}

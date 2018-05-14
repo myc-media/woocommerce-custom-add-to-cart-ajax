@@ -587,7 +587,7 @@ class MYCAjax{
     }
 
     public static function myc_woocommerce_account_menu_items($items){
-      if(current_user_can('administrator') || current_user_can('supercustomer')){
+      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('shop_manager')){
         $items['user-list'] = 'Users';
         return $items;
       } else {
@@ -621,30 +621,40 @@ class MYCAjax{
           <thead>
             <tr>
               <th>User</th>
-              <th>Esso</th>
-              <th>Mobil</th>
+              <th class="essoCheck">Esso</th>
+              <th class="mobilCheck">Mobil</th>
             </tr>
           </thead>
           <tbody>
             <?php
-              foreach($users as $user){
-                if($user->roles[0] == 'customer_on_account'){
+            foreach($users as $user){
+                ?>
+                <tr>
+                  <td><?php echo $user->display_name; ?></td>
+                  <td>
+                    <?php
+                    if($user->roles[0] == 'customer_on_account' || $user->roles[0] == 'shop_manager' || $user->roles[0] == 'supercustomer' || $user->roles[0] == 'administrator'){
+                    ?>
+                    <span class="essoCheck">&#10003;</span>
+                    <?php
+                    } else {
+
+                    }
+                    ?>
+                  </td>
+                  <td>
+                    <?php
+                    if($user->roles[0] == 'mobile-customer-on-account' || $user->roles[0] == 'shop_manager' || $user->roles[0] == 'supercustomer' || $user->roles[0] == 'administrator'){
+                    ?>
+                    <span class="mobilCheck">&#10003;</span>
+                    <?php
+                  } else {
+
+                  }
                   ?>
-                  <tr>
-                    <td><?php echo $user->display_name; ?></td>
-                    <td>&#10003;</td>
-                    <td></td>
-                  </tr>
-                  <?php
-                }elseif($user->roles[0] == 'mobile-customer-on-account'){
-                  ?>
-                  <tr>
-                    <td><?php echo $user->display_name; ?></td>
-                    <td></td>
-                    <td>&#10003;</td>
-                  </tr>
-                  <?php
-                }
+                  </td>
+                </tr>
+                <?php
               }
             ?>
           </tbody>
@@ -652,7 +662,7 @@ class MYCAjax{
         <?php
       }
 
-      $allUsers = get_users();
+      $allUsers = get_users(array('orderby' => 'display_name'));
       pumpUsers($allUsers);
     }
 
