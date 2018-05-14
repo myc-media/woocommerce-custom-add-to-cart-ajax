@@ -684,219 +684,224 @@ jQuery('document').ready(function($){
   *******************************/
   $('button.ajaxButton').click(function(e){
       // e.preventDefault();
-       $('.cart-menu-wrap').addClass('has-products first-load');
+      if($('.tc-active').length>0){
+        $('.cart-menu-wrap').addClass('has-products first-load');
 
-      var productObj ={};
-      var itemURL = thisButton.attr('href');
-      var quantity = $('form input[name="quantity"]').val();
-      var label, varQuantity, varImage, varPrice, finalPrice;
-      var canvasImage;
+        var productObj ={};
+        var itemURL = thisButton.attr('href');
+        var quantity = $('form input[name="quantity"]').val();
+        var label, varQuantity, varImage, varPrice, finalPrice;
+        var canvasImage;
 
-      /**********************************
-      LOOP THROUGH ACTIVE/SELECTED OPTIONS
-      **********************************/
-      var checkPrice = $('.tc-totals-form input.cpf-product-price').attr('value');
-      var tempPrice = $('#tm-epo-totals span.price.amount.final').text().replace(/[\[\]"$,]+/g, '');
-      finalPrice = tempPrice;
-      $('.tc-totals-form input.cpf-product-price').attr('value', finalPrice);
-      $('li.tmcp-field-wrap').each(function(index, value){
-          // productArray.push($(this));
-          if($(this).hasClass('tc-active')){
+        /**********************************
+        LOOP THROUGH ACTIVE/SELECTED OPTIONS
+        **********************************/
+        var checkPrice = $('.tc-totals-form input.cpf-product-price').attr('value');
+        var tempPrice = $('#tm-epo-totals span.price.amount.final').text().replace(/[\[\]"$,]+/g, '');
+        finalPrice = tempPrice;
+        $('.tc-totals-form input.cpf-product-price').attr('value', finalPrice);
+        $('li.tmcp-field-wrap').each(function(index, value){
+            // productArray.push($(this));
+            if($(this).hasClass('tc-active')){
 
-              label = $(this).find('span.tc-label').text();
+                label = $(this).find('span.tc-label').text();
 
-              varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/[\[\]",]+/g, '');
+                varPrice = $(this).find('label input.tmcp-field.tm-epo-field').attr('data-rules').replace(/[\[\]",]+/g, '');
 
-              varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
+                varQuantity = $(this).find('input.tm-qty').length ? $(this).find('input.tm-qty').val() : 1;
 
-              if($(this).find('label input.tmcp-field').attr('data-imagep')){
-                varImage = $(this).find('label input.tmcp-field').attr('data-imagep');
-              } else {
-                varImage = $(this).find('label input.tmcp-field').attr('data-image');
-              }
+                if($(this).find('label input.tmcp-field').attr('data-imagep')){
+                  varImage = $(this).find('label input.tmcp-field').attr('data-imagep');
+                } else {
+                  varImage = $(this).find('label input.tmcp-field').attr('data-image');
+                }
 
-              // if(checkPrice > 100){
-                  // varPrice = 0;
-                  productObj[index]={'label':label, 'setPrice':finalPrice, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
-              // } else {
-              //     productObj[index]={'label':label, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
-              // }
-          }
-      });
-
-      /*******HTML2CANVAS***********/
-      if($('.ajaxColumnLink').length > 0){
-        var htmlCanvas = document.getElementsByClassName('ajaxColumnLink');
-        var canvasVar;
-        /********HTML2CANVAS************/
-        html2canvas(htmlCanvas[0], {backgroundColor: null}).then(function(canvas) {
-          // htmlCanvas[0].appendChild(canvas);
-          // $('.ajaxColumnLink canvas').attr('id', 'canvasID');
-          canvasVar = canvas.toDataURL("image/png");
-          // console.log(canvasVar);
-          $.ajax({
-            type: 'POST',
-            url: modalAjaxURL.ajaxurl,
-            data: {
-              'htmlImg' : canvasVar,
-              'action' : 'htmlCanvas',
-              'htmlImgName' : 'test'
-            },
-            success: function(result){
-              canvasImage = result.replace('/home/myccom/public_html/mycgraphics', 'https://www.mycgraphics.com');
-
-
-              /************************
-              AJAX POST TO CART
-              ************************/
-
-              $.ajax({
-                  type: 'POST',
-                  url: modalAjaxURL.ajaxurl,
-                  /************************
-                  AJAX POST ADD TO CART DATA
-                  ************************/
-                  data: {
-                      'button_id': post_id,
-                      'action': 'add_to_cart',
-                      'quantity' : quantity,
-                      'productData' : productObj,
-                      'canvasImage' : canvasImage
-
-                  },
-                  /************************
-                  AJAX POST ADD TO CART SUCCESS
-                  ************************/
-                  success: function(results){
-                      // console.log(results);
-                      // console.log(result[1]['label']);
-                      $('.cart-menu').html(results.count['a.cart-contents']);
-                      $('.result').html(results);
-                      // console.log(results);
-
-                      /************************
-                      AJAX MINI CART UPDATE
-                      ************************/
-
-                      $.ajax({
-                          type: 'GET',
-                          url: modalAjaxURL.ajaxurl,
-                          /************************
-                          AJAX MINI CART DATA
-                          ************************/
-                          data: {
-                              'action': 'custom_mini_cart_update'
-                          },
-                          /************************
-                          AJAX MINI CART SUCCESS
-                          ************************/
-                          success: function(response){
-
-                              $('.widget_shopping_cart_content').html(response);
-                          }
-                      });
-
-                  },
-                  /************************************
-                  AJAX POST ADD TO CART DATA BEFORE SEND
-                  **************************************/
-                  beforeSend: function(){
-                      $('.redLoader').show();
-                      $('.redLoader').addClass('loaderPosition');
-                  },
-                  /************************************
-                  AJAX POST ADD TO CART DATA AFTER COMPLETE
-                  **************************************/
-                  complete: function(){
-                      $('.redLoader').hide();
-                      $('.redLoader').removeClass('loaderPosition');
-                  },
-              });
-            },
-            /************************************
-            AJAX POST ADD TO CART DATA BEFORE SEND
-            **************************************/
-            beforeSend: function(){
-                $('.redLoader').show();
-                $('.redLoader').addClass('loaderPosition');
-            },
-            /************************************
-            AJAX POST ADD TO CART DATA AFTER COMPLETE
-            **************************************/
-            complete: function(){
-                $('.redLoader').hide();
-                $('.redLoader').removeClass('loaderPosition');
-            },
-            error: function(){
-              console.log('error');
+                // if(checkPrice > 100){
+                    // varPrice = 0;
+                    productObj[index]={'label':label, 'setPrice':finalPrice, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
+                // } else {
+                //     productObj[index]={'label':label, 'price':varPrice, 'image': varImage, 'quantity': varQuantity};
+                // }
             }
-          });
         });
 
-      } else {
+        /*******HTML2CANVAS***********/
+        if($('.ajaxColumnLink').length > 0){
+          var htmlCanvas = document.getElementsByClassName('ajaxColumnLink');
+          var canvasVar;
+          /********HTML2CANVAS************/
+          html2canvas(htmlCanvas[0], {backgroundColor: null}).then(function(canvas) {
+            // htmlCanvas[0].appendChild(canvas);
+            // $('.ajaxColumnLink canvas').attr('id', 'canvasID');
+            canvasVar = canvas.toDataURL("image/png");
+            // console.log(canvasVar);
+            $.ajax({
+              type: 'POST',
+              url: modalAjaxURL.ajaxurl,
+              data: {
+                'htmlImg' : canvasVar,
+                'action' : 'htmlCanvas',
+                'htmlImgName' : 'test'
+              },
+              success: function(result){
+                canvasImage = result.replace('/home/myccom/public_html/mycgraphics', 'https://www.mycgraphics.com');
 
-        $.ajax({
-            type: 'POST',
-            url: modalAjaxURL.ajaxurl,
-            /************************
-            AJAX POST ADD TO CART DATA
-            ************************/
-            data: {
-                'button_id': post_id,
-                'action': 'add_to_cart',
-                'quantity' : quantity,
-                'productData' : productObj
-
-            },
-            /************************
-            AJAX POST ADD TO CART SUCCESS
-            ************************/
-            success: function(results){
-                // console.log(results);
-                // console.log(result[1]['label']);
-                $('.cart-menu').html(results.count['a.cart-contents']);
-                $('.result').html(results);
-                // console.log(results);
 
                 /************************
-                AJAX MINI CART UPDATE
+                AJAX POST TO CART
                 ************************/
 
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: modalAjaxURL.ajaxurl,
                     /************************
-                    AJAX MINI CART DATA
+                    AJAX POST ADD TO CART DATA
                     ************************/
                     data: {
-                        'action': 'custom_mini_cart_update'
+                        'button_id': post_id,
+                        'action': 'add_to_cart',
+                        'quantity' : quantity,
+                        'productData' : productObj,
+                        'canvasImage' : canvasImage
+
                     },
                     /************************
-                    AJAX MINI CART SUCCESS
+                    AJAX POST ADD TO CART SUCCESS
                     ************************/
-                    success: function(response){
+                    success: function(results){
+                        // console.log(results);
+                        // console.log(result[1]['label']);
+                        $('.cart-menu').html(results.count['a.cart-contents']);
+                        $('.result').html(results);
+                        // console.log(results);
 
-                        $('.widget_shopping_cart_content').html(response);
-                    }
+                        /************************
+                        AJAX MINI CART UPDATE
+                        ************************/
+
+                        $.ajax({
+                            type: 'GET',
+                            url: modalAjaxURL.ajaxurl,
+                            /************************
+                            AJAX MINI CART DATA
+                            ************************/
+                            data: {
+                                'action': 'custom_mini_cart_update'
+                            },
+                            /************************
+                            AJAX MINI CART SUCCESS
+                            ************************/
+                            success: function(response){
+
+                                $('.widget_shopping_cart_content').html(response);
+                            }
+                        });
+
+                    },
+                    /************************************
+                    AJAX POST ADD TO CART DATA BEFORE SEND
+                    **************************************/
+                    beforeSend: function(){
+                        $('.redLoader').show();
+                        $('.redLoader').addClass('loaderPosition');
+                    },
+                    /************************************
+                    AJAX POST ADD TO CART DATA AFTER COMPLETE
+                    **************************************/
+                    complete: function(){
+                        $('.redLoader').hide();
+                        $('.redLoader').removeClass('loaderPosition');
+                    },
                 });
+              },
+              /************************************
+              AJAX POST ADD TO CART DATA BEFORE SEND
+              **************************************/
+              beforeSend: function(){
+                  $('.redLoader').show();
+                  $('.redLoader').addClass('loaderPosition');
+              },
+              /************************************
+              AJAX POST ADD TO CART DATA AFTER COMPLETE
+              **************************************/
+              complete: function(){
+                  $('.redLoader').hide();
+                  $('.redLoader').removeClass('loaderPosition');
+              },
+              error: function(){
+                console.log('error');
+              }
+            });
+          });
 
-            },
-            /************************************
-            AJAX POST ADD TO CART DATA BEFORE SEND
-            **************************************/
-            beforeSend: function(){
-                $('.redLoader').show();
-                $('.redLoader').addClass('loaderPosition');
-            },
-            /************************************
-            AJAX POST ADD TO CART DATA AFTER COMPLETE
-            **************************************/
-            complete: function(){
-                $('.redLoader').hide();
-                $('.redLoader').removeClass('loaderPosition');
-            },
-        });
+        } else {
+
+          $.ajax({
+              type: 'POST',
+              url: modalAjaxURL.ajaxurl,
+              /************************
+              AJAX POST ADD TO CART DATA
+              ************************/
+              data: {
+                  'button_id': post_id,
+                  'action': 'add_to_cart',
+                  'quantity' : quantity,
+                  'productData' : productObj
+
+              },
+              /************************
+              AJAX POST ADD TO CART SUCCESS
+              ************************/
+              success: function(results){
+                  // console.log(results);
+                  // console.log(result[1]['label']);
+                  $('.cart-menu').html(results.count['a.cart-contents']);
+                  $('.result').html(results);
+                  // console.log(results);
+
+                  /************************
+                  AJAX MINI CART UPDATE
+                  ************************/
+
+                  $.ajax({
+                      type: 'GET',
+                      url: modalAjaxURL.ajaxurl,
+                      /************************
+                      AJAX MINI CART DATA
+                      ************************/
+                      data: {
+                          'action': 'custom_mini_cart_update'
+                      },
+                      /************************
+                      AJAX MINI CART SUCCESS
+                      ************************/
+                      success: function(response){
+
+                          $('.widget_shopping_cart_content').html(response);
+                      }
+                  });
+
+              },
+              /************************************
+              AJAX POST ADD TO CART DATA BEFORE SEND
+              **************************************/
+              beforeSend: function(){
+                  $('.redLoader').show();
+                  $('.redLoader').addClass('loaderPosition');
+              },
+              /************************************
+              AJAX POST ADD TO CART DATA AFTER COMPLETE
+              **************************************/
+              complete: function(){
+                  $('.redLoader').hide();
+                  $('.redLoader').removeClass('loaderPosition');
+              },
+          });
+        }
+      } else {
+        alert('Please select one or more parts to add to your cart');
       }
+
 
 
   });

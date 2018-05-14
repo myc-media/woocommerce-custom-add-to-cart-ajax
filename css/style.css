@@ -209,7 +209,8 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-2505 {
     flex-basis: 30% !important; }
   .page-template ul.products li.classic.post-2011,
-  .page-template ul.products li.classic.post-2013 {
+  .page-template ul.products li.classic.post-2013,
+  .page-template ul.products li.classic.post-3116 {
     flex-basis: 35% !important; }
   .page-template ul.products li.classic.post-1358,
   .page-template ul.products li.classic.post-1360,
@@ -229,14 +230,8 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-1984,
   .page-template ul.products li.classic.post-2226,
   .page-template ul.products li.classic.post-2227,
-  .page-template ul.products li.classic.post-2229,
-  .page-template ul.products li.classic.post-2231,
-  .page-template ul.products li.classic.post-2232,
   .page-template ul.products li.classic.post-2275,
   .page-template ul.products li.classic.post-2276,
-  .page-template ul.products li.classic.post-2279,
-  .page-template ul.products li.classic.post-2280,
-  .page-template ul.products li.classic.post-2281,
   .page-template ul.products li.classic.post-2470,
   .page-template ul.products li.classic.post-2471,
   .page-template ul.products li.classic.post-2500,
@@ -251,7 +246,10 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-3081,
   .page-template ul.products li.classic.post-3075,
   .page-template ul.products li.classic.post-3089,
-  .page-template ul.products li.classic.post-3091 {
+  .page-template ul.products li.classic.post-3091,
+  .page-template ul.products li.classic.post-3111,
+  .page-template ul.products li.classic.post-3113,
+  .page-template ul.products li.classic.post-3115 {
       flex-basis: 50% !important; }
   .page-template ul.products li.classic.post-2019 {
       flex-basis: 50% !important; }
@@ -286,6 +284,17 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
     flex-basis: 7.5% !important; }
   .page-template ul.products li.post-1814 {
     flex-basis: 85% !important; }
+  .page-template ul.products li.post-2229,
+  .page-template ul.products li.post-2279 {
+    flex-basis: 65% !important; }
+  .page-template ul.products li.post-2231,
+  .page-template ul.products li.post-2232,
+  .page-template ul.products li.post-2280,
+  .page-template ul.products li.post-2281 {
+    flex-basis: 35% !important; }
+  .flexend ul.products {
+    justify-content: flex-end !important;
+  }
 .page-template ul.tmcp-ul-wrap.tmcp-elements {
   display: flex;
   flex-wrap: wrap;
