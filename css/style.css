@@ -577,10 +577,10 @@ h1.product_title.entry-title {
     color: #ed2d34;
 }
 
-tbody tr td:last-of-type {
+.user-details-table tbody tr td:last-of-type {
     background: #2b6fb7;
 }
-tbody tr td:nth-of-type(2) {
+.user-details-table tbody tr td:nth-of-type(2) {
     background: #ed2d34;
 }
 span.essoCheck, span.mobilCheck {

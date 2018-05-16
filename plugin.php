@@ -617,7 +617,7 @@ class MYCAjax{
 
       function pumpUsers($users){
         ?>
-        <table>
+        <table class="user-details-table">
           <thead>
             <tr>
               <th>User</th>
