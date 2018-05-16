@@ -587,7 +587,7 @@ class MYCAjax{
     }
 
     public static function myc_woocommerce_account_menu_items($items){
-      if(current_user_can('administrator') || current_user_can('supercustomer')){
+      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('shop_manager')){
         $items['user-list'] = 'Users';
         return $items;
       } else {
@@ -615,26 +615,57 @@ class MYCAjax{
     public static function myc_user_list_content(){
       echo '<h3>Users List</h3>';
 
-      function pumpUsers($users,$company){
-        echo '<table><thead><tr><th>User</th><th>Company</th></tr></thead><tbody>';
-        foreach($users as $user){
-          echo '<tr><td>' . $user->display_name . '</td><td>'.$company.'</td></tr>';
-        }
-        echo '</tbody></table>';
+      function pumpUsers($users){
+        ?>
+        <table class="user-details-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th class="essoCheck">Esso</th>
+              <th class="mobilCheck">Mobil</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            foreach($users as $user){
+                ?>
+                <tr>
+                  <td><?php echo $user->display_name; ?></td>
+                  <td>
+                    <?php
+                    if($user->roles[0] == 'customer_on_account' || $user->roles[0] == 'shop_manager' || $user->roles[0] == 'supercustomer' || $user->roles[0] == 'administrator'){
+                    ?>
+                    <span class="essoCheck">&#10003;</span>
+                    <?php
+                    } else {
+
+                    }
+                    ?>
+                  </td>
+                  <td>
+                    <?php
+                    if($user->roles[0] == 'mobile-customer-on-account' || $user->roles[0] == 'shop_manager' || $user->roles[0] == 'supercustomer' || $user->roles[0] == 'administrator'){
+                    ?>
+                    <span class="mobilCheck">&#10003;</span>
+                    <?php
+                  } else {
+
+                  }
+                  ?>
+                  </td>
+                </tr>
+                <?php
+              }
+            ?>
+          </tbody>
+        </table>
+        <?php
       }
-      //'customer_on_account'
-      //'mobile-customer-on-account'
-      $essoUsers = get_users(array('role' => 'customer_on_account'));
-      $mobilUsers = get_users(array('role' => 'mobile-customer-on-account'));
-      echo '<div class="usersReport">';
-      echo '<div class="userReportSection">';
-      $renderEsso = pumpUsers($essoUsers, 'Esso');
-      echo '</div>';
-      echo '<div class="userReportSection">';
-      $renderMobil = pumpUsers($mobilUsers, 'Mobil');
-      echo '</div>';
-      echo '</div>';
+
+      $allUsers = get_users(array('orderby' => 'display_name'));
+      pumpUsers($allUsers);
     }
+
 
 
 
