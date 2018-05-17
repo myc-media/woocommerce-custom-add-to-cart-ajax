@@ -194,6 +194,18 @@ jQuery('document').ready(function($){
                         $('#tab-whiteblack img.attachment-woocommerce_thumbnail').each(function(index, val){
                           $(this).removeClass('image-change'+index);
                         });
+                      } else if($("#tab-white:visible").is(":visible")){
+                        $('#tab-white img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      } else if($("#tab-other:visible").is(":visible")){
+                        $('#tab-other img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
+                      } else if($("#tab-diesel-white:visible").is(":visible")){
+                        $('#tab-diesel-white img.attachment-woocommerce_thumbnail').each(function(index, val){
+                          $(this).removeClass('image-change'+index);
+                        });
                       } else if($("#tab-diesel-other:visible").is(":visible")){
                         $('#tab-diesel-other img.attachment-woocommerce_thumbnail').each(function(index, val){
                           $(this).removeClass('image-change'+index);
@@ -238,6 +250,33 @@ jQuery('document').ready(function($){
           						});
                     } else if($("#tab-diesel-other:visible").is(":visible")){
                       $('#tab-diesel-other img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-white:visible").is(":visible")){
+                      $('#tab-white img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-other:visible").is(":visible")){
+                      $('#tab-other img.attachment-woocommerce_thumbnail').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).addClass('image-change'+index);
+          						});
+                      $('ul.tmcp-ul-wrap.tmcp-elements').each(function(index, val){
+                        $(this).removeClass('image-change'+index);
+          							$(this).find('li label img').addClass('image-change'+index);
+          						});
+                    } else if($("#tab-diesel-white:visible").is(":visible")){
+                      $('#tab-diesel-white img.attachment-woocommerce_thumbnail').each(function(index, val){
                         $(this).removeClass('image-change'+index);
           							$(this).addClass('image-change'+index);
           						});
@@ -407,6 +446,84 @@ jQuery('document').ready(function($){
                                     }
                                   } else if($("#tab-diesel-other:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible")){
                                     var imgToChange = $('#tab-diesel-other img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-white:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-other:visible").is("visible") && !$("#tab-diesel-white:visible").is("visible")){
+                                    var imgToChange = $('#tab-white img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-other:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-white:visible").is("visible") && !$("#tab-diesel-white:visible").is("visible")){
+                                    var imgToChange = $('#tab-other img.attachment-woocommerce_thumbnail');
+                                    for(var x = 0; x <= imgToChange.length; x++){
+                                      if($(val).hasClass('tc-active')){
+                                        $(val).find('label img').each(function(i, value){
+                                            classToChange = 'image-change'+(x);
+                                            var leftImg = $(imgToChange)[x];
+                                            if($(value).hasClass(classToChange)){
+                                              $(leftImg).fadeOut('fast', function(){
+                                                $(leftImg).attr('src', $(value).attr('src')).fadeIn('fast');
+                                                $(leftImg).attr('srcset', $(value).attr('src')).fadeIn('fast');
+                                              });
+                                            }
+                                        });
+                                      }
+                                      else {
+                                        var leftImg = $(imgToChange)[x];
+                                        classToChange = 'image-change'+(x);
+                                        if($(this).find('label img').hasClass(classToChange)){
+                                          $(leftImg).fadeOut('fast', function(){
+                                            $(leftImg).attr('src', "#").fadeIn('fast');
+                                            $(leftImg).attr('srcset', "#").fadeIn('fast');
+                                          });
+                                        }
+                                      }
+                                    }
+                                  } else if($("#tab-diesel-white:visible").is(":visible") && !$("#tab-gas:visible").is("visible") && !$("#tab-diesel:visible").is("visible") && !$("#tab-blue:visible").is("visible") && !$("#tab-whiteblack:visible").is("visible") && !$("#tab-white:visible").is("visible") && !$("#tab-other:visible").is("visible")){
+                                    var imgToChange = $('#tab-diesel-white img.attachment-woocommerce_thumbnail');
                                     for(var x = 0; x <= imgToChange.length; x++){
                                       if($(val).hasClass('tc-active')){
                                         $(val).find('label img').each(function(i, value){
