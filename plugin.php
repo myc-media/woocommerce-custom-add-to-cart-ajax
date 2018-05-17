@@ -587,7 +587,7 @@ class MYCAjax{
     }
 
     public static function myc_woocommerce_account_menu_items($items){
-      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('shop_manager')){
+      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('shop_manager') || current_user_can('pioneer_super_customer')){
         $items['user-list'] = 'Users';
         return $items;
       } else {
@@ -600,7 +600,7 @@ class MYCAjax{
 
     public static function myc_redirect(){
       global $wp;
-      if(current_user_can('administrator') || current_user_can('supercustomer')){
+      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('pioneer_super_customer')){
         return;
       }
         $currentURL = trailingslashit(home_url($wp->request));
@@ -621,41 +621,129 @@ class MYCAjax{
           <thead>
             <tr>
               <th>User</th>
-              <th class="essoCheck">Esso</th>
-              <th class="mobilCheck">Mobil</th>
+              <?php
+              if(current_user_can('supercustomer')){
+                ?>
+                <th class="essoCheck">Esso</th>
+                <th class="mobilCheck">Mobil</th>
+                <?php
+              } else if(current_user_can('pioneer_super_customer')){
+                  ?>
+                    <th class="pioneerCheck">Test</th>
+                  <?php
+              } else {
+                ?>
+                <th class="essoCheck">Esso</th>
+                <th class="mobilCheck">Mobil</th>
+                <th class="pioneerCheck">Test</th>
+                <?php
+              }
+              ?>
             </tr>
           </thead>
           <tbody>
             <?php
-            foreach($users as $user){
-                ?>
-                <tr>
-                  <td><?php echo $user->display_name; ?></td>
-                  <td>
-                    <?php
-                    if($user->roles[0] == 'customer_on_account' || $user->roles[0] == 'shop_manager' || $user->roles[0] == 'supercustomer' || $user->roles[0] == 'administrator'){
+              if(current_user_can('supercustomer')){
+                foreach($users as $user){
+                  if($user->caps['customer_on_account'] == 1 || $user->caps['customer']== 1 || $user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer'] ==1){
                     ?>
-                    <span class="essoCheck">&#10003;</span>
-                    <?php
-                    } else {
+                    <tr>
+                      <td><?php echo $user->display_name; ?></td>
+                      <td class="essoColumn">
+                        <?php
+                        if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
+                        ?>
+                        <span class="essoCheck">&#10003;</span>
+                        <?php
+                        } else {
 
-                    }
-                    ?>
-                  </td>
-                  <td>
+                        }
+                        ?>
+                      </td>
+                      <td class="mobilColumn">
+                        <?php
+                        if($user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer']==1){
+                        ?>
+                        <span class="mobilCheck">&#10003;</span>
+                        <?php
+                      } else {
+
+                      }
+                      ?>
+                      </td>
+                    </tr>
                     <?php
-                    if($user->roles[0] == 'mobile-customer-on-account' || $user->roles[0] == 'shop_manager' || $user->roles[0] == 'supercustomer' || $user->roles[0] == 'administrator'){
-                    ?>
-                    <span class="mobilCheck">&#10003;</span>
-                    <?php
-                  } else {
+                  }else {
 
                   }
-                  ?>
-                  </td>
-                </tr>
-                <?php
+                }
+              } else if(current_user_can('pioneer_super_customer')){
+                foreach($users as $user){
+                  if($user->caps['pioneer_customer_on_account']==1 || $user->caps['pioneer_customer']==1){
+                   ?>
+                   <tr>
+                     <td>
+                       <?php
+                           echo $user->display_name;
+                       ?>
+                     </td>
+                     <td class="pioneerColumn">
+                       <?php
+                       if($user->caps['pioneer_customer']==1 || $user->caps['pioneer_customer_on_account']==1){
+                       ?>
+                       <span class="pioneerCheck">&#10003;</span>
+                       <?php
+                       }
+                     ?>
+                     </td>
+                   </tr>
+                   <?php
+                } else {
+
+                }
               }
+             } else if(current_user_can('administrator') || current_user_can('shop_manager')){
+               foreach($users as $user){
+                 ?>
+                 <tr>
+                   <td><?php echo $user->display_name; ?></td>
+                   <td class="essoColumn">
+                     <?php
+                     if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
+                     ?>
+                     <span class="essoCheck">&#10003;</span>
+                     <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
+                   <td class="mobilColumn">
+                     <?php
+                     if($user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer']==1){
+                     ?>
+                     <span class="mobilCheck">&#10003;</span>
+                     <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
+                   <td class="pioneerColumn">
+                     <?php
+                     if($user->caps['pioneer_customer']==1 || $user->caps['pioneer_customer_on_account']==1){
+                     ?>
+                     <span class="pioneerCheck">&#10003;</span>
+                     <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
+                 </tr>
+                 <?php
+               }
+             }
             ?>
           </tbody>
         </table>
@@ -663,7 +751,13 @@ class MYCAjax{
       }
 
       $allUsers = get_users(array('orderby' => 'display_name'));
+
       pumpUsers($allUsers);
+    }
+
+    public static function action_woocommerce_email_header( $email_heading ) {
+        $new_email_heading = str_replace( 'New customer order', 'New order', $email_heading );
+        return $new_email_heading;
     }
 
 
@@ -787,4 +881,10 @@ add_action('woocommerce_account_user-list_endpoint', array('MYCAjax', 'myc_user_
 
 
 add_action('template_redirect', array('MYCAjax', 'myc_redirect'));
+
+
+
+/*******EMAIL ORDER NAME********/
+
+add_action( 'woocommerce_email_header', array('MYCAjax', 'action_woocommerce_email_header'), 10, 1 );
 ?>

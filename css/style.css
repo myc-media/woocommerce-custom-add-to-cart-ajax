@@ -576,14 +576,23 @@ h1.product_title.entry-title {
 .essoCheck {
     color: #ed2d34;
 }
+.pioneerCheck {
+  color: #fedc00;
+}
 
-.user-details-table tbody tr td:last-of-type {
+.user-details-table tbody tr td.mobilColumn {
     background: #2b6fb7;
 }
-.user-details-table tbody tr td:nth-of-type(2) {
+.user-details-table tbody tr td.essoColumn {
     background: #ed2d34;
 }
-span.essoCheck, span.mobilCheck {
+.user-details-table tbody tr td.pioneerColumn {
+    background-color: #fedc00;
+}
+th.mobilCheck, th.essoCheck, th.pioneerCheck {
+  text-align: center !important;
+}
+span.essoCheck, span.mobilCheck, span.pioneerCheck {
     color: white;
     width: 100%;
     text-align: center;
