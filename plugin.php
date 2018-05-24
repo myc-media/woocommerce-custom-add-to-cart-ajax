@@ -364,7 +364,7 @@ class MYCAjax{
 
         foreach($values['tmpost_data']['productData'] as $key => $value){
 
-            $renderImage = "<img src='" . $value['image'] . "' />";
+            $renderImage = "<img width='200' class='partImage' style='max-width: 200px;' src='" . $value['image'] . "' />";
 
             wc_add_order_item_meta($itemId, "Part", $value["label"]);
             // wc_add_order_item_meta($itemId, "Quantity", $value["quantity"]);
@@ -374,12 +374,16 @@ class MYCAjax{
             //     wc_add_order_item_meta($itemId, "Price", $value["price"]);
             // }
             if(empty($values['canvas'])){
+              wc_add_order_item_meta($itemId, "Quantity", $value['quantity']);
+              wc_add_order_item_meta($itemId, "Price/Part", $value['price']);
               wc_add_order_item_meta($itemId, "Part-Image", $renderImage);
             }
             // wc_add_order_item_meta($itemId, " ", $renderImage);
         }
         if(!empty($values['canvas'])){
-          $canvas = '<img src="'.$values['canvas'].'" />';
+          $canvas = '<a class="showImage" href="'.$values['canvas'].'" target="_blank"><img width="200" src="'.$values['canvas'].'" /></a>';
+          wc_add_order_item_meta($itemId, "Quantity", $value['quantity']);
+          wc_add_order_item_meta($itemId, "Price/Set", $value['setPrice']);
           wc_add_order_item_meta($itemId, 'Set-Image', $canvas);
         }
         return $itemId;
@@ -419,7 +423,7 @@ class MYCAjax{
     public static function myc_before_checkout_form($checkout){
 
       date_default_timezone_set('America/New_York');
-      $mydateoptions = array('' => __('Select Install Date', 'woocommerce'));
+      $mydateoptions = array('' => __('Select Date', 'woocommerce'));
 
       echo '<div id="customer_po_field"><h2>' . __('Job Information') . '</h2>';
 
@@ -427,6 +431,7 @@ class MYCAjax{
      <script>
          jQuery(function($){
              $("#datepicker").datepicker();
+             $("#pickup_datepicker").datepicker();
          });
      </script>';
 
@@ -458,6 +463,15 @@ class MYCAjax{
         'placeholder' => __('Enter PO Number', 'woocommerce')
       ), $checkout->get_value('customer_po_number'));
 
+      woocommerce_form_field('pickup_date', array(
+        'type'        => 'text',
+        'class'       => array('my-field-class', 'form-row-wide'),
+        'id'          => 'pickup_datepicker',
+        'label'       => __('Pickup Date', 'woocommerce'),
+        'placeholder' => __('Select Date'),
+        'options'     => $mydateoptions
+      ), $checkout->get_value('pickup_date'));
+
       woocommerce_form_field('install_date', array(
         'type'        => 'text',
         'class'       => array('my-field-class', 'form-row-wide'),
@@ -465,7 +479,7 @@ class MYCAjax{
         'label'       => __('Install Date', 'woocommerce'),
         'placeholder' => __('Select Date'),
         'options'     => $mydateoptions
-      ), $checkout->get_value('customer_po_number'));
+      ), $checkout->get_value('install_date'));
 
       echo '</div>';
     }
@@ -485,6 +499,9 @@ class MYCAjax{
       if (!empty($_POST['customer_po_number'])) {
         update_post_meta($order_id, '_customer_po_number', sanitize_text_field($_POST['customer_po_number']));
       }
+      if(!empty($_POST['pickup_date'])){
+        update_post_meta($order_id, '_pickup_date', sanitize_text_field($_POST['pickup_date']));
+      }
       if(!empty($_POST['install_date'])){
         update_post_meta($order_id, '_install_date', sanitize_text_field($_POST['install_date']));
       }
@@ -500,6 +517,7 @@ class MYCAjax{
       echo '<p><strong>'.__('Customer Install Address').':</strong> ' . get_post_meta( $order->id, '_customer_install_address', true ) . '</p>';
       echo '<p><strong>'.__('Customer Install Address 2').':</strong> ' . get_post_meta( $order->id, '_job_number', true ) . '</p>';
       echo '<p><strong>'.__('Customer PO Number').':</strong> ' . get_post_meta( $order->id, '_customer_po_number', true ) . '</p>';
+      echo '<p><strong>'.__('Pickup Date').':</strong> ' . get_post_meta($order->id, '_pickup_date', true) . '</p>';
       echo '<p><strong>'.__('Install Date').':</strong> ' . get_post_meta($order->id, '_install_date', true) . '</p>';
       ?>
         </div>
@@ -519,6 +537,9 @@ class MYCAjax{
       }
       if($user_id && $_POST['customer_po_number']){
         update_user_meta($user_id, 'customer_po_number', sanitize_text_field($_POST['customer_po_number']));
+      }
+      if($user_id && $_POST['pickup_date']){
+        update_user_meta($user_id, 'pickup_date', sanitize_text_field($_POST['pickup_date']));
       }
       if($user_id && $_POST['install_date']){
         update_user_meta($user_id, 'install_date', sanitize_text_field($_POST['install_date']));
@@ -552,6 +573,10 @@ class MYCAjax{
 								<td><?php echo $order->get_meta('_customer_po_number'); ?></td>
 							</tr>
               <tr>
+                <td>Pickup Date</td>
+                <td><?php echo $order->get_meta('_pickup_date'); ?></td>
+              </tr>
+              <tr>
                 <td>Install Date</td>
                 <td><?php echo $order->get_meta('_install_date'); ?></td>
               </tr>
@@ -572,6 +597,7 @@ class MYCAjax{
       $keys['Customer Address'] = '_customer_install_address';
       $keys['Customer Address Two'] = '_job_number';
       $keys['Customer PO'] = '_customer_po_number';
+      $keys['Pickup Date'] = '_pickup_date';
       $keys['Install Date'] = '_install_date';
       return $keys;
     }
@@ -616,11 +642,14 @@ class MYCAjax{
       echo '<h3>Users List</h3>';
 
       function pumpUsers($users){
+        $userinfo;
+        $companyInfo;
         ?>
         <table class="user-details-table">
           <thead>
             <tr>
               <th>User</th>
+              <th>Company</th>
               <?php
               if(current_user_can('supercustomer')){
                 ?>
@@ -629,13 +658,13 @@ class MYCAjax{
                 <?php
               } else if(current_user_can('pioneer_super_customer')){
                   ?>
-                    <th class="pioneerCheck">Test</th>
+                    <th class="pioneerCheck">Pioneer</th>
                   <?php
               } else {
                 ?>
                 <th class="essoCheck">Esso</th>
                 <th class="mobilCheck">Mobil</th>
-                <th class="pioneerCheck">Test</th>
+                <th class="pioneerCheck">Pioneer</th>
                 <?php
               }
               ?>
@@ -645,16 +674,23 @@ class MYCAjax{
             <?php
               if(current_user_can('supercustomer')){
                 foreach($users as $user){
+                  $userinfo = get_user_meta($user->ID);
+                  $companyInfo = $userinfo['company'][0];
                   if($user->caps['customer_on_account'] == 1 || $user->caps['customer']== 1 || $user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer'] ==1){
                     ?>
                     <tr>
                       <td><?php echo $user->display_name; ?></td>
+                      <td><?php echo $companyInfo; ?></td>
                       <td class="essoColumn">
                         <?php
                         if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
                         ?>
                         <span class="essoCheck">&#10003;</span>
                         <?php
+                        } else if($user->caps['supercustomer'] == 1) {
+                          ?>
+                          <span class="essoCheck">&#9733;</span>
+                          <?php
                         } else {
 
                         }
@@ -665,6 +701,10 @@ class MYCAjax{
                         if($user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer']==1){
                         ?>
                         <span class="mobilCheck">&#10003;</span>
+                        <?php
+                      } else if($user->caps['supercustomer'] == 1) {
+                        ?>
+                        <span class="essoCheck">&#9733;</span>
                         <?php
                       } else {
 
@@ -679,6 +719,8 @@ class MYCAjax{
                 }
               } else if(current_user_can('pioneer_super_customer')){
                 foreach($users as $user){
+                  $userinfo = get_user_meta($user->ID);
+                  $companyInfo = $userinfo['company'][0];
                   if($user->caps['pioneer_customer_on_account']==1 || $user->caps['pioneer_customer']==1){
                    ?>
                    <tr>
@@ -687,6 +729,7 @@ class MYCAjax{
                            echo $user->display_name;
                        ?>
                      </td>
+                     <td><?php echo $companyInfo; ?></td>
                      <td class="pioneerColumn">
                        <?php
                        if($user->caps['pioneer_customer']==1 || $user->caps['pioneer_customer_on_account']==1){
@@ -698,24 +741,39 @@ class MYCAjax{
                      </td>
                    </tr>
                    <?php
+                } else if($user->caps['pioneer_super_customer'] == 1) {
+                  ?>
+                  <span class="essoCheck">&#9733;</span>
+                  <?php
                 } else {
 
                 }
               }
              } else if(current_user_can('administrator') || current_user_can('shop_manager')){
                foreach($users as $user){
+                 $userinfo = get_user_meta($user->ID);
+                 $companyInfo = $userinfo['company'][0];
                  ?>
                  <tr>
                    <td><?php echo $user->display_name; ?></td>
+                   <td><?php echo $companyInfo; ?></td>
                    <td class="essoColumn">
                      <?php
                      if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
                      ?>
                      <span class="essoCheck">&#10003;</span>
                      <?php
-                     } else {
+                   } else if($user->caps['supercustomer'] == 1) {
+                     ?>
+                     <span class="essoCheck">&#9733;</span>
+                     <?php
+                   } else if($user->caps['administrator'] == 1) {
+                     ?>
+                     <span class="essoCheck">&#9733;A</span>
+                     <?php
+                   } else {
 
-                     }
+                   }
                      ?>
                    </td>
                    <td class="mobilColumn">
@@ -724,6 +782,14 @@ class MYCAjax{
                      ?>
                      <span class="mobilCheck">&#10003;</span>
                      <?php
+                     } else if($user->caps['supercustomer'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;</span>
+                       <?php
+                     } else if($user->caps['administrator'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;A</span>
+                       <?php
                      } else {
 
                      }
@@ -735,6 +801,14 @@ class MYCAjax{
                      ?>
                      <span class="pioneerCheck">&#10003;</span>
                      <?php
+                   } else if($user->caps['pioneer_super_customer'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;</span>
+                       <?php
+                     } else if($user->caps['administrator'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;A</span>
+                       <?php
                      } else {
 
                      }
@@ -750,7 +824,8 @@ class MYCAjax{
         <?php
       }
 
-      $allUsers = get_users(array('orderby' => 'display_name'));
+      // $allUsers = get_users(array('orderby' => 'display_name'));
+      $allUsers = get_users('orderby=meta_value&meta_key=company');
 
       pumpUsers($allUsers);
     }
@@ -760,7 +835,19 @@ class MYCAjax{
         return $new_email_heading;
     }
 
-
+    public static function myc_email_header(){
+      echo '
+      <style type="text/css">
+        ul.wc-item-meta {
+          font-size: 12px;
+          font-style: normal;
+        }
+        .partImage {
+          max-width: 200px !important;
+        }
+      </style>
+      ';
+    }
 
 
 }
@@ -887,4 +974,71 @@ add_action('template_redirect', array('MYCAjax', 'myc_redirect'));
 /*******EMAIL ORDER NAME********/
 
 add_action( 'woocommerce_email_header', array('MYCAjax', 'action_woocommerce_email_header'), 10, 1 );
+
+/******EMAIL FORMAT****/
+
+add_action('woocommerce_email_header', array('MYCAjax', 'myc_email_header'));
+
+/**************COMPANY FIELD****************/
+
+//add&remove field from user profiles - sorce:http://davidwalsh.name/add-profile-fields
+function modify_contact_methods($profile_fields) {
+
+	// Add new fields
+	$profile_fields['company'] = 'Company';
+
+	// Remove old fields
+	//unset($profile_fields['aim']);
+
+	return $profile_fields;
+}
+add_filter('user_contactmethods', 'modify_contact_methods');
+
+//Add the colum to the user backend
+function user_sortable_columns( $columns ) {
+	$columns['company'] = 'Company';
+	return $columns;
+}
+add_filter( 'manage_users_sortable_columns', 'user_sortable_columns' );
+
+//alter the user query and sorts whole list by company
+function status_order_in_user_query($query){
+	if('Company'==$query->query_vars['orderby']) {
+		$query->query_from .= " LEFT JOIN wp_usermeta ON wp_users.ID = wp_usermeta.user_id AND meta_key = 'company'";
+		$query->query_orderby = " ORDER BY wp_usermeta.meta_value ".($query->query_vars["order"] == "ASC" ? "asc " : "desc ");//set sort order
+	}
+	//print_r($query); // for debugging
+}
+add_action('pre_user_query', 'status_order_in_user_query');
+
+//makes the user meta "company" searchable and returen results
+function extended_user_search( $user_query ){
+	// Make sure this is only applied to user search
+	if ( $user_query->query_vars['search'] ){
+		$search = trim( $user_query->query_vars['search'], '*' );
+		if ( $_REQUEST['s'] == $search ){
+			global $wpdb;
+			$user_query->query_from .= "JOIN wp_usermeta MF ON MF.user_id = {$wpdb->users}.ID AND MF.meta_key = 'company'";
+			$user_query->query_where = 'WHERE 1=1' . $user_query->get_search_sql( $search, array( 'user_login', 'user_email', 'user_nicename', 'MF.meta_value' ), 'both' );
+		}
+	}
+}
+add_action( 'pre_user_query', 'extended_user_search' );
+
+//add columns to User panel list page
+function add_user_columns( $defaults ) {
+     $defaults['company'] = __('Company', 'user-column');
+     return $defaults;
+}
+add_filter('manage_users_columns', 'add_user_columns', 15, 1);
+
+//Print the user data in the new column
+function add_custom_user_columns($value, $column_name, $id) {
+      if( $column_name == 'company' ) {
+		return get_the_author_meta( 'company', $id );
+      }
+}
+add_action('manage_users_custom_column', 'add_custom_user_columns', 15, 3);
+
+
 ?>

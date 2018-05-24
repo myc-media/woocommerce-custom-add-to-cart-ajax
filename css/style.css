@@ -42,6 +42,9 @@ div#customer_po_field input {
 td.product-name a {
     display: none;
 }
+td.product-name a.showImage {
+  display: initial !important;
+}
 .woocommerce-checkout .cart_item a.tm-cart-edit-options {
     display: none;
 }
@@ -256,7 +259,11 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-3115,
   .page-template ul.products li.classic.post-3163,
   .page-template ul.products li.classic.post-3168,
-  .page-template ul.products li.classic.post-3230 {
+  .page-template ul.products li.classic.post-3230,
+  .page-template ul.products li.classic.post-3305,
+  .page-template ul.products li.classic.post-3307,
+  .page-template ul.products li.classic.post-3306,
+  .page-template ul.products li.classic.post-3308 {
       flex-basis: 50% !important; }
   .page-template ul.products li.classic.post-2019 {
       flex-basis: 50% !important; }
@@ -606,8 +613,12 @@ span.essoCheck, span.mobilCheck, span.pioneerCheck {
     display: block;
 }
 
-/**********PIONEER PAGE*********/
 
+/*******PIONEER PUMPS*********/
 .page-template-page-pioneer .ModalRow.row form.cart {
     background: #bbbdc0 !important;
+}
+/*******GLOBAL SELECT PUMPS*******/
+.syncSelectBottom li {
+    pointer-events: none !important;
 }
