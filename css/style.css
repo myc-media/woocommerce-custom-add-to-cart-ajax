@@ -116,7 +116,15 @@ form ~ .product_meta span.posted_in {
 .riserRight .products li[class*="post-"] {
   margin-left: -40% !important;
 }
-
+.tm-description {
+    background: #ed1c24 !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+.tm-description {
+    display: inline-block;
+    padding: 1%;
+}
 /**********MODAL IMAGE SIZE MAX HEIGHT**********/
 li.tmcp-field-wrap label img.tmlazy.checkbox_image {
     max-height: 200px;
@@ -213,6 +221,16 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
     flex-basis: 30% !important; }
   .page-template ul.products li.classic.post-3218,
   .page-template ul.products li.classic.post-3223,
+  .page-template ul.products li.classic.post-3074,
+  .page-template ul.products li.classic.post-3384,
+  .page-template ul.products li.classic.post-3385,
+  .page-template ul.products li.classic.post-2693,
+  .page-template ul.products li.classic.post-3080,
+  .page-template ul.products li.classic.post-3081,
+  .page-template ul.products li.classic.post-2694,
+  .page-template ul.products li.classic.post-2676,
+  .page-template ul.products li.classic.post-3076,
+  .page-template ul.products li.classic.post-3075,
   .page-template ul.products li.classic.post-3225 {
     flex-basis: 33% !important; }
   .page-template ul.products li.classic.post-2011,
@@ -243,15 +261,8 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-2471,
   .page-template ul.products li.classic.post-2500,
   .page-template ul.products li.classic.post-2501,
-  .page-template ul.products li.classic.post-2693,
-  .page-template ul.products li.classic.post-2694,
   .page-template ul.products li.classic.post-3068,
   .page-template ul.products li.classic.post-3071,
-  .page-template ul.products li.classic.post-3074,
-  .page-template ul.products li.classic.post-3076,
-  .page-template ul.products li.classic.post-3080,
-  .page-template ul.products li.classic.post-3081,
-  .page-template ul.products li.classic.post-3075,
   .page-template ul.products li.classic.post-3089,
   .page-template ul.products li.classic.post-3091,
   .page-template ul.products li.classic.post-3111,
@@ -278,7 +289,6 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-2626,
   .page-template ul.products li.classic.post-2627,
   .page-template ul.products li.classic.post-2675,
-  .page-template ul.products li.classic.post-2676,
   .page-template ul.products li.classic.post-2677 {
     flex-basis: 33% !important; }
   .page-template ul.products li.classic.post-2474,
@@ -591,7 +601,7 @@ h1.product_title.entry-title {
     color: #ed2d34;
 }
 .pioneerCheck {
-  color: #fedc00;
+  color: #ff8d00;
 }
 
 .user-details-table tbody tr td.mobilColumn {
@@ -601,7 +611,7 @@ h1.product_title.entry-title {
     background: #ed2d34;
 }
 .user-details-table tbody tr td.pioneerColumn {
-    background-color: #fedc00;
+    background-color: #ff8d00;
 }
 th.mobilCheck, th.essoCheck, th.pioneerCheck {
   text-align: center !important;
