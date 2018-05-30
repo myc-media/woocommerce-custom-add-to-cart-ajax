@@ -662,6 +662,7 @@ class MYCAjax{
                   <?php
               } else {
                 ?>
+                <th class="expiry">Expiry</th>
                 <th class="essoCheck">Esso</th>
                 <th class="mobilCheck">Mobil</th>
                 <th class="pioneerCheck">Pioneer</th>
@@ -753,10 +754,12 @@ class MYCAjax{
                foreach($users as $user){
                  $userinfo = get_user_meta($user->ID);
                  $companyInfo = $userinfo['company'][0];
+                 $expiryInfo = $userinfo['expiry'][0];
                  ?>
                  <tr>
                    <td><?php echo $user->display_name; ?></td>
                    <td><?php echo $companyInfo; ?></td>
+                   <td><?php echo $expiryInfo; ?></td>
                    <td class="essoColumn">
                      <?php
                      if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
@@ -849,37 +852,134 @@ class MYCAjax{
       ';
     }
 
+    public static function userPaymentDisableOptions($gateways){
+      global $woocommerce, $current_user;
+
+      if(isset($gateways['cod']) && current_user_can('customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('mobil_customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('pioneer_customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif($current_user->caps['customer_no_checkout'] == 1){
+        unset($gateways['cod']);
+        unset($gateways['stripe']);
+      }
+      return $gateways;
+    }
+
+    /**************COMPANY FIELD****************/
+    public static function modify_contact_methods($profile_fields) {
+
+    	// Add new fields
+    	$profile_fields['company'] = 'Company';
+      $profile_fields['expiry'] = 'Expiry';
+
+    	return $profile_fields;
+    }
+
+    //Add company colum to the user backend
+    public static function user_sortable_columns( $columns ) {
+    	$columns['company'] = 'Company';
+      $columns['Expiry'] = 'Expiry';
+    	return $columns;
+    }
+
+    public static function status_order_in_user_query($query){
+    	if('Company'==$query->query_vars['orderby']) {
+    		$query->query_from .= " LEFT JOIN wp_usermeta ON wp_users.ID = wp_usermeta.user_id AND meta_key = 'company'";
+    		$query->query_orderby = " ORDER BY wp_usermeta.meta_value ".($query->query_vars["order"] == "ASC" ? "asc " : "desc ");//set sort order
+    	}
+    	//print_r($query); // for debugging
+    }
+
+    public static function extended_user_search( $user_query ){
+    	// Make sure this is only applied to user search
+    	if ( $user_query->query_vars['search'] ){
+    		$search = trim( $user_query->query_vars['search'], '*' );
+    		if ( $_REQUEST['s'] == $search ){
+    			global $wpdb;
+    			$user_query->query_from .= "JOIN wp_usermeta MF ON MF.user_id = {$wpdb->users}.ID AND MF.meta_key = 'company'";
+    			$user_query->query_where = 'WHERE 1=1' . $user_query->get_search_sql( $search, array( 'user_login', 'user_email', 'user_nicename', 'MF.meta_value' ), 'both' );
+    		}
+    	}
+    }
+
+    public static function add_user_columns( $defaults ) {
+         $defaults['company'] = __('Company', 'user-column');
+         $defaults['expiry'] = __('Expiry', 'user-column');
+         return $defaults;
+    }
+
+    public static function add_custom_user_columns($value, $column_name, $id) {
+          if( $column_name == 'company' ) {
+    		      return get_the_author_meta( 'company', $id );
+          }
+          if($column_name == 'expiry'){
+            return get_the_author_meta('expiry', $id);
+          }
+    }
+
+    /****LOGIN REDIRECT*****/
+    public static function myc_login_redirect($redirect, $user){
+      $role = $user->roles[0];
+      $dashboard = admin_url();
+      $myaccount = get_permalink(wc_get_page_id('my-account'));
+      if($role != 'administrator'){
+        $redirect = $myaccount;
+      } else {
+        $redirect = $dashboard;
+      }
+
+      return $redirect;
+    }
+
+    //SHOP PAGE REDIRECT
+
+    public static function custom_shop_page_redirect() {
+        if( is_shop() ){
+            wp_redirect( home_url( '/' ) );
+            exit();
+        }
+    }
+
+    public static function myc_custom_login(){
+    	wp_enqueue_style('mycLoginStyle', get_stylesheet_directory_uri().'/css/login-style.css');
+    	wp_enqueue_script('mycLoginScript', get_stylesheet_directory_uri().'/js/login-script.js', array('jquery'), '1', true);
+    }
+
+    public static function myc_login_logo(){
+    	return home_url();
+    }
+
+    public static function add_login_logout_link($items, $args) {
+      ob_start();
+      wp_loginout('');
+      $loginoutlink = ob_get_contents();
+      ob_end_clean();
+      $items .= '<li>'. $loginoutlink .'</li>';
+      return $items;
+    }
+
+    public static function myc_remove_my_account_links( $menu_links ){
+
+    	//unset( $menu_links['dashboard'] ); // Dashboard
+    	//unset( $menu_links['payment-methods'] ); // Payment Methods
+    	//unset( $menu_links['orders'] ); // Orders
+    	//unset( $menu_links['downloads'] ); // Downloads
+    	//unset( $menu_links['edit-account'] ); // Account details
+    	//unset( $menu_links['customer-logout'] ); // Logout
+
+    	return $menu_links;
+
+    }
+
+    /*****LOGIN TOOLTIP LOGO*******/
+    public static function my_login_logo_url_title() {
+         return 'MYC Graphics Login';
+    }
 
 }
-
-/*********WOOCOMMERCE TEMPLATE REDIRECT************/
-// function woo_adon_plugin_template( $template, $template_name, $template_path ) {
-//   global $woocommerce;
-//   $_template = $template;
-//   if ( ! $template_path )
-//      $template_path = $woocommerce->template_url;
-//
-//   $plugin_path  = untrailingslashit( plugin_dir_path( __FILE__ ) )  . '/template/woocommerce/';
-//
-//  // Look within passed path within the theme - this is priority
-//  $template = locate_template(
-//  array(
-//    $template_path . $template_name,
-//    $template_name
-//  )
-// );
-//
-// if( ! $template && file_exists( $plugin_path . $template_name ) )
-//  $template = $plugin_path . $template_name;
-//
-// if ( ! $template )
-//  $template = $_template;
-//
-// return $template;
-// }
-//
-//
-// add_filter( 'woocommerce_locate_template', 'woo_adon_plugin_template', 1, 3 );
 
 
 /******REMOVE LINK FROM ORDER DETAILS PRODUCT NAME**********/
@@ -979,66 +1079,48 @@ add_action( 'woocommerce_email_header', array('MYCAjax', 'action_woocommerce_ema
 
 add_action('woocommerce_email_header', array('MYCAjax', 'myc_email_header'));
 
+/********USER CHECKOUT ROLES********/
+add_filter('woocommerce_available_payment_gateways', array('MYCAjax', 'userPaymentDisableOptions'));
+
+
 /**************COMPANY FIELD****************/
-
-//add&remove field from user profiles - sorce:http://davidwalsh.name/add-profile-fields
-function modify_contact_methods($profile_fields) {
-
-	// Add new fields
-	$profile_fields['company'] = 'Company';
-
-	// Remove old fields
-	//unset($profile_fields['aim']);
-
-	return $profile_fields;
-}
-add_filter('user_contactmethods', 'modify_contact_methods');
+add_filter('user_contactmethods', array('MYCAjax', 'modify_contact_methods'));
 
 //Add the colum to the user backend
-function user_sortable_columns( $columns ) {
-	$columns['company'] = 'Company';
-	return $columns;
-}
-add_filter( 'manage_users_sortable_columns', 'user_sortable_columns' );
+add_filter( 'manage_users_sortable_columns', array('MYCAjax', 'user_sortable_columns' ));
 
 //alter the user query and sorts whole list by company
-function status_order_in_user_query($query){
-	if('Company'==$query->query_vars['orderby']) {
-		$query->query_from .= " LEFT JOIN wp_usermeta ON wp_users.ID = wp_usermeta.user_id AND meta_key = 'company'";
-		$query->query_orderby = " ORDER BY wp_usermeta.meta_value ".($query->query_vars["order"] == "ASC" ? "asc " : "desc ");//set sort order
-	}
-	//print_r($query); // for debugging
-}
-add_action('pre_user_query', 'status_order_in_user_query');
+add_action('pre_user_query', array('MYCAjax', 'status_order_in_user_query'));
 
 //makes the user meta "company" searchable and returen results
-function extended_user_search( $user_query ){
-	// Make sure this is only applied to user search
-	if ( $user_query->query_vars['search'] ){
-		$search = trim( $user_query->query_vars['search'], '*' );
-		if ( $_REQUEST['s'] == $search ){
-			global $wpdb;
-			$user_query->query_from .= "JOIN wp_usermeta MF ON MF.user_id = {$wpdb->users}.ID AND MF.meta_key = 'company'";
-			$user_query->query_where = 'WHERE 1=1' . $user_query->get_search_sql( $search, array( 'user_login', 'user_email', 'user_nicename', 'MF.meta_value' ), 'both' );
-		}
-	}
-}
-add_action( 'pre_user_query', 'extended_user_search' );
+add_action( 'pre_user_query', array('MYCAjax', 'extended_user_search' ));
 
 //add columns to User panel list page
-function add_user_columns( $defaults ) {
-     $defaults['company'] = __('Company', 'user-column');
-     return $defaults;
-}
-add_filter('manage_users_columns', 'add_user_columns', 15, 1);
+add_filter('manage_users_columns', array('MYCAjax', 'add_user_columns'), 15, 1);
 
 //Print the user data in the new column
-function add_custom_user_columns($value, $column_name, $id) {
-      if( $column_name == 'company' ) {
-		return get_the_author_meta( 'company', $id );
-      }
-}
-add_action('manage_users_custom_column', 'add_custom_user_columns', 15, 3);
+add_action('manage_users_custom_column', array('MYCAjax', 'add_custom_user_columns'), 15, 3);
 
+/*****LOGIN REDIRECT*******/
+add_filter('woocommerce_login_redirect', array('MYCAjax', array('MYCAjax', 'myc_login_redirect')), 1200, 2);
+
+//SHOP PAGE REDIRECT
+add_action( 'template_redirect', array('MYCAjax', 'custom_shop_page_redirect' ));
+
+
+//WPLOGIN SCREEN CUSTOMIZE
+
+add_action('login_enqueue_scripts', array('MYCAjax', 'myc_custom_login'));
+add_filter( 'login_headerurl', array('MYCAjax', 'myc_login_logo'));
+
+/******LOGOUT REDIRECT**********/
+add_filter('wp_nav_menu_items', array('MYCAjax', 'add_login_logout_link'), 10, 2);
+
+
+//CHANGE ENDPOINT URL OF LOGOUT ON MY ACCOUNT DASHBOARD
+
+add_filter ( 'woocommerce_account_menu_items', array('MYCAjax', 'myc_remove_my_account_links' ));
+
+add_filter( 'login_headertitle', array('MYCAjax', 'my_login_logo_url_title'));
 
 ?>
