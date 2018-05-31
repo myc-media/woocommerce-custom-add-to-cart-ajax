@@ -346,7 +346,6 @@ class MYCAjax{
         }
 
         //RETURN PRODUCT TEMPLATE WITH PRODUCT OPTIONS PRINTED TO CART & MINI CART
-
         return $other_data;
     }
 
@@ -382,7 +381,7 @@ class MYCAjax{
         }
         if(!empty($values['canvas'])){
           $canvas = '<a class="showImage" href="'.$values['canvas'].'" target="_blank"><img width="200" src="'.$values['canvas'].'" /></a>';
-          wc_add_order_item_meta($itemId, "Quantity", $value['quantity']);
+          wc_add_order_item_meta($itemId, "Quantity", $values['quantity']);
           wc_add_order_item_meta($itemId, "Price/Set", $value['setPrice']);
           wc_add_order_item_meta($itemId, 'Set-Image', $canvas);
         }
@@ -978,6 +977,15 @@ class MYCAjax{
     public static function my_login_logo_url_title() {
          return 'MYC Graphics Login';
     }
+    
+    /******REMOVE QTY COLUMN*******/
+    public static function hidding_some_order_buttons() {
+    echo '<style>
+        .woocommerce_order_items_wrapper.wc-order-items-editable thead tr th:nth-of-type(4), .woocommerce_order_items_wrapper.wc-order-items-editable tbody tr td:nth-of-type(4) {
+            display: none;
+        }
+    </style>';
+}
 
 }
 
@@ -1125,5 +1133,10 @@ add_filter( 'login_headertitle', array('MYCAjax', 'my_login_logo_url_title'));
 
 
 /********TESTING****************/
+
+
+add_action( 'admin_head', array('MYCAjax', 'hidding_some_order_buttons' ));
+
+
 
 ?>
