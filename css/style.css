@@ -69,7 +69,9 @@ td.product-name a.showImage {
     flex-basis: 25% !important;
 }
 .set .thirdFlex-ul li {
-    flex-basis: 33.33% !important;
+    flex-basis: 32.33% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 .set .ajaxColumnLink > a{
     z-index: 1000;
@@ -631,4 +633,11 @@ span.essoCheck, span.mobilCheck, span.pioneerCheck {
 /*******GLOBAL SELECT PUMPS*******/
 .syncSelectBottom li {
     pointer-events: none !important;
+}
+
+
+/*******SIDEBAR PAGE STYLES********/
+
+.page-template-page-esso-left-sidebar .container.main-content {
+    max-width: 1920px !important;
 }

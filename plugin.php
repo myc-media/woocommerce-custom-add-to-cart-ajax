@@ -374,7 +374,7 @@ class MYCAjax{
             // }
             if(empty($values['canvas'])){
               wc_add_order_item_meta($itemId, "Quantity", $value['quantity']);
-              wc_add_order_item_meta($itemId, "Price/Part", $value['price']);
+              wc_add_order_item_meta($itemId, "Price/Part", "$".$value['price']);
               wc_add_order_item_meta($itemId, "Part-Image", $renderImage);
             }
             // wc_add_order_item_meta($itemId, " ", $renderImage);
@@ -382,7 +382,7 @@ class MYCAjax{
         if(!empty($values['canvas'])){
           $canvas = '<a class="showImage" href="'.$values['canvas'].'" target="_blank"><img width="200" src="'.$values['canvas'].'" /></a>';
           wc_add_order_item_meta($itemId, "Quantity", $values['quantity']);
-          wc_add_order_item_meta($itemId, "Price/Set", $value['setPrice']);
+          wc_add_order_item_meta($itemId, "Price/Set", "$".$value['setPrice']);
           wc_add_order_item_meta($itemId, 'Set-Image', $canvas);
         }
         return $itemId;
@@ -428,10 +428,10 @@ class MYCAjax{
 
       echo '
      <script>
-         jQuery(function($){
-             $("#datepicker").datepicker();
-             $("#pickup_datepicker").datepicker();
-         });
+          jQuery(document).ready(function($){
+            $("#datepicker").datepicker();
+            $("#pickup_datepicker").datepicker();
+          });
      </script>';
 
       woocommerce_form_field('customer_install_name', array(
@@ -444,7 +444,7 @@ class MYCAjax{
       woocommerce_form_field('customer_install_address', array(
         'type'        => 'text',
         'class'       => array('my-field-class', 'form-row-wide'),
-        'label'       => __('Location / Address', 'woocommerce'),
+        'label'       => __('Dispenser Graphics Location', 'woocommerce'),
         'placeholder' => __('Enter Location / address', 'woocommerce')
       ), $checkout->get_value('customer_install_address'));
 
@@ -514,7 +514,7 @@ class MYCAjax{
       <?
       echo '<p><strong>'.__('Customer Install Name').':</strong> ' . get_post_meta( $order->id, '_customer_install_name', true ) . '</p>';
       echo '<p><strong>'.__('Customer Install Address').':</strong> ' . get_post_meta( $order->id, '_customer_install_address', true ) . '</p>';
-      echo '<p><strong>'.__('Customer Install Address 2').':</strong> ' . get_post_meta( $order->id, '_job_number', true ) . '</p>';
+      echo '<p><strong>'.__('Job Number').':</strong> ' . get_post_meta( $order->id, '_job_number', true ) . '</p>';
       echo '<p><strong>'.__('Customer PO Number').':</strong> ' . get_post_meta( $order->id, '_customer_po_number', true ) . '</p>';
       echo '<p><strong>'.__('Pickup Date').':</strong> ' . get_post_meta($order->id, '_pickup_date', true) . '</p>';
       echo '<p><strong>'.__('Install Date').':</strong> ' . get_post_meta($order->id, '_install_date', true) . '</p>';
@@ -546,8 +546,51 @@ class MYCAjax{
     }
 
     public static function myc_order_thank_you_pages($order){
+      global $wp;
+
+      // if(current_user_can('administrator')){
+      //   $orderData = $order->get_data();
+      //   $fee_lines = $orderData[fee_lines];
+      //   $tax_lines = $orderData[tax_lines];
+      //
+      //   foreach($tax_lines as $k=>$v){
+      //     $tax_obj = $v->get_data();
+      //     $tax = $tax_obj['tax_total'];
+      //     echo '<pre>';
+      //     print_r($orderData[total_tax]);
+      //     echo '</pre>';
+      //
+      //     echo '<pre>' . print_r($tax) . '</pre>';
+      //   }
+      //
+      // }
+
+      $orderData = $order->get_data();
+      $fee_lines = $orderData[fee_lines];
+      $tax_lines = $orderData[tax_lines];
+
+      foreach($fee_lines as $k=>$v){
+        $tax_obj = $v->get_data();
+        $tax = $tax_obj['total_tax'];
+      }
 
 	    	?>
+
+          <div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
+            <table>
+              <tbody>
+                <tr>
+                  <td colspan="3">
+                    <strong>Rush Fee Tax:</strong>
+                  </td>
+                  <td>
+                    <strong><?php echo $tax; ?></strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
 		    	<div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
 
 
@@ -977,7 +1020,7 @@ class MYCAjax{
     public static function my_login_logo_url_title() {
          return 'MYC Graphics Login';
     }
-    
+
     /******REMOVE QTY COLUMN*******/
     public static function hidding_some_order_buttons() {
     echo '<style>
@@ -1134,9 +1177,35 @@ add_filter( 'login_headertitle', array('MYCAjax', 'my_login_logo_url_title'));
 
 /********TESTING****************/
 
+/***SIDEBAR**/
 
 add_action( 'admin_head', array('MYCAjax', 'hidding_some_order_buttons' ));
 
+add_action('widgets_init', 'myc_widgets');
 
+function myc_widgets(){
+  	register_sidebar(array('name' => 'Esso Sidebar', 'id' => 'page-sidebar-esso','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+}
+
+
+/***********EXTRA FEES*********/
+/**
+ * Add a standard $ value surcharge to all transactions in cart / checkout
+ */
+// add_action( 'woocommerce_cart_calculate_fees','wc_add_surcharge' );
+// function wc_add_surcharge() {
+// global $woocommerce;
+//
+// if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+// return;
+//
+// $county = array('CA');
+// // change the $fee to set the surcharge to a value to suit
+// $fee = 7.50;
+//
+// if ( in_array( WC()->customer->get_shipping_country(), $county ) ) :
+//     $woocommerce->cart->add_fee( 'Environmental Ink and Waste Fee', $fee, true, 'standard' );
+// endif;
+// }
 
 ?>
