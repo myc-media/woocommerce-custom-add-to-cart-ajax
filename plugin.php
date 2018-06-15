@@ -163,6 +163,7 @@ class MYCAjax{
         header("Content-Type: application/json");
         echo $response;
 
+
         die();
     }
 
@@ -346,6 +347,7 @@ class MYCAjax{
         }
 
         //RETURN PRODUCT TEMPLATE WITH PRODUCT OPTIONS PRINTED TO CART & MINI CART
+
         return $other_data;
     }
 
@@ -382,9 +384,10 @@ class MYCAjax{
         if(!empty($values['canvas'])){
           $canvas = '<a class="showImage" href="'.$values['canvas'].'" target="_blank"><img width="200" src="'.$values['canvas'].'" /></a>';
           wc_add_order_item_meta($itemId, "Quantity", $values['quantity']);
-          wc_add_order_item_meta($itemId, "Price/Set", "$".$value['setPrice']);
+          wc_add_order_item_meta($itemId, "Price/Set", "$".$value['setPrice']/$values['quantity']);
           wc_add_order_item_meta($itemId, 'Set-Image', $canvas);
         }
+
         return $itemId;
     }
 
@@ -548,22 +551,28 @@ class MYCAjax{
     public static function myc_order_thank_you_pages($order){
       global $wp;
 
-      // if(current_user_can('administrator')){
-      //   $orderData = $order->get_data();
-      //   $fee_lines = $orderData[fee_lines];
-      //   $tax_lines = $orderData[tax_lines];
-      //
-      //   foreach($tax_lines as $k=>$v){
-      //     $tax_obj = $v->get_data();
-      //     $tax = $tax_obj['tax_total'];
-      //     echo '<pre>';
-      //     print_r($orderData[total_tax]);
-      //     echo '</pre>';
-      //
-      //     echo '<pre>' . print_r($tax) . '</pre>';
-      //   }
-      //
-      // }
+      if(current_user_can('administrator')){
+        // $orderData = $order->get_data();
+        // $fee_lines = $orderData[fee_lines];
+        // $tax_lines = $orderData[tax_lines];
+        // foreach($tax_lines as $k=>$v){
+          // $tax_obj = $v->get_data();
+          // $tax = $tax_obj['tax_total'];
+          // echo '<pre>';
+          // print_r($orderData[total_tax]);
+          // echo '</pre>';
+          //
+          // echo '<pre>' . print_r($tax) . '</pre>';
+        // }
+        // foreach($tax_lines as $item_id=>$item){
+        //     $tax = $item->get_data();
+        //     $tax_obj = $tax['tax_total'];
+        // }
+        // foreach($order->get_items() as $key=>$value){
+        //     $item->set_total_tax($tax_obj);
+        //     $item->save();
+        // }
+      }
 
       $orderData = $order->get_data();
       $fee_lines = $orderData[fee_lines];
@@ -584,7 +593,7 @@ class MYCAjax{
                     <strong>Rush Fee Tax:</strong>
                   </td>
                   <td>
-                    <strong><?php echo $tax; ?></strong>
+                    <strong><?php echo number_format($tax, 2, '.', ''); ?></strong>
                   </td>
                 </tr>
               </tbody>
@@ -634,7 +643,7 @@ class MYCAjax{
     }
 
     public static function myc_email_order_meta_keys($keys){
-
+      // echo '<pre>'.print_r($keys).'</pre>';
       $keys['Customer Install Name'] = '_customer_install_name';
       $keys['Customer Address'] = '_customer_install_address';
       $keys['Customer Address Two'] = '_job_number';
@@ -1024,11 +1033,29 @@ class MYCAjax{
     /******REMOVE QTY COLUMN*******/
     public static function hidding_some_order_buttons() {
     echo '<style>
-        .woocommerce_order_items_wrapper.wc-order-items-editable thead tr th:nth-of-type(4), .woocommerce_order_items_wrapper.wc-order-items-editable tbody tr td:nth-of-type(4) {
-            display: none;
-        }
-    </style>';
-}
+          .woocommerce_order_items_wrapper.wc-order-items-editable thead tr th:nth-of-type(4), .woocommerce_order_items_wrapper.wc-order-items-editable tbody tr td:nth-of-type(4) {
+              display: none;
+          }
+          </style>';
+    }
+
+    //ADD FEE
+    public static function myc_handling_fee() {
+         global $woocommerce;
+
+         if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+              return;
+
+         $fee = 7.50;
+         $woocommerce->cart->add_fee( 'Environmental Ink and Waste Disposal Fee', $fee, true, 'standard' );
+    }
+
+    //ADD INVOICE NUMBER CUSTOMIZATION
+    public static function myc_order_number($order_id){
+      $prefix = "DG-";
+      $new_order_id = $prefix . $order_id;
+      return $new_order_id;
+    }
 
 }
 
@@ -1189,23 +1216,11 @@ function myc_widgets(){
 
 
 /***********EXTRA FEES*********/
-/**
- * Add a standard $ value surcharge to all transactions in cart / checkout
- */
-// add_action( 'woocommerce_cart_calculate_fees','wc_add_surcharge' );
-// function wc_add_surcharge() {
-// global $woocommerce;
-//
-// if ( is_admin() && ! defined( 'DOING_AJAX' ) )
-// return;
-//
-// $county = array('CA');
-// // change the $fee to set the surcharge to a value to suit
-// $fee = 7.50;
-//
-// if ( in_array( WC()->customer->get_shipping_country(), $county ) ) :
-//     $woocommerce->cart->add_fee( 'Environmental Ink and Waste Fee', $fee, true, 'standard' );
-// endif;
-// }
+add_action( 'woocommerce_cart_calculate_fees', array('MYCAjax', 'myc_handling_fee' ));
+
+
+/******ADD CUSTOM PREFIX TO ORDER NUMBER********/
+add_filter('woocommerce_order_number', array('MYCAjax', 'myc_order_number'));
+
 
 ?>

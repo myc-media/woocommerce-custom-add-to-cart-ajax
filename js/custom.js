@@ -69,6 +69,22 @@ jQuery('document').ready(function($){
       closeAjaxBox();
   });
 
+
+  /************HIDE SHIPPING ACCOUNT ON PICKUP CHOICE*************/
+  // $(document).ready(function(){
+  //       $('#checkout').change(function(){
+  //           if($(this).find('input[checked]').val() == 'local_pickup:4'){
+  //             $('span.select2-selection__clear').click();
+  //             $('#wc_checkout_add_ons_18_field').hide('fast');
+  //             $('#wc_checkout_add_ons_19_field').hide('fast');
+  //           } else {
+  //             $('#wc_checkout_add_ons_18_field').show('fast');
+  //             $('#wc_checkout_add_ons_19_field').show('fast');
+  //           }
+  //       });
+  //   });
+
+
   /***********AJAX MODAL SHOW************/
 
   //ADD ajaxModal class to colum link
