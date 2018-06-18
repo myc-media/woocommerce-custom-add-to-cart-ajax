@@ -1201,17 +1201,22 @@ add_filter ( 'woocommerce_account_menu_items', array('MYCAjax', 'myc_remove_my_a
 
 add_filter( 'login_headertitle', array('MYCAjax', 'my_login_logo_url_title'));
 
-
-/********TESTING****************/
+/***REMOVE QTY COLUMN*******/
+add_action( 'admin_head', array('MYCAjax', 'hidding_some_order_buttons' ));
 
 /***SIDEBAR**/
-
-add_action( 'admin_head', array('MYCAjax', 'hidding_some_order_buttons' ));
 
 add_action('widgets_init', 'myc_widgets');
 
 function myc_widgets(){
   	register_sidebar(array('name' => 'Esso Sidebar', 'id' => 'page-sidebar-esso','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Esso Parts Sidebar', 'id' => 'page-sidebar-esso-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'Mobil Sidebar', 'id' => 'page-sidebar-mobil','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Mobil Parts Sidebar', 'id' => 'page-sidebar-mobil-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'Pioneer Sidebar', 'id' => 'page-sidebar-pioneer','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Pioneer Parts Sidebar', 'id' => 'page-sidebar-pioneer-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
 }
 
 

@@ -638,6 +638,137 @@ span.essoCheck, span.mobilCheck, span.pioneerCheck {
 
 /*******SIDEBAR PAGE STYLES********/
 
-.page-template-page-esso-left-sidebar .container.main-content {
+.page-template-page-esso-left-sidebar .container.main-content,
+.page-template-page-mobil-left-sidebar .container.main-content,
+.page-template-page-pioneer-left-sidebar .container.main-content,
+.page-template-page-esso-parts-left-sidebar .container.main-content,
+.page-template-page-mobil-parts-left-sidebar .container.main-content,
+.page-template-page-pioneer-parts-left-sidebar .container.main-content {
     max-width: 1920px !important;
+}
+
+/***********SIDEBARS*********/
+#sidebar.left-sidebar div h4 {
+    color: #ed1c24!important;
+    font-size: 2em;
+    margin: 1%;
+    padding: 3% 1%;
+    font-weight: bold;
+}
+
+#sidebar.left-sidebar ul.menu li.menu-item a {
+    padding: 1% 5% !important;
+    font-weight: bold;
+    color: white;
+}
+#sidebar.left-sidebar ul li {
+    background: #ed1c24 !important;
+    margin: 2%;
+}
+.page-template-page-mobil-left-sidebar #sidebar.left-sidebar div h4,
+.page-template-page-mobil-parts-left-sidebar #sidebar.left-sidebar div h4 {
+    color: #2b6fb7!important;
+}
+.page-template-page-mobil-left-sidebar #sidebar.left-sidebar ul li,
+.page-template-page-mobil-left-sidebar .tabbed > ul li a.active-tab,
+.page-template-page-mobil-parts-left-sidebar #sidebar.left-sidebar ul li,
+.page-template-page-mobil-parts-left-sidebar .tabbed > ul li a.active-tab{
+    background: #2b6fb7!important;
+}
+.page-template-page-mobil-left-sidebar .tabbed > ul li a.active-tab,
+.page-template-page-mobil-parts-left-sidebar .tabbed > ul li a.active-tab {
+    border-color: #2b6fb7!important;
+}
+.page-template-page-mobil-left-sidebar #sidebar.left-sidebar ul li:hover,
+.page-template-page-mobil-parts-left-sidebar  #sidebar.left-sidebar ul li:hover{
+    background: #0559b3!important
+}
+
+.page-template-page-mobil-left-sidebar #sidebar.left-sidebar ul li.widgetHeading a:not([href^='myc']),
+.page-template-page-mobil-parts-left-sidebar #sidebar.left-sidebar ul li.widgetHeading a:not([href^='myc']) {
+    color: #2b6fb7!important;
+}
+
+
+.page-template-page-pioneer-left-sidebar #sidebar.left-sidebar ul li,
+.page-template-page-pioneer-left-sidebar .tabbed > ul li a.active-tab,
+.page-template-page-pioneer-parts-left-sidebar #sidebar.left-sidebar ul li,
+.page-template-page-pioneer-parts-left-sidebar .tabbed > ul li a.active-tab{
+    background: #ff8d00!important;
+}
+.page-template-page-pioneer-left-sidebar .tabbed > ul li a.active-tab,
+.page-template-page-pioneer-parts-left-sidebar .tabbed > ul li a.active-tab{
+    border-color: #ff8d00!important;
+}
+.page-template-page-pioneer-left-sidebar #sidebar.left-sidebar ul li:hover,
+.page-template-page-pioneer-parts-left-sidebar #sidebar.left-sidebar ul li:hover{
+    background: #d47500!important;
+}
+.page-template-page-pioneer-left-sidebar #sidebar.left-sidebar ul li.widgetHeading a:not([href^='myc']),
+.page-template-page-pioneer-parts-left-sidebar #sidebar.left-sidebar ul li.widgetHeading a:not([href^='myc']) {
+    color: #ff8d00!important;
+}
+.page-template-page-pioneer-left-sidebar #sidebar.left-sidebar div h4,
+.page-template-page-pioneer-parts-left-sidebar #sidebar.left-sidebar div h4{
+    color: #ff8d00!important;
+}
+#sidebar.left-sidebar {
+    float: none !important;
+    background: white;
+}
+
+#sidebar.left-sidebar ul.menu li:not(.menu-item) {
+    display: none;
+}
+#sidebar.left-sidebar ul.woocommerce-mini-cart li {
+    background: white !important;
+}
+ul.woocommerce-mini-cart a.no-ajaxy img {
+    float: none !important;
+}
+.woocommerce-mini-cart li img {
+    width: 25% !important;
+}
+.hide_cart_widget_if_empty {
+    max-height: 200px !important;
+    overflow: scroll;
+}
+#sidebar.left-sidebar ul li:hover {
+    background: #cc0c14 !important;
+    transition: all .1s linear;
+}
+#sidebar.left-sidebar ul li.widgetHeading a {
+    color: #ed1c24 !important;
+}
+
+#sidebar.left-sidebar ul li.widgetHeading {
+    background: white !important;
+}
+#sidebar.left-sidebar {
+    float: none !important;
+    background: white;
+    border: 4px solid #efefef;
+    box-sizing: border-box;
+    padding: 1%;
+}
+#sidebar.left-sidebar div h4:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 5px;
+    background-color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+/**********MAIN NAV********/
+
+body:not([data-header-format="left-header"]) header#top nav >ul >li.megamenu >ul >li >ul >li.has-ul.mobilMenuHead >a,
+body[data-dropdown-style="minimal"] header#top nav > ul > li.megamenu > ul li.mobilMenuHead ul li a:hover,
+body[data-dropdown-style="minimal"]:not([data-header-format="left-header"]) header#top nav > ul > li.megamenu > ul li.mobilMenuHead ul li.current-menu-item > a{
+    background: #2b6fb7 !important;
+}
+body:not([data-header-format="left-header"]) header#top nav >ul >li.megamenu >ul >li >ul >li.has-ul.pioneerMenuHead >a,
+body[data-dropdown-style="minimal"] header#top nav > ul > li.megamenu > ul li.pioneerMenuHead ul li a:hover,
+body[data-dropdown-style="minimal"]:not([data-header-format="left-header"]) header#top nav > ul > li.megamenu > ul li.pioneerMenuHead ul li.current-menu-item > a{
+    background: #ff8d00 !important;
 }
