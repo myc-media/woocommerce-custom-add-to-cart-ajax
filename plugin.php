@@ -711,12 +711,17 @@ class MYCAjax{
                   ?>
                     <th class="pioneerCheck">Pioneer</th>
                   <?php
+              } else if(current_user_can('rdr_super_customer')){
+                  ?>
+                    <th class="rdrCheck">RDR</th>
+                  <?php
               } else {
                 ?>
                 <th class="expiry">Expiry</th>
                 <th class="essoCheck">Esso</th>
                 <th class="mobilCheck">Mobil</th>
                 <th class="pioneerCheck">Pioneer</th>
+                <th class="rdrCheck">RDR</th>
                 <?php
               }
               ?>
@@ -801,7 +806,39 @@ class MYCAjax{
 
                 }
               }
-             } else if(current_user_can('administrator') || current_user_can('shop_manager')){
+            } else if(current_user_can('rdr_super_customer')){
+               foreach($users as $user){
+                 $userinfo = get_user_meta($user->ID);
+                 $companyInfo = $userinfo['company'][0];
+                 if($user->caps['rdr_customer_on_account']==1 || $user->caps['rdr_customer']==1){
+                  ?>
+                  <tr>
+                    <td>
+                      <?php
+                          echo $user->display_name;
+                      ?>
+                    </td>
+                    <td><?php echo $companyInfo; ?></td>
+                    <td class="rdrColumn">
+                      <?php
+                      if($user->caps['rdr_customer']==1 || $user->caps['rdr_customer_on_account']==1){
+                      ?>
+                      <span class="rdrCheck">&#10003;</span>
+                      <?php
+                      }
+                    ?>
+                    </td>
+                  </tr>
+                  <?php
+               } else if($user->caps['rdr_super_customer'] == 1) {
+                 ?>
+                 <span class="rdrCheck">&#9733;</span>
+                 <?php
+               } else {
+
+               }
+             }
+            } else if(current_user_can('administrator') || current_user_can('shop_manager')){
                foreach($users as $user){
                  $userinfo = get_user_meta($user->ID);
                  $companyInfo = $userinfo['company'][0];
@@ -868,6 +905,25 @@ class MYCAjax{
                      }
                      ?>
                    </td>
+                   <td class="rdrColumn">
+                     <?php
+                     if($user->caps['rdr_customer']==1 || $user->caps['rdr_customer_on_account']==1){
+                     ?>
+                     <span class="rdrCheck">&#10003;</span>
+                     <?php
+                   } else if($user->caps['rdr_super_customer'] == 1) {
+                       ?>
+                       <span class="rdrCheck">&#9733;</span>
+                       <?php
+                     } else if($user->caps['administrator'] == 1) {
+                       ?>
+                       <span class="rdrCheck">&#9733;A</span>
+                       <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
                  </tr>
                  <?php
                }
@@ -911,6 +967,8 @@ class MYCAjax{
       } elseif(isset($gateways['cod']) && current_user_can('mobil_customer') && !isset($current_user->caps['customer_no_checkout'])){
         unset($gateways['cod']);
       } elseif(isset($gateways['cod']) && current_user_can('pioneer_customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('rdr_customer') && !isset($current_user->caps['customer_no_checkout'])){
         unset($gateways['cod']);
       } elseif($current_user->caps['customer_no_checkout'] == 1){
         unset($gateways['cod']);
@@ -1008,7 +1066,7 @@ class MYCAjax{
       wp_loginout('');
       $loginoutlink = ob_get_contents();
       ob_end_clean();
-      $items .= '<li>'. $loginoutlink .'</li>';
+      $items .= '<li class="loginout">'. $loginoutlink .'</li>';
       return $items;
     }
 
@@ -1217,6 +1275,9 @@ function myc_widgets(){
 
     register_sidebar(array('name' => 'Pioneer Sidebar', 'id' => 'page-sidebar-pioneer','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
     register_sidebar(array('name' => 'Pioneer Parts Sidebar', 'id' => 'page-sidebar-pioneer-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'RDR Sidebar', 'id' => 'page-sidebar-rdr','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'RDR Parts Sidebar', 'id' => 'page-sidebar-rdr-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
 }
 
 
