@@ -641,7 +641,9 @@ span.essoCheck, span.mobilCheck, span.pioneerCheck {
     text-align: center;
     display: block;
 }
-
+td.rdrColumn {
+    text-align: center;
+}
 
 /*******PIONEER PUMPS*********/
 .page-template-page-pioneer .ModalRow.row form.cart {
