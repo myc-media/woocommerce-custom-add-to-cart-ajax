@@ -641,7 +641,7 @@ span.essoCheck, span.mobilCheck, span.pioneerCheck {
     text-align: center;
     display: block;
 }
-td.rdrColumn {
+body:not(.woocommerce-cart) .main-content td.rdrColumn, body:not(.woocommerce-cart) .main-content th.rdrCheck {
     text-align: center;
 }
 
