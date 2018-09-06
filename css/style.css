@@ -303,7 +303,9 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-5013,
   .page-template ul.products li.classic.post-5015,
   .page-template ul.products li.classic.post-5066,
-  .page-template ul.products li.classic.post-5067 {
+  .page-template ul.products li.classic.post-5067,
+  .page-template ul.products li.classic.post-5181,
+  .page-template ul.products li.classic.post-5182 {
       flex-basis: 50% !important; }
   .page-template ul.products li.classic.post-2019 {
       flex-basis: 50% !important; }
@@ -322,7 +324,15 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-2626,
   .page-template ul.products li.classic.post-2627,
   .page-template ul.products li.classic.post-2675,
-  .page-template ul.products li.classic.post-2677 {
+  .page-template ul.products li.classic.post-2677,
+  .page-template ul.products li.classic.post-5203,
+  .page-template ul.products li.classic.post-5204,
+  .page-template ul.products li.classic.post-5205,
+  .page-template ul.products li.classic.post-5213,
+  .page-template ul.products li.classic.post-5214,
+  .page-template ul.products li.classic.post-5215,
+  .page-template ul.products li.classic.post-5231,
+  .page-template ul.products li.classic.post-5235 {
     flex-basis: 33% !important; }
   .page-template ul.products li.classic.post-2474,
   .page-template ul.products li.classic.post-2504 {
