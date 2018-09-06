@@ -1270,6 +1270,9 @@ function myc_widgets(){
   	register_sidebar(array('name' => 'Esso Sidebar', 'id' => 'page-sidebar-esso','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
     register_sidebar(array('name' => 'Esso Parts Sidebar', 'id' => 'page-sidebar-esso-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
 
+    register_sidebar(array('name' => 'Esso Sidebar French', 'id' => 'page-sidebar-esso-french','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Esso Parts Sidebar French', 'id' => 'page-sidebar-esso-parts-french','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
     register_sidebar(array('name' => 'Mobil Sidebar', 'id' => 'page-sidebar-mobil','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
     register_sidebar(array('name' => 'Mobil Parts Sidebar', 'id' => 'page-sidebar-mobil-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
 
