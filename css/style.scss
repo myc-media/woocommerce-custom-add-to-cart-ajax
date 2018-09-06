@@ -1,382 +1,675 @@
-//colors
-$color_alizarin_crimson_approx: rgba(237, 28, 36, 1);
-$white: rgba(255, 255, 255, 1);
-$black: rgba(0, 0, 0, 1);
-$color_tundora_approx: rgba(68, 68, 68, 1);
-$color_alizarin_crimson_80_approx: rgba(237, 28, 36, .8);
-$color_cararra_approx: rgba(236, 236, 236, 1);
-$color_dove_gray_approx: rgba(111, 111, 111, 1);
-$color_alto_approx: rgba(220, 220, 220, 1);
-$color_star_dust_approx: rgba(155, 155, 162, 1);
-$white_90: rgba(255, 255, 255, 0.9);
+/*******HTML2CANVAS********/
 
-.page-template-default {
-	.summary-content {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: left;
-		> * {
-			flex-basis: 100% !important;
-		}
-	}
-	div[id*="product-"] {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
-		.images {
-			display: flex;
-			flex-wrap: wrap;
-			align-items: center !important;
-			justify-content: center;
-		}
-		> * {
-			flex-basis: 50%;
-			margin: 0;
-			//Instead of the line below you could use @include box-sizing($bs)
-			box-sizing: border-box;
-		}
-		> .single-product-main-image {
-			flex-basis: 0 !important;
-		}
-	}
-	ul {
-		&.products.columns-1 {
-			display: flex;
-			justify-content: center;
-			flex-wrap: wrap;
-			align-items: center;
-			li {
-				&.post-1348 {
-					flex-basis: 57% !important;
-				}
-				&.post-1500 {
-					flex-basis: 57% !important;
-				}
-				&.post-1349 {
-					flex-basis: 21.5% !important;
-				}
-				&.post-1346 {
-					flex-basis: 21.5% !important;
-				}
-				&.classic {
-					&.post-1499 {
-						flex-basis: 21.5% !important;
-					}
-					&.post-1501 {
-						flex-basis: 21.5% !important;
-					}
-					&.post-1358 {
-						flex-basis: 50% !important;
-					}
-					&.post-1360 {
-						flex-basis: 50% !important;
-					}
-					&.post-1503 {
-						flex-basis: 50% !important;
-					}
-					&.post-1504 {
-						flex-basis: 50% !important;
-					}
-				}
-				&.post-1401 {
-					flex-basis: 67% !important;
-				}
-				&.post-1507 {
-					flex-basis: 67% !important;
-				}
-				&.post-1404 {
-					flex-basis: 33% !important;
-				}
-				&.post-1508 {
-					flex-basis: 33% !important;
-				}
-				&.post-1415 {
-					flex-basis: 85% !important;
-				}
-				&.post-1509 {
-					flex-basis: 85% !important;
-				}
-				&.post-1418 {
-					flex-basis: 15% !important;
-				}
-				&.post-1510 {
-					flex-basis: 15% !important;
-				}
-			}
-		}
-		&.tmcp-ul-wrap.tmcp-elements {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-		}
-	}
-	.woocommerce-loop-product__title {
-		display: none !important;
-	}
-	.product-wrap {
-		filter: drop-shadow(0 0 5px $color_tundora_approx);
-		//Instead of the line below you could use @include box-sizing($bs)
-		box-sizing: border-box;
-		//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-		transition: .2s all linear;
-		margin: 1%;
-		//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-		border-radius: 5px;
-		&:hover {
-			filter: drop-shadow(0 0 5px $black);
-			padding: 1%;
-			//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-			transition: .2s all linear;
-			&:after {
-				content: " +";
-				color: $white;
-				line-height: 20px;
-				display: block;
-				width: 20px;
-				height: 20px;
-				background: $color_alizarin_crimson_approx;
-				position: absolute;
-				right: 5px;
-				top: 1%;
-				text-align: center;
-				//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-				transform: scale(.5);
-				//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-				transition: .2s all ease-in;
-			}
-		}
-		&:after {
-			content: " ";
-			display: block;
-			width: 20px;
-			height: 20px;
-			background: $color_alizarin_crimson_80_approx;
-			position: absolute;
-			top: 10%;
-			right: -80px;
-			//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-			transition: .3s all ease-out;
-		}
-	}
-	.ajaxColumn {
-		//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-		transition: .2s all ease-out;
-	}
-	.ajaxClass {
-		position: absolute;
-		background: $white;
-		z-index: 100;
-		//Instead of the line below you could use @include box-sizing($bs)
-		box-sizing: border-box;
-		padding: 3%;
-		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-		box-shadow: 0 0 35px -3px;
-		//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-		transition: .3s all ease;
-	}
-	.closeAjaxBox {
-		display: none;
-		position: absolute;
-		top: 20px;
-		right: 20px;
-		//Instead of the line below you could use @include box-sizing($bs)
-		box-sizing: border-box;
-		border: 1px solid $color_alto_approx;
-		width: 40px;
-		height: 40px;
-		line-height: 36px;
-		//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-		border-radius: 50%;
-		color: $color_star_dust_approx;
-		cursor: pointer;
-	}
-	.productsZIndex {
-		z-index: 0;
-	}
-	.hideOnNoAJAX {
-		display: none;
-	}
-	.showOnAJAX {
-		display: initial;
-	}
-	.woocommerce-product-gallery {
-		opacity: 1 !important;
-	}
-	.tc-extra-product-options {
-		visibility: visible;
-	}
-	a {
-		&.yith-wcqv-button.button {
-			position: absolute;
-			z-index: 10000;
-			top: 10%;
-			right: 0;
-			//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-			transform: translate(-50%);
-			margin: 0;
-		}
-		&.button.product_type_simple.add_to_cart_button.ajax_add_to_cart {
-			display: none;
-		}
-	}
-	.loaderPosition {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-		transform: translate(-50%, -50%);
-		background: $white_90 !important;
-		width: 100%;
-		height: 100%;
-		display: flex !important;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
-		margin: 0;
-	}
-	.images img.attachment-quick_view_image_size.size-quick_view_image_size.wp-post-image {
-		height: auto !important;
-		width: auto !important;
-		margin: auto;
-	}
-	.summary.entry-summary.ps-container.ps-active-y {
-		background: $white;
-	}
-	.products li[class*="post-"] {
-		flex-basis: 100% !important;
-	}
-	h2.woocommerce-loop-product__title {
-		display: none !important;
-	}
-	div[id*=product] > .single-product-summary {
-		flex-basis: 100% !important;
-	}
-	h1.product_title.entry-title {
-		font-size: 2.5em;
-		font-weight: bold !important;
-	}
-	li.tmcp-field-wrap {
-		flex-basis: 33.3%;
-	}
-	form div.quantity ~ button.button.alt {
-		display: none;
-	}
-	.ModalRow ~ p {
-		text-align: center;
-	}
-	figure.redLoader {
-		display: none;
-		margin: 0;
-	}
+.ajaxColumnLink canvas {
+  width: 100px !important;
+  height: auto !important;
+  position: fixed;
+  right: 4%;
+  top: 20%;
 }
-@media all and(max-width: 1000px) {
-	.page-template-default .products li[class*="post-"] {
-		flex-basis: 100%;
-	}
+
+/********CHECKOUT**********/
+
+div#ui-datepicker-div {
+  td a {
+    color: white;
+  }
+  background: #ed2d34;
+  color: white !important;
+  padding: 2%;
 }
+
+table.ui-datepicker-calendar {
+  width: 200px;
+}
+
+div#customer_po_field {
+  background: #ed1c24;
+  box-sizing: border-box;
+  padding: 4%;
+  color: white !important;
+  h2 {
+    color: white;
+  }
+  label span {
+    color: white !important;
+    font-weight: bold;
+  }
+  input {
+    color: black !important;
+  }
+}
+
+/********CART***********/
+
+td.product-name a, .woocommerce-checkout .cart_item a.tm-cart-edit-options {
+  display: none;
+}
+
+.woocommerce-cart-form__cart-item > td {
+  vertical-align: top !important;
+}
+
+.woocommerce table.cart .woocommerce-cart-form__cart-item td img {
+  height: auto !important;
+  max-width: 100px !important;
+}
+
+/***FLEX BASIS OVERRIDE SETS****/
+
+.set {
+  li.tmcp-field-wrap, div[id*="product-"] > * {
+    flex-basis: 100% !important;
+  }
+  .halfFlex-ul li {
+    flex-basis: 50% !important;
+  }
+  .quarterFlex-ul li {
+    flex-basis: 25% !important;
+  }
+  .thirdFlex-ul li {
+    flex-basis: 33.33% !important;
+  }
+  .ajaxColumnLink > {
+    a {
+      z-index: 1000;
+    }
+    .vc_column-inner {
+      z-index: 0;
+    }
+  }
+  span.tm-epo-required {
+    display: none;
+  }
+  .cpf_hide_element.tm-cell.cpf-type-radio {
+    border: 1px solid #ececec;
+  }
+}
+
+#tm-epo-totals {
+  dd.tm-options-totals {
+    span.price.amount.options {
+      display: block !important;
+    }
+    margin-bottom: 20px;
+  }
+  .tm-options-totals {
+    background: #ededed !important;
+    padding: 1%;
+  }
+}
+
+div.quantity label.screen-reader-text {
+  position: relative !important;
+}
+
+form ~ .product_meta span.posted_in {
+  display: none;
+}
+
+/**********NOMODAL FOR SETS***********/
+
+.set .ajaxClass {
+  position: relative !important;
+}
+
+/************RISERS************/
+
+.riserLeft .woocommerce .products li[class*="post-"], .riserRight .woocommerce .products li[class*="post-"] {
+  position: absolute !important;
+  width: 8.5% !important;
+  top: 50% !important;
+}
+
+.riserLeft .products li[class*="post-"] {
+  margin-left: 40% !important;
+}
+
+.riserRight .products li[class*="post-"] {
+  margin-left: -40% !important;
+}
+
+/**********MODAL IMAGE SIZE MAX HEIGHT**********/
+
+li.tmcp-field-wrap label img.tmlazy.checkbox_image {
+  max-height: 200px;
+}
+
+body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
+  max-height: 150px !important;
+  max-width: 90px !important;
+  /* width: auto !important; */
+  width: auto !important;
+  height: auto !important;
+}
+
+/*******ZINDEX*********/
+
+.productZIndex {
+  z-index: 0 !important;
+}
+
+/******SASS OUTPUT*********/
+
+.twentyPercent {
+  width: 20% !important;
+  margin: 0 !important;
+}
+
+.fortyPercent {
+  width: 40% !important;
+  margin: 0 !important;
+}
+
+.page-template {
+  .summary-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    > * {
+      flex-basis: 100% !important;
+    }
+  }
+  div[id*="product-"] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .images {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center !important;
+      justify-content: center;
+    }
+    > {
+      * {
+        flex-basis: 50%;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .single-product-main-image {
+        flex-basis: 0 !important;
+      }
+    }
+  }
+  ul.products {
+    &.columns-1 {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    &.columns-4 {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      li.classic {
+        margin-right: 0 !important;
+      }
+    }
+    li {
+      &.post-1348, &.post-1500, &.post-1783 {
+        flex-basis: 57% !important;
+      }
+      &.post-2312, &.post-2343, &.post-2356, &.post-2375 {
+        flex-basis: 18% !important;
+      }
+      &.classic {
+        &.post-2478, &.post-2507 {
+          flex-basis: 12% !important;
+        }
+      }
+      &.post-2342, &.post-2374 {
+        flex-basis: 64% !important;
+      }
+      &.post-1349, &.post-1346 {
+        flex-basis: 21.5% !important;
+      }
+      &.classic {
+        &.post-1499, &.post-1501, &.post-1781, &.post-1785 {
+          flex-basis: 21.5% !important;
+        }
+        &.post-1961, &.post-1962, &.post-1985, &.post-1986, &.post-2017, &.post-2020 {
+          flex-basis: 25% !important;
+        }
+        &.post-2012, &.post-2475, &.post-2505 {
+          flex-basis: 30% !important;
+        }
+        &.post-3218, &.post-3223, &.post-3225 {
+          flex-basis: 33% !important;
+        }
+        &.post-2011, &.post-2013, &.post-3116 {
+          flex-basis: 35% !important;
+        }
+        &.post-1358, &.post-1360, &.post-1503, &.post-1504, &.post-1791, &.post-1796, &.post-1774, &.post-1776, &.post-1924, &.post-1951, &.post-1960, &.post-1978, &.post-1979, &.post-1980, &.post-1981, &.post-1984, &.post-2226, &.post-2227, &.post-2275, &.post-2276, &.post-2470, &.post-2471, &.post-2500, &.post-2501, &.post-2693, &.post-2694, &.post-3068, &.post-3071, &.post-3074, &.post-3076, &.post-3080, &.post-3081, &.post-3075, &.post-3089, &.post-3091, &.post-3111, &.post-3113, &.post-3115, &.post-3163, &.post-3168, &.post-3230, &.post-2019 {
+          flex-basis: 50% !important;
+        }
+      }
+      &.post-1401, &.post-1507, &.post-1808 {
+        flex-basis: 67% !important;
+      }
+      &.post-1404, &.post-1508, &.post-1810 {
+        flex-basis: 33% !important;
+      }
+      &.classic {
+        &.post-2620, &.post-2626, &.post-2627, &.post-2675, &.post-2676, &.post-2677 {
+          flex-basis: 33% !important;
+        }
+        &.post-2474, &.post-2504 {
+          flex-basis: 70% !important;
+        }
+      }
+      &.post-1415, &.post-1509 {
+        flex-basis: 85% !important;
+      }
+      &.classic {
+        &.post-2476, &.post-2506 {
+          flex-basis: 88% !important;
+        }
+      }
+      &.post-1418, &.post-1510 {
+        flex-basis: 15% !important;
+      }
+      &.post-1812, &.post-1819 {
+        flex-basis: 7.5% !important;
+      }
+      &.post-1814 {
+        flex-basis: 85% !important;
+      }
+      &.post-2229, &.post-2279 {
+        flex-basis: 65% !important;
+      }
+      &.post-2231, &.post-2232, &.post-2280, &.post-2281 {
+        flex-basis: 35% !important;
+      }
+    }
+  }
+}
+
+.flexend ul.products {
+  justify-content: flex-end !important;
+}
+
+.page-template {
+  ul.tmcp-ul-wrap.tmcp-elements {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .woocommerce-loop-product__title {
+    display: none !important;
+  }
+  .product-wrap {
+    filter: drop-shadow(0 0 5px #444444);
+    box-sizing: border-box;
+    transition: .2s all linear;
+    margin: 1%;
+    border-radius: 5px;
+    &:hover {
+      filter: drop-shadow(0 0 5px black);
+      padding: 1%;
+      transition: .2s all linear;
+      &:after {
+        content: " +";
+        color: white;
+        line-height: 20px;
+        display: block;
+        width: 20px;
+        height: 20px;
+        background: #ed1c24;
+        position: absolute;
+        right: 5px;
+        top: 1%;
+        text-align: center;
+        transform: scale(0.5);
+        transition: .2s all ease-in;
+      }
+    }
+    &:after {
+      content: " ";
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: rgba(237, 28, 36, 0.8);
+      position: absolute;
+      top: 10%;
+      right: -80px;
+      transition: .3s all ease-out;
+    }
+  }
+  .ajaxColumn {
+    transition: .2s all ease-out;
+  }
+  .ajaxClass {
+    position: absolute;
+    background: white;
+    z-index: 100;
+    box-sizing: border-box;
+    padding: 3%;
+    box-shadow: 0 0 35px -3px;
+    transition: .3s all ease;
+  }
+  .closeAjaxBox {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    box-sizing: border-box;
+    border: 1px solid gainsboro;
+    width: 40px;
+    height: 40px;
+    line-height: 36px;
+    border-radius: 50%;
+    color: #9b9ba2;
+    cursor: pointer;
+  }
+  .productsZIndex {
+    z-index: 0;
+  }
+  .hideOnNoAJAX {
+    display: none;
+  }
+  .showOnAJAX {
+    display: initial;
+  }
+  .woocommerce-product-gallery {
+    opacity: 1 !important;
+  }
+  .tc-extra-product-options {
+    visibility: visible;
+    .syncSelectBottom {
+      display: none;
+    }
+  }
+  a {
+    &.yith-wcqv-button.button {
+      position: absolute;
+      z-index: 10000;
+      top: 10%;
+      right: 0;
+      transform: translate(-50%);
+      margin: 0;
+    }
+    &.button.product_type_simple.add_to_cart_button.ajax_add_to_cart {
+      display: none;
+    }
+  }
+  .loaderPosition {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9) !important;
+    width: 100%;
+    height: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+  .images img.attachment-quick_view_image_size.size-quick_view_image_size.wp-post-image {
+    height: auto !important;
+    width: auto !important;
+    margin: auto;
+  }
+  .summary.entry-summary.ps-container.ps-active-y {
+    background: white;
+  }
+  .products li[class*="post-"] {
+    flex-basis: 100% !important;
+  }
+  h2.woocommerce-loop-product__title {
+    display: none !important;
+  }
+  div[id*=product] > .single-product-summary {
+    flex-basis: 100% !important;
+  }
+  h1.product_title.entry-title {
+    font-size: 2.5em;
+    font-weight: bold !important;
+  }
+  li.tmcp-field-wrap {
+    flex-basis: 33.3%;
+  }
+  form div.quantity ~ button.button.alt {
+    display: none;
+  }
+  .ModalRow ~ p {
+    text-align: center;
+  }
+  figure.redLoader {
+    display: none;
+    margin: 0;
+  }
+}
+
+@media all and (max-width: 1000px) {
+  .page-template .products li[class*="post-"] {
+    flex-basis: 100%;
+  }
+}
+
 .tm-description {
-	background: $color_cararra_approx;
-	font-size: .9em;
-	font-weight: 100;
-	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	box-shadow: 0 1px 10px -2px;
-	color: $color_dove_gray_approx;
+  background: #ececec;
+  font-size: .9em;
+  font-weight: 100;
+  box-shadow: 0 1px 10px -2px;
+  color: #6f6f6f;
 }
-.ModalRow.row {
-	margin-bottom: 0 !important;
-	padding-bottom: 0;
-	> h1 {
-		color: $color_alizarin_crimson_approx;
-	}
+
+.ModalRow {
+  &.row {
+    margin-bottom: 0 !important;
+    padding-bottom: 0;
+    > h1 {
+      color: #ed1c24;
+    }
+  }
+  &.parts .tm-final-totals {
+    display: none !important;
+  }
 }
+
 ul.wpb_tabs_nav.ui-tabs-nav.clearfix {
-	margin-bottom: 45px !important;
+  margin-bottom: 45px !important;
 }
+
 .fiveHundredD ul.products li {
-	&:nth-of-type(1) {
-		flex-basis: 100% !important;
-	}
-	&:nth-of-type(5) {
-		flex-basis: 100% !important;
-	}
-	&:nth-of-type(2) {
-		flex-basis: 21.5% !important;
-	}
-	&:nth-of-type(4) {
-		flex-basis: 21.5% !important;
-	}
-	&:nth-of-type(3) {
-		flex-basis: 57% !important;
-	}
-	&:nth-of-type(6) {
-		flex-basis: 50% !important;
-	}
-	&:nth-of-type(7) {
-		flex-basis: 50% !important;
-	}
+  &:nth-of-type(1), &:nth-of-type(5) {
+    flex-basis: 100% !important;
+  }
+  &:nth-of-type(2), &:nth-of-type(4) {
+    flex-basis: 21.5% !important;
+  }
+  &:nth-of-type(3) {
+    flex-basis: 57% !important;
+  }
+  &:nth-of-type(6), &:nth-of-type(7) {
+    flex-basis: 50% !important;
+  }
 }
+
 .fiveHundredD2 ul.products li {
-	&:nth-of-type(1) {
-		flex-basis: 100% !important;
-	}
-	&:nth-of-type(2) {
-		flex-basis: 100% !important;
-	}
-	&:nth-of-type(3) {
-		flex-basis: 67% !important;
-	}
-	&:nth-of-type(4) {
-		flex-basis: 33% !important;
-	}
+  &:nth-of-type(1), &:nth-of-type(2) {
+    flex-basis: 100% !important;
+  }
+  &:nth-of-type(3) {
+    flex-basis: 67% !important;
+  }
+  &:nth-of-type(4) {
+    flex-basis: 33% !important;
+  }
 }
+
 .fiveHundredD3 ul.products li {
-	&:nth-of-type(3) {
-		flex-basis: 100% !important;
-	}
-	&:nth-of-type(1) {
-		flex-basis: 85% !important;
-	}
-	&:nth-of-type(2) {
-		flex-basis: 15% !important;
-	}
+  &:nth-of-type(3) {
+    flex-basis: 100% !important;
+  }
+  &:nth-of-type(1) {
+    flex-basis: 85% !important;
+  }
+  &:nth-of-type(2) {
+    flex-basis: 15% !important;
+  }
 }
+
 span.price {
-	display: none !important;
+  display: none !important;
 }
-p.price {
-	display: none;
+
+p.price, .col.single-product-main-image {
+  display: none;
 }
-.col.single-product-main-image {
-	display: none;
-}
+
 .single-product-summary .summary.entry-summary {
-	text-align: center;
+  text-align: center;
 }
+
 .tm-extra-product-options .tmcp-field-wrap .tc-price {
-	display: block !important;
+  display: block !important;
 }
+
 .tc-active label img {
-	border-color: $color_alizarin_crimson_approx!important;
-	//Instead of the line below you could use @include box-sizing($bs)
-	box-sizing: border-box;
-	border-width: 5px !important;
-	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-	box-shadow: 0 0 23px 0 $color_alizarin_crimson_approx!important;
+  border-color: #ed1c24 !important;
+  box-sizing: border-box;
+  border-width: 5px !important;
+  box-shadow: 0 0 23px 0 #ed1c24 !important;
 }
+
 h1.product_title.entry-title {
-	color: $white;
-	background: $color_alizarin_crimson_approx!important;
-	margin-top: 50px;
-	padding: 2%;
-	//Instead of the line below you could use @include box-sizing($bs)
-	box-sizing: border-box;
+  color: white;
+  background: #ed1c24 !important;
+  margin-top: 50px;
+  padding: 2%;
+  box-sizing: border-box;
 }
+
 .setClass span {
-	&.tc-label.radio_image_label {
-		display: none;
-	}
-	&.price.tc-price {
-		display: none !important;
-	}
+  &.tc-label.radio_image_label {
+    display: none;
+  }
+  &.price.tc-price {
+    display: none !important;
+  }
+}
+
+ul.wc-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.wc-item-meta li {
+  flex-basis: 100%;
+  &:last-of-type {
+    display: flex;
+    flex-wrap: wrap;
+    p {
+      flex-basis: 100%;
+    }
+  }
+  p {
+    padding-bottom: 0;
+  }
+}
+
+.woocommerce ul.products li.product {
+  width: 100% !important;
+}
+
+/*******MOBILE PUMPS********/
+@media all and (max-width: 1000px) {
+  .productMobileFlex {
+    &:first-of-type > .col.span_12.left, &:last-of-type > .col.span_12.left {
+      display: flex !important;
+    }
+    &:first-of-type > .col.span_12.left > * {
+      flex-basis: 25% !important;
+    }
+    &:last-of-type > .col.span_12.left > {
+      * {
+        flex-basis: 25% !important;
+      }
+      div:nth-of-type(2) {
+        flex: 50% !important;
+      }
+    }
+  }
+  .riserLeft .woocommerce .products li[class*="post-"], .riserRight .woocommerce .products li[class*="post-"] {
+    top: 0 !important;
+    width: 8% !important;
+  }
+  .page-template .products li[class*="post-"] {
+    margin-bottom: 0 !important;
+  }
+  .riserLeft .products li[class*="post-"] {
+    margin-left: 40% !important;
+  }
+  .riserRight .products li[class*="post-"] {
+    margin-left: -40% !important;
+  }
+}
+
+/***********USER REPORT PAGE ACCOUNT*********/
+
+.usersReport {
+  .userReportSection {
+    flex-basis: 50% !important;
+    padding: 1% !important;
+    box-sizing: border-box !important;
+  }
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.essoCheck {
+  font-weight: bold;
+}
+
+.mobilCheck {
+  font-weight: bold;
+  color: #0266b4;
+}
+
+.essoCheck {
+  color: #ed2d34;
+}
+
+.pioneerCheck {
+  color: #fedc00;
+}
+
+.user-details-table tbody tr td {
+  &.mobilColumn {
+    background: #2b6fb7;
+  }
+  &.essoColumn {
+    background: #ed2d34;
+  }
+  &.pioneerColumn {
+    background-color: #fedc00;
+  }
+}
+
+th {
+  &.mobilCheck, &.essoCheck, &.pioneerCheck {
+    text-align: center !important;
+  }
+}
+
+span {
+  &.essoCheck, &.mobilCheck, &.pioneerCheck {
+    color: white;
+    width: 100%;
+    text-align: center;
+    display: block;
+  }
+}
+
+/*******PIONEER PUMPS*********/
+
+.page-template-page-pioneer .ModalRow.row form.cart {
+  background: #bbbdc0 !important;
 }

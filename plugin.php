@@ -163,6 +163,7 @@ class MYCAjax{
         header("Content-Type: application/json");
         echo $response;
 
+
         die();
     }
 
@@ -364,7 +365,7 @@ class MYCAjax{
 
         foreach($values['tmpost_data']['productData'] as $key => $value){
 
-            $renderImage = "<img src='" . $value['image'] . "' />";
+            $renderImage = "<img width='200' class='partImage' style='max-width: 200px;' src='" . $value['image'] . "' />";
 
             wc_add_order_item_meta($itemId, "Part", $value["label"]);
             // wc_add_order_item_meta($itemId, "Quantity", $value["quantity"]);
@@ -374,14 +375,19 @@ class MYCAjax{
             //     wc_add_order_item_meta($itemId, "Price", $value["price"]);
             // }
             if(empty($values['canvas'])){
+              wc_add_order_item_meta($itemId, "Quantity", $value['quantity']);
+              wc_add_order_item_meta($itemId, "Price/Part", "$".$value['price']);
               wc_add_order_item_meta($itemId, "Part-Image", $renderImage);
             }
             // wc_add_order_item_meta($itemId, " ", $renderImage);
         }
         if(!empty($values['canvas'])){
-          $canvas = '<img src="'.$values['canvas'].'" />';
+          $canvas = '<a class="showImage" href="'.$values['canvas'].'" target="_blank"><img width="200" src="'.$values['canvas'].'" /></a>';
+          wc_add_order_item_meta($itemId, "Quantity", $values['quantity']);
+          wc_add_order_item_meta($itemId, "Price/Set", "$".$value['setPrice']/$values['quantity']);
           wc_add_order_item_meta($itemId, 'Set-Image', $canvas);
         }
+
         return $itemId;
     }
 
@@ -419,15 +425,16 @@ class MYCAjax{
     public static function myc_before_checkout_form($checkout){
 
       date_default_timezone_set('America/New_York');
-      $mydateoptions = array('' => __('Select Install Date', 'woocommerce'));
+      $mydateoptions = array('' => __('Select Date', 'woocommerce'));
 
       echo '<div id="customer_po_field"><h2>' . __('Job Information') . '</h2>';
 
       echo '
      <script>
-         jQuery(function($){
-             $("#datepicker").datepicker();
-         });
+          jQuery(document).ready(function($){
+            $("#datepicker").datepicker();
+            $("#pickup_datepicker").datepicker();
+          });
      </script>';
 
       woocommerce_form_field('customer_install_name', array(
@@ -440,7 +447,7 @@ class MYCAjax{
       woocommerce_form_field('customer_install_address', array(
         'type'        => 'text',
         'class'       => array('my-field-class', 'form-row-wide'),
-        'label'       => __('Location / Address', 'woocommerce'),
+        'label'       => __('Dispenser Graphics Location', 'woocommerce'),
         'placeholder' => __('Enter Location / address', 'woocommerce')
       ), $checkout->get_value('customer_install_address'));
 
@@ -458,6 +465,15 @@ class MYCAjax{
         'placeholder' => __('Enter PO Number', 'woocommerce')
       ), $checkout->get_value('customer_po_number'));
 
+      woocommerce_form_field('pickup_date', array(
+        'type'        => 'text',
+        'class'       => array('my-field-class', 'form-row-wide'),
+        'id'          => 'pickup_datepicker',
+        'label'       => __('Pickup Date', 'woocommerce'),
+        'placeholder' => __('Select Date'),
+        'options'     => $mydateoptions
+      ), $checkout->get_value('pickup_date'));
+
       woocommerce_form_field('install_date', array(
         'type'        => 'text',
         'class'       => array('my-field-class', 'form-row-wide'),
@@ -465,7 +481,7 @@ class MYCAjax{
         'label'       => __('Install Date', 'woocommerce'),
         'placeholder' => __('Select Date'),
         'options'     => $mydateoptions
-      ), $checkout->get_value('customer_po_number'));
+      ), $checkout->get_value('install_date'));
 
       echo '</div>';
     }
@@ -485,6 +501,9 @@ class MYCAjax{
       if (!empty($_POST['customer_po_number'])) {
         update_post_meta($order_id, '_customer_po_number', sanitize_text_field($_POST['customer_po_number']));
       }
+      if(!empty($_POST['pickup_date'])){
+        update_post_meta($order_id, '_pickup_date', sanitize_text_field($_POST['pickup_date']));
+      }
       if(!empty($_POST['install_date'])){
         update_post_meta($order_id, '_install_date', sanitize_text_field($_POST['install_date']));
       }
@@ -498,8 +517,9 @@ class MYCAjax{
       <?
       echo '<p><strong>'.__('Customer Install Name').':</strong> ' . get_post_meta( $order->id, '_customer_install_name', true ) . '</p>';
       echo '<p><strong>'.__('Customer Install Address').':</strong> ' . get_post_meta( $order->id, '_customer_install_address', true ) . '</p>';
-      echo '<p><strong>'.__('Customer Install Address 2').':</strong> ' . get_post_meta( $order->id, '_job_number', true ) . '</p>';
+      echo '<p><strong>'.__('Job Number').':</strong> ' . get_post_meta( $order->id, '_job_number', true ) . '</p>';
       echo '<p><strong>'.__('Customer PO Number').':</strong> ' . get_post_meta( $order->id, '_customer_po_number', true ) . '</p>';
+      echo '<p><strong>'.__('Pickup Date').':</strong> ' . get_post_meta($order->id, '_pickup_date', true) . '</p>';
       echo '<p><strong>'.__('Install Date').':</strong> ' . get_post_meta($order->id, '_install_date', true) . '</p>';
       ?>
         </div>
@@ -520,14 +540,66 @@ class MYCAjax{
       if($user_id && $_POST['customer_po_number']){
         update_user_meta($user_id, 'customer_po_number', sanitize_text_field($_POST['customer_po_number']));
       }
+      if($user_id && $_POST['pickup_date']){
+        update_user_meta($user_id, 'pickup_date', sanitize_text_field($_POST['pickup_date']));
+      }
       if($user_id && $_POST['install_date']){
         update_user_meta($user_id, 'install_date', sanitize_text_field($_POST['install_date']));
       }
     }
 
     public static function myc_order_thank_you_pages($order){
+      global $wp;
+
+      if(current_user_can('administrator')){
+        // $orderData = $order->get_data();
+        // $fee_lines = $orderData[fee_lines];
+        // $tax_lines = $orderData[tax_lines];
+        // foreach($tax_lines as $k=>$v){
+          // $tax_obj = $v->get_data();
+          // $tax = $tax_obj['tax_total'];
+          // echo '<pre>';
+          // print_r($orderData[total_tax]);
+          // echo '</pre>';
+          //
+          // echo '<pre>' . print_r($tax) . '</pre>';
+        // }
+        // foreach($tax_lines as $item_id=>$item){
+        //     $tax = $item->get_data();
+        //     $tax_obj = $tax['tax_total'];
+        // }
+        // foreach($order->get_items() as $key=>$value){
+        //     $item->set_total_tax($tax_obj);
+        //     $item->save();
+        // }
+      }
+
+      $orderData = $order->get_data();
+      $fee_lines = $orderData[fee_lines];
+      $tax_lines = $orderData[tax_lines];
+
+      foreach($fee_lines as $k=>$v){
+        $tax_obj = $v->get_data();
+        $tax = $tax_obj['total_tax'];
+      }
 
 	    	?>
+
+          <div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
+            <table>
+              <tbody>
+                <tr>
+                  <td colspan="3">
+                    <strong>Rush Fee Tax:</strong>
+                  </td>
+                  <td>
+                    <strong><?php echo number_format($tax, 2, '.', ''); ?></strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
 		    	<div class="woocommerce-column woocommerce-column--1 woocommerce-column--billing-address col-1">
 
 
@@ -552,6 +624,10 @@ class MYCAjax{
 								<td><?php echo $order->get_meta('_customer_po_number'); ?></td>
 							</tr>
               <tr>
+                <td>Pickup Date</td>
+                <td><?php echo $order->get_meta('_pickup_date'); ?></td>
+              </tr>
+              <tr>
                 <td>Install Date</td>
                 <td><?php echo $order->get_meta('_install_date'); ?></td>
               </tr>
@@ -567,11 +643,12 @@ class MYCAjax{
     }
 
     public static function myc_email_order_meta_keys($keys){
-
+      // echo '<pre>'.print_r($keys).'</pre>';
       $keys['Customer Install Name'] = '_customer_install_name';
       $keys['Customer Address'] = '_customer_install_address';
       $keys['Customer Address Two'] = '_job_number';
       $keys['Customer PO'] = '_customer_po_number';
+      $keys['Pickup Date'] = '_pickup_date';
       $keys['Install Date'] = '_install_date';
       return $keys;
     }
@@ -587,7 +664,7 @@ class MYCAjax{
     }
 
     public static function myc_woocommerce_account_menu_items($items){
-      if(current_user_can('administrator') || current_user_can('supercustomer')){
+      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('shop_manager') || current_user_can('pioneer_super_customer')){
         $items['user-list'] = 'Users';
         return $items;
       } else {
@@ -600,7 +677,7 @@ class MYCAjax{
 
     public static function myc_redirect(){
       global $wp;
-      if(current_user_can('administrator') || current_user_can('supercustomer')){
+      if(current_user_can('administrator') || current_user_can('supercustomer') || current_user_can('pioneer_super_customer')){
         return;
       }
         $currentURL = trailingslashit(home_url($wp->request));
@@ -615,59 +692,430 @@ class MYCAjax{
     public static function myc_user_list_content(){
       echo '<h3>Users List</h3>';
 
-      function pumpUsers($users,$company){
-        echo '<table><thead><tr><th>User</th><th>Company</th></tr></thead><tbody>';
-        foreach($users as $user){
-          echo '<tr><td>' . $user->display_name . '</td><td>'.$company.'</td></tr>';
-        }
-        echo '</tbody></table>';
+      function pumpUsers($users){
+        $userinfo;
+        $companyInfo;
+        ?>
+        <table class="user-details-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Company</th>
+              <?php
+              if(current_user_can('supercustomer')){
+                ?>
+                <th class="essoCheck">Esso</th>
+                <th class="mobilCheck">Mobil</th>
+                <?php
+              } else if(current_user_can('pioneer_super_customer')){
+                  ?>
+                    <th class="pioneerCheck">Pioneer</th>
+                  <?php
+              } else if(current_user_can('rdr_super_customer')){
+                  ?>
+                    <th class="rdrCheck">RDR</th>
+                  <?php
+              } else {
+                ?>
+                <th class="expiry">Expiry</th>
+                <th class="essoCheck">Esso</th>
+                <th class="mobilCheck">Mobil</th>
+                <th class="pioneerCheck">Pioneer</th>
+                <th class="rdrCheck">RDR</th>
+                <?php
+              }
+              ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              if(current_user_can('supercustomer')){
+                foreach($users as $user){
+                  $userinfo = get_user_meta($user->ID);
+                  $companyInfo = $userinfo['company'][0];
+                  if($user->caps['customer_on_account'] == 1 || $user->caps['customer']== 1 || $user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer'] ==1){
+                    ?>
+                    <tr>
+                      <td><?php echo $user->display_name; ?></td>
+                      <td><?php echo $companyInfo; ?></td>
+                      <td class="essoColumn">
+                        <?php
+                        if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
+                        ?>
+                        <span class="essoCheck">&#10003;</span>
+                        <?php
+                        } else if($user->caps['supercustomer'] == 1) {
+                          ?>
+                          <span class="essoCheck">&#9733;</span>
+                          <?php
+                        } else {
+
+                        }
+                        ?>
+                      </td>
+                      <td class="mobilColumn">
+                        <?php
+                        if($user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer']==1){
+                        ?>
+                        <span class="mobilCheck">&#10003;</span>
+                        <?php
+                      } else if($user->caps['supercustomer'] == 1) {
+                        ?>
+                        <span class="essoCheck">&#9733;</span>
+                        <?php
+                      } else {
+
+                      }
+                      ?>
+                      </td>
+                    </tr>
+                    <?php
+                  }else {
+
+                  }
+                }
+              } else if(current_user_can('pioneer_super_customer')){
+                foreach($users as $user){
+                  $userinfo = get_user_meta($user->ID);
+                  $companyInfo = $userinfo['company'][0];
+                  if($user->caps['pioneer_customer_on_account']==1 || $user->caps['pioneer_customer']==1){
+                   ?>
+                   <tr>
+                     <td>
+                       <?php
+                           echo $user->display_name;
+                       ?>
+                     </td>
+                     <td><?php echo $companyInfo; ?></td>
+                     <td class="pioneerColumn">
+                       <?php
+                       if($user->caps['pioneer_customer']==1 || $user->caps['pioneer_customer_on_account']==1){
+                       ?>
+                       <span class="pioneerCheck">&#10003;</span>
+                       <?php
+                       }
+                     ?>
+                     </td>
+                   </tr>
+                   <?php
+                } else if($user->caps['pioneer_super_customer'] == 1) {
+                  ?>
+                  <span class="essoCheck">&#9733;</span>
+                  <?php
+                } else {
+
+                }
+              }
+            } else if(current_user_can('rdr_super_customer')){
+               foreach($users as $user){
+                 $userinfo = get_user_meta($user->ID);
+                 $companyInfo = $userinfo['company'][0];
+                 if($user->caps['rdr_customer_on_account']==1 || $user->caps['rdr_customer']==1){
+                  ?>
+                  <tr>
+                    <td>
+                      <?php
+                          echo $user->display_name;
+                      ?>
+                    </td>
+                    <td><?php echo $companyInfo; ?></td>
+                    <td class="rdrColumn">
+                      <?php
+                      if($user->caps['rdr_customer']==1 || $user->caps['rdr_customer_on_account']==1){
+                      ?>
+                      <span class="rdrCheck">&#10003;</span>
+                      <?php
+                      }
+                    ?>
+                    </td>
+                  </tr>
+                  <?php
+               } else if($user->caps['rdr_super_customer'] == 1) {
+                 ?>
+                 <span class="rdrCheck">&#9733;</span>
+                 <?php
+               } else {
+
+               }
+             }
+            } else if(current_user_can('administrator') || current_user_can('shop_manager')){
+               foreach($users as $user){
+                 $userinfo = get_user_meta($user->ID);
+                 $companyInfo = $userinfo['company'][0];
+                 $expiryInfo = $userinfo['expiry'][0];
+                 ?>
+                 <tr>
+                   <td><?php echo $user->display_name; ?></td>
+                   <td><?php echo $companyInfo; ?></td>
+                   <td><?php echo $expiryInfo; ?></td>
+                   <td class="essoColumn">
+                     <?php
+                     if($user->caps['customer_on_account']==1 || $user->caps['customer']==1){
+                     ?>
+                     <span class="essoCheck">&#10003;</span>
+                     <?php
+                   } else if($user->caps['supercustomer'] == 1) {
+                     ?>
+                     <span class="essoCheck">&#9733;</span>
+                     <?php
+                   } else if($user->caps['administrator'] == 1) {
+                     ?>
+                     <span class="essoCheck">&#9733;A</span>
+                     <?php
+                   } else {
+
+                   }
+                     ?>
+                   </td>
+                   <td class="mobilColumn">
+                     <?php
+                     if($user->caps['mobile-customer-on-account']==1 || $user->caps['mobil_customer']==1){
+                     ?>
+                     <span class="mobilCheck">&#10003;</span>
+                     <?php
+                     } else if($user->caps['supercustomer'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;</span>
+                       <?php
+                     } else if($user->caps['administrator'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;A</span>
+                       <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
+                   <td class="pioneerColumn">
+                     <?php
+                     if($user->caps['pioneer_customer']==1 || $user->caps['pioneer_customer_on_account']==1){
+                     ?>
+                     <span class="pioneerCheck">&#10003;</span>
+                     <?php
+                   } else if($user->caps['pioneer_super_customer'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;</span>
+                       <?php
+                     } else if($user->caps['administrator'] == 1) {
+                       ?>
+                       <span class="essoCheck">&#9733;A</span>
+                       <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
+                   <td class="rdrColumn">
+                     <?php
+                     if($user->caps['rdr_customer']==1 || $user->caps['rdr_customer_on_account']==1){
+                     ?>
+                     <span class="rdrCheck">&#10003;</span>
+                     <?php
+                   } else if($user->caps['rdr_super_customer'] == 1) {
+                       ?>
+                       <span class="rdrCheck">&#9733;</span>
+                       <?php
+                     } else if($user->caps['administrator'] == 1) {
+                       ?>
+                       <span class="rdrCheck">&#9733;A</span>
+                       <?php
+                     } else {
+
+                     }
+                     ?>
+                   </td>
+                 </tr>
+                 <?php
+               }
+             }
+            ?>
+          </tbody>
+        </table>
+        <?php
       }
-      //'customer_on_account'
-      //'mobile-customer-on-account'
-      $essoUsers = get_users(array('role' => 'customer_on_account'));
-      $mobilUsers = get_users(array('role' => 'mobile-customer-on-account'));
-      echo '<div class="usersReport">';
-      echo '<div class="userReportSection">';
-      $renderEsso = pumpUsers($essoUsers, 'Esso');
-      echo '</div>';
-      echo '<div class="userReportSection">';
-      $renderMobil = pumpUsers($mobilUsers, 'Mobil');
-      echo '</div>';
-      echo '</div>';
+
+      // $allUsers = get_users(array('orderby' => 'display_name'));
+      $allUsers = get_users('orderby=meta_value&meta_key=company');
+
+      pumpUsers($allUsers);
     }
 
+    public static function action_woocommerce_email_header( $email_heading ) {
+        $new_email_heading = str_replace( 'New customer order', 'New order', $email_heading );
+        return $new_email_heading;
+    }
 
+    public static function myc_email_header(){
+      echo '
+      <style type="text/css">
+        ul.wc-item-meta {
+          font-size: 12px;
+          font-style: normal;
+        }
+        .partImage {
+          max-width: 200px !important;
+        }
+      </style>
+      ';
+    }
+
+    public static function userPaymentDisableOptions($gateways){
+      global $woocommerce, $current_user;
+
+      if(isset($gateways['cod']) && current_user_can('customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('mobil_customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('pioneer_customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('rdr_customer') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
+      } elseif($current_user->caps['customer_no_checkout'] == 1){
+        unset($gateways['cod']);
+        unset($gateways['stripe']);
+      }
+      return $gateways;
+    }
+
+    /**************COMPANY FIELD****************/
+    public static function modify_contact_methods($profile_fields) {
+
+    	// Add new fields
+    	$profile_fields['company'] = 'Company';
+      $profile_fields['expiry'] = 'Expiry';
+
+    	return $profile_fields;
+    }
+
+    //Add company colum to the user backend
+    public static function user_sortable_columns( $columns ) {
+    	$columns['company'] = 'Company';
+      $columns['Expiry'] = 'Expiry';
+    	return $columns;
+    }
+
+    public static function status_order_in_user_query($query){
+    	if('Company'==$query->query_vars['orderby']) {
+    		$query->query_from .= " LEFT JOIN wp_usermeta ON wp_users.ID = wp_usermeta.user_id AND meta_key = 'company'";
+    		$query->query_orderby = " ORDER BY wp_usermeta.meta_value ".($query->query_vars["order"] == "ASC" ? "asc " : "desc ");//set sort order
+    	}
+    	//print_r($query); // for debugging
+    }
+
+    public static function extended_user_search( $user_query ){
+    	// Make sure this is only applied to user search
+    	if ( $user_query->query_vars['search'] ){
+    		$search = trim( $user_query->query_vars['search'], '*' );
+    		if ( $_REQUEST['s'] == $search ){
+    			global $wpdb;
+    			$user_query->query_from .= "JOIN wp_usermeta MF ON MF.user_id = {$wpdb->users}.ID AND MF.meta_key = 'company'";
+    			$user_query->query_where = 'WHERE 1=1' . $user_query->get_search_sql( $search, array( 'user_login', 'user_email', 'user_nicename', 'MF.meta_value' ), 'both' );
+    		}
+    	}
+    }
+
+    public static function add_user_columns( $defaults ) {
+         $defaults['company'] = __('Company', 'user-column');
+         $defaults['expiry'] = __('Expiry', 'user-column');
+         return $defaults;
+    }
+
+    public static function add_custom_user_columns($value, $column_name, $id) {
+          if( $column_name == 'company' ) {
+    		      return get_the_author_meta( 'company', $id );
+          }
+          if($column_name == 'expiry'){
+            return get_the_author_meta('expiry', $id);
+          }
+    }
+
+    /****LOGIN REDIRECT*****/
+    public static function myc_login_redirect($redirect, $user){
+      $role = $user->roles[0];
+      $dashboard = admin_url();
+      $myaccount = get_permalink(wc_get_page_id('my-account'));
+      if($role != 'administrator'){
+        $redirect = $myaccount;
+      } else {
+        $redirect = $dashboard;
+      }
+
+      return $redirect;
+    }
+
+    //SHOP PAGE REDIRECT
+
+    public static function custom_shop_page_redirect() {
+        if( is_shop() ){
+            wp_redirect( home_url( '/' ) );
+            exit();
+        }
+    }
+
+    public static function myc_custom_login(){
+    	wp_enqueue_style('mycLoginStyle', get_stylesheet_directory_uri().'/css/login-style.css');
+    	wp_enqueue_script('mycLoginScript', get_stylesheet_directory_uri().'/js/login-script.js', array('jquery'), '1', true);
+    }
+
+    public static function myc_login_logo(){
+    	return home_url();
+    }
+
+    public static function add_login_logout_link($items, $args) {
+      ob_start();
+      wp_loginout('');
+      $loginoutlink = ob_get_contents();
+      ob_end_clean();
+      $items .= '<li class="loginout">'. $loginoutlink .'</li>';
+      return $items;
+    }
+
+    public static function myc_remove_my_account_links( $menu_links ){
+
+    	//unset( $menu_links['dashboard'] ); // Dashboard
+    	//unset( $menu_links['payment-methods'] ); // Payment Methods
+    	//unset( $menu_links['orders'] ); // Orders
+    	//unset( $menu_links['downloads'] ); // Downloads
+    	//unset( $menu_links['edit-account'] ); // Account details
+    	//unset( $menu_links['customer-logout'] ); // Logout
+
+    	return $menu_links;
+
+    }
+
+    /*****LOGIN TOOLTIP LOGO*******/
+    public static function my_login_logo_url_title() {
+         return 'MYC Graphics Login';
+    }
+
+    /******REMOVE QTY COLUMN*******/
+    public static function hidding_some_order_buttons() {
+    echo '<style>
+          .woocommerce_order_items_wrapper.wc-order-items-editable thead tr th:nth-of-type(4), .woocommerce_order_items_wrapper.wc-order-items-editable tbody tr td:nth-of-type(4) {
+              display: none;
+          }
+          </style>';
+    }
+
+    //ADD FEE
+    public static function myc_handling_fee() {
+         global $woocommerce;
+
+         if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+              return;
+
+         $fee = 7.50;
+         $woocommerce->cart->add_fee( 'Environmental Ink and Waste Disposal Fee', $fee, true, 'standard' );
+    }
+
+    //ADD INVOICE NUMBER CUSTOMIZATION
+    public static function myc_order_number($order_id){
+      $prefix = "DG-";
+      $new_order_id = $prefix . $order_id;
+      return $new_order_id;
+    }
 
 }
-
-/*********WOOCOMMERCE TEMPLATE REDIRECT************/
-// function woo_adon_plugin_template( $template, $template_name, $template_path ) {
-//   global $woocommerce;
-//   $_template = $template;
-//   if ( ! $template_path )
-//      $template_path = $woocommerce->template_url;
-//
-//   $plugin_path  = untrailingslashit( plugin_dir_path( __FILE__ ) )  . '/template/woocommerce/';
-//
-//  // Look within passed path within the theme - this is priority
-//  $template = locate_template(
-//  array(
-//    $template_path . $template_name,
-//    $template_name
-//  )
-// );
-//
-// if( ! $template && file_exists( $plugin_path . $template_name ) )
-//  $template = $plugin_path . $template_name;
-//
-// if ( ! $template )
-//  $template = $_template;
-//
-// return $template;
-// }
-//
-//
-// add_filter( 'woocommerce_locate_template', 'woo_adon_plugin_template', 1, 3 );
 
 
 /******REMOVE LINK FROM ORDER DETAILS PRODUCT NAME**********/
@@ -756,4 +1204,92 @@ add_action('woocommerce_account_user-list_endpoint', array('MYCAjax', 'myc_user_
 
 
 add_action('template_redirect', array('MYCAjax', 'myc_redirect'));
+
+
+
+/*******EMAIL ORDER NAME********/
+
+add_action( 'woocommerce_email_header', array('MYCAjax', 'action_woocommerce_email_header'), 10, 1 );
+
+/******EMAIL FORMAT****/
+
+add_action('woocommerce_email_header', array('MYCAjax', 'myc_email_header'));
+
+/********USER CHECKOUT ROLES********/
+add_filter('woocommerce_available_payment_gateways', array('MYCAjax', 'userPaymentDisableOptions'));
+
+
+/**************COMPANY FIELD****************/
+add_filter('user_contactmethods', array('MYCAjax', 'modify_contact_methods'));
+
+//Add the colum to the user backend
+add_filter( 'manage_users_sortable_columns', array('MYCAjax', 'user_sortable_columns' ));
+
+//alter the user query and sorts whole list by company
+add_action('pre_user_query', array('MYCAjax', 'status_order_in_user_query'));
+
+//makes the user meta "company" searchable and returen results
+add_action( 'pre_user_query', array('MYCAjax', 'extended_user_search' ));
+
+//add columns to User panel list page
+add_filter('manage_users_columns', array('MYCAjax', 'add_user_columns'), 15, 1);
+
+//Print the user data in the new column
+add_action('manage_users_custom_column', array('MYCAjax', 'add_custom_user_columns'), 15, 3);
+
+/*****LOGIN REDIRECT*******/
+add_filter('woocommerce_login_redirect', array('MYCAjax', array('MYCAjax', 'myc_login_redirect')), 1200, 2);
+
+//SHOP PAGE REDIRECT
+add_action( 'template_redirect', array('MYCAjax', 'custom_shop_page_redirect' ));
+
+
+//WPLOGIN SCREEN CUSTOMIZE
+
+add_action('login_enqueue_scripts', array('MYCAjax', 'myc_custom_login'));
+add_filter( 'login_headerurl', array('MYCAjax', 'myc_login_logo'));
+
+/******LOGOUT REDIRECT**********/
+add_filter('wp_nav_menu_items', array('MYCAjax', 'add_login_logout_link'), 10, 2);
+
+
+//CHANGE ENDPOINT URL OF LOGOUT ON MY ACCOUNT DASHBOARD
+
+add_filter ( 'woocommerce_account_menu_items', array('MYCAjax', 'myc_remove_my_account_links' ));
+
+add_filter( 'login_headertitle', array('MYCAjax', 'my_login_logo_url_title'));
+
+/***REMOVE QTY COLUMN*******/
+add_action( 'admin_head', array('MYCAjax', 'hidding_some_order_buttons' ));
+
+/***SIDEBAR**/
+
+add_action('widgets_init', 'myc_widgets');
+
+function myc_widgets(){
+  	register_sidebar(array('name' => 'Esso Sidebar', 'id' => 'page-sidebar-esso','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Esso Parts Sidebar', 'id' => 'page-sidebar-esso-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'Esso Sidebar French', 'id' => 'page-sidebar-esso-french','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Esso Parts Sidebar French', 'id' => 'page-sidebar-esso-parts-french','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'Mobil Sidebar', 'id' => 'page-sidebar-mobil','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Mobil Parts Sidebar', 'id' => 'page-sidebar-mobil-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'Pioneer Sidebar', 'id' => 'page-sidebar-pioneer','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'Pioneer Parts Sidebar', 'id' => 'page-sidebar-pioneer-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+
+    register_sidebar(array('name' => 'RDR Sidebar', 'id' => 'page-sidebar-rdr','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+    register_sidebar(array('name' => 'RDR Parts Sidebar', 'id' => 'page-sidebar-rdr-parts','before_widget' => '<div id="%1$s" class="widget %2$s">','after_widget'  => '</div>', 'before_title'  => '<h4>', 'after_title'   => '</h4>'));
+}
+
+
+/***********EXTRA FEES*********/
+add_action( 'woocommerce_cart_calculate_fees', array('MYCAjax', 'myc_handling_fee' ));
+
+
+/******ADD CUSTOM PREFIX TO ORDER NUMBER********/
+add_filter('woocommerce_order_number', array('MYCAjax', 'myc_order_number'));
+
+
 ?>
