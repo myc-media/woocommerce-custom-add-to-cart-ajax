@@ -6,6 +6,14 @@
     right: 4%;
     top: 20%;
 }
+
+/****MINI-CART****/
+.woocommerce-page .widget.woocommerce ul.product_list_widget li img {
+    float: none !important;
+    height: auto !important;
+    width: 62px !important;
+}
+
 /********CHECKOUT**********/
 div#ui-datepicker-div td a {
     color: white;
@@ -289,7 +297,13 @@ body .nectar-slide-in-cart .widget_shopping_cart .cart_list a img {
   .page-template ul.products li.classic.post-3793,
   .page-template ul.products li.classic.post-3795,
   .page-template ul.products li.classic.post-3803,
-  .page-template ul.products li.classic.post-3860 {
+  .page-template ul.products li.classic.post-3860,
+  .page-template ul.products li.classic.post-5005,
+  .page-template ul.products li.classic.post-5007,
+  .page-template ul.products li.classic.post-5013,
+  .page-template ul.products li.classic.post-5015,
+  .page-template ul.products li.classic.post-5066,
+  .page-template ul.products li.classic.post-5067 {
       flex-basis: 50% !important; }
   .page-template ul.products li.classic.post-2019 {
       flex-basis: 50% !important; }
@@ -826,3 +840,20 @@ body[data-dropdown-style="minimal"]:not([data-header-format="left-header"]) head
     background: #444444;
     color: white !important;
 } */
+
+
+/************RISERS*************/
+div#product-1710 div.quantity,
+div#product-4247 div.quantity,
+div#product-4248 div.quantity,
+div#product-4249 div.quantity,
+div#product-4250 div.quantity,
+div#product-4255 div.quantity,
+div#product-4256 div.quantity,
+div#product-4257 div.quantity,
+div#product-4258 div.quantity,
+div#product-4271 div.quantity,
+div#product-4272 div.quantity,
+div#product-4285 div.quantity {
+    display: none;
+}
