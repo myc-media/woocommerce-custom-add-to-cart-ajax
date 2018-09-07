@@ -970,6 +970,8 @@ class MYCAjax{
         unset($gateways['cod']);
       } elseif(isset($gateways['cod']) && current_user_can('rdr_customer') && !isset($current_user->caps['customer_no_checkout'])){
         unset($gateways['cod']);
+      } elseif(isset($gateways['cod']) && current_user_can('esso-french') && !isset($current_user->caps['customer_no_checkout'])){
+        unset($gateways['cod']);
       } elseif($current_user->caps['customer_no_checkout'] == 1){
         unset($gateways['cod']);
         unset($gateways['stripe']);
