@@ -73,6 +73,9 @@ div#product-4285 div.quantity {
 .woocommerce ul.products li.product {
   width: 100% !important; }
 
+.woocommerce form .form-row.woocommerce-invalid label {
+  color: #ed2d34 !important; }
+
 .set .ajaxColumnLink > a {
   z-index: 1000; }
 

@@ -184,6 +184,11 @@ div {
 	ul.products li.product {
 		width: 100% !important;
 	}
+	form{
+		.form-row.woocommerce-invalid label {
+			color: $color_alizarin_crimson_approx !important;
+		}
+	} 
 }
 .set {
 	.ajaxColumnLink {
