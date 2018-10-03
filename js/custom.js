@@ -1162,5 +1162,9 @@ jQuery('document').ready(function($){
 
   });
 
+  $('i.updatePricingEdit').on('click', function(){
+    $(this).closest('p').next('.updatePricing').append('Test');
+  });
+
 
 });

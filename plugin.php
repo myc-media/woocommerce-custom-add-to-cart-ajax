@@ -263,7 +263,7 @@ class MYCAjax{
         GET Product Price and Quantity before setting cart total
         Calculate Price by Multiplying Quantity and Price
         ************************/
-
+        global $wp;
         $finalPrice;
         $product;
 
@@ -276,26 +276,35 @@ class MYCAjax{
 
         //ITERATE THROUGH PRODUCTS IN CART
         foreach($cart_object->cart_contents as $key=>$value){
+          $count = count($value['tmpost_data']['productData']);
             //ITERATE THROUGH PRODUCT DATA
+            
             foreach($value['tmpost_data']['productData'] as $k=>$v){
+              $setPrice = $v['setPrice'];
+              $price = $v['price'];
+              $setQuantity = $value['quantity'];
+              $onePrice = $value['tm_epo_product_original_price'];
+              $partQuantity = $value['quantity'];
+              $partNewQuantity = $v['quantity'];
 
-                if($v['setPrice'] > 100){
+                // if($v['setPrice'] > 100){
+                  if($count > 2){
 
-                    $product = $v['setPrice'] / $value['quantity'];
+                    // $product = $v['setPrice'] / $value['quantity'];
+                    $product = $onePrice + $price;
                     //SET PRICE
                     $value['data']->set_price($product);
 
-                } else if($v['setPrice'] > 100 and $v['price'] <1){
-                  $product += ($v['price'] * $v['quantity']) + $v['setPrice'];
-                  $value['data']->set_price($product);
                 } else {
-                  $product += ($v['price'] * $v['quantity']);
+                  
+                  $product += $setPrice;
                   $value['data']->set_price($product);
                 }
-
+              //RESET PRICE COUNTER TO 0
+              $product = 0;
             }
-            //RESET PRICE COUNTER TO 0
-            $product = 0;
+            
+           
 
         }
     }
@@ -307,6 +316,7 @@ class MYCAjax{
     **********************************************/
 
     public static function myc_get_item_data($other_data, $cart_item){
+      global $wp;
         //COUNT NUMBER OF PRODUCTS IN CART
         $countVar = 0;
         foreach($cart_item as $k => $v){
@@ -321,7 +331,19 @@ class MYCAjax{
             //VALIDATE IF PRODUCT EXISTS AND OPTION IS NOT NULL
           if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
             if($cart_item["custom_data_${x}"]['Price'] > 0){
-              $other_data[] = array(
+              if(current_user_can('administrator')){
+                $other_data[] = array(
+                    //OUTPUT FIRST FIELD (PRODUCT NAME)
+                    'name' => $cart_item["custom_data_{$x}"]['Option'],
+                    //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
+                    'value' =>  '<p>
+                                <span class="cpf-img-on-cart">
+                                '.$cart_item["custom_data_{$x}"]['Image'].'
+                                '.$cart_item["custom_data_{$x}"]['Quantity'].'<small> x $'.$cart_item["custom_data_{$x}"]['Price'].' = $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'<i class="fa-pencil updatePricingEdit"></i></small>
+                                </span></p><div class="updatePricing"></div>'
+                );
+              }else {
+                $other_data[] = array(
                   //OUTPUT FIRST FIELD (PRODUCT NAME)
                   'name' => $cart_item["custom_data_{$x}"]['Option'],
                   //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
@@ -331,6 +353,7 @@ class MYCAjax{
                               '.$cart_item["custom_data_{$x}"]['Quantity'].'<small> x $'.$cart_item["custom_data_{$x}"]['Price'].' = $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</small>
                               </span>'
               );
+              }
             } else {
               //SET CUSTOM TEMPLATE OF OUTPUT
               $other_data[] = array(

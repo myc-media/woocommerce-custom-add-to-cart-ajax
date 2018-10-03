@@ -3,6 +3,12 @@
   width: 8.5% !important;
   top: 50% !important; }
 
+.page-template .quantity {
+  display: none; }
+
+.page-template div[class*='set'] .quantity {
+  display: initial !important; }
+
 div#ui-datepicker-div {
   background: #ed2d34;
   color: white !important;
@@ -68,7 +74,8 @@ div#product-4285 div.quantity {
 
 .woocommerce table.cart .woocommerce-cart-form__cart-item td img {
   height: auto !important;
-  max-width: 100px !important; }
+  max-width: 100px !important;
+  width: auto !important; }
 
 .woocommerce ul.products li.product {
   width: 100% !important; }

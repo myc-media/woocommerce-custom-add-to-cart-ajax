@@ -109,6 +109,16 @@ $color_monza_approx: #cc0c14;
 	top: 50% !important;
 }
 
+.page-template {
+	.quantity {
+    	display: none;
+	}
+	div[class*='set'] {
+		.quantity {
+			display: initial !important;
+		}
+	}
+}
 
 div {
 	&#ui-datepicker-div {
@@ -177,9 +187,12 @@ div {
 	}
 }
 .woocommerce {
-	table.cart .woocommerce-cart-form__cart-item td img {
-		height: auto !important;
-		max-width: 100px !important;
+	table.cart {
+		.woocommerce-cart-form__cart-item td img {
+			height: auto !important;
+			max-width: 100px !important;
+			width: auto !important;
+		}
 	}
 	ul.products li.product {
 		width: 100% !important;
