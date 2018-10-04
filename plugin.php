@@ -104,6 +104,7 @@ class MYCAjax{
         return $qv;
     }
 
+    
 
     /**ADD TO CART****/
 
@@ -296,7 +297,6 @@ class MYCAjax{
                     $value['data']->set_price($product);
 
                 } else {
-                  
                   $product += $setPrice;
                   $value['data']->set_price($product);
                 }
@@ -304,12 +304,35 @@ class MYCAjax{
               $product = 0;
             }
             
-           
-
         }
     }
 
+    /*****TEST PARTS UPDATE ON CART PAGE ****/
 
+    public static function parts_quantity_update(){
+
+      $partId = $_GET['partId'];
+      global $woocommerce;
+
+      $list;
+      
+      foreach($woocommerce->cart as $k=>$v) {
+        foreach($v as $id=>$meta){
+          foreach($meta as $option=>$value){
+            if($meta['product_id'] == $partId){
+              if($value['Quantity'] != null){
+                foreach($value as $key=>$string){
+                  if($key == 'Quantity'){
+                    echo $string;
+                  } 
+                }
+              }
+            }
+          }
+        }
+      }
+      die(); 
+    }
 
     /********************************************
     GET CUSTOM META INFO AND SET TEMPLATE FOR OUTPUT
@@ -1178,6 +1201,10 @@ add_filter('wp_ajax_custom_mini_cart_update', array('MYCAjax', 'custom_mini_cart
 add_filter('wp_ajax_nopriv_htmlCanvas', array('MYCAjax', 'htmlCanvasFunc'));
 add_filter('wp_ajax_htmlCanvas', array('MYCAjax', 'htmlCanvasFunc'));
 
+// PARTS CART QUANTITY UPDATE
+add_filter('wp_ajax_parts_quantity_update', array('MYCAjax', 'parts_quantity_update'));
+add_filter('wp_ajax_nopriv_parts_quantity_update', array('MYCAjax', 'parts_quantity_update'));
+
 
 //GET ITEM FROM SESSION
 add_action('woocommerce_get_cart_item_from_session', array('MYCAjax', 'myc_get_cart_item_from_session'), 10, 2);
@@ -1315,6 +1342,8 @@ add_action( 'woocommerce_cart_calculate_fees', array('MYCAjax', 'myc_handling_fe
 
 /******ADD CUSTOM PREFIX TO ORDER NUMBER********/
 add_filter('woocommerce_order_number', array('MYCAjax', 'myc_order_number'));
+
+
 
 
 ?>

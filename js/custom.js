@@ -1157,13 +1157,30 @@ jQuery('document').ready(function($){
       } else {
         alert('Please select one or more parts to add to your cart');
       }
+  }); // END ADD TO CART BUTTON CLICK
 
+  $('i.updatePricingEdit').click(function(){
+    // $(this).closest('p').next('.updatePricing').append('Test');
+    var thisDiv = $(this);
+    
+    var id = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a.remove').attr('data-product_id');
 
-
-  });
-
-  $('i.updatePricingEdit').on('click', function(){
-    $(this).closest('p').next('.updatePricing').append('Test');
+    console.log(id);
+    
+    $.ajax({
+      type: 'GET',
+      url: modalAjaxURL.ajaxurl,
+      data: {
+          'action': 'parts_quantity_update',
+          'partId': id
+      },
+      success: function(response){
+        $(response).each(function(index, element){
+          console.log(element);
+        });
+        $thisButtondIV = $(thisDiv).closest('p').next('.updatePricing').append('<div class="testDiv">'+response+'</div>');
+      }
+    });
   });
 
 
