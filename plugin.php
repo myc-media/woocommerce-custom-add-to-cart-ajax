@@ -312,22 +312,35 @@ class MYCAjax{
     public static function parts_quantity_update(){
 
       $partId = $_GET['partId'];
+      
       global $woocommerce;
 
-      $list;
+      $quantityArr = array();
       
       foreach($woocommerce->cart as $k=>$v) {
         foreach($v as $id=>$meta){
-          foreach($meta as $option=>$value){
-            if($meta['product_id'] == $partId){
-              if($value['Quantity'] != null){
-                foreach($value as $key=>$string){
-                  if($key == 'Quantity'){
-                    echo $string;
-                  } 
-                }
-              }
-            }
+          if($meta['product_id'] == $partId){
+            
+              header('Content-type: application/json');
+              echo json_encode($meta);
+            
+            // foreach($meta as $option=>$value){            
+            //   // if(!empty($value['Quantity'])){
+            //   //   // foreach($value as $key=>$string){
+            //   //   //   if($key == 'Quantity'){
+            //   //   //     for($x = 0; $x < count($key); $x++){
+            //   //   //       $quantityArr[$x] = [$key=>$string];
+            //   //   //     }
+            //   //   //     header('Content-type: application/json');
+            //   //   //     echo json_encode($quantityArr);
+            //   //   //   } 
+            //   //   // }
+            //   //   echo $value['Quantity'];
+            //   // }
+            //   if(current_user_can('administrator') && !empty($value['Quantity'])){
+            //     echo $value['Quantity'];
+            //   }
+            // }
           }
         }
       }

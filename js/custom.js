@@ -1158,7 +1158,7 @@ jQuery('document').ready(function($){
         alert('Please select one or more parts to add to your cart');
       }
   }); // END ADD TO CART BUTTON CLICK
-
+    var object;
   $('i.updatePricingEdit').click(function(){
     // $(this).closest('p').next('.updatePricing').append('Test');
     var thisDiv = $(this);
@@ -1175,10 +1175,13 @@ jQuery('document').ready(function($){
           'partId': id
       },
       success: function(response){
-        $(response).each(function(index, element){
-          console.log(element);
-        });
-        $thisButtondIV = $(thisDiv).closest('p').next('.updatePricing').append('<div class="testDiv">'+response+'</div>');
+          for(var key in response){
+              if(response.hasOwnProperty(key)){
+                  if(response[key]['Quantity'] != null){
+                      console.log(response[key]['Quantity']);
+                  }
+              }
+          }
       }
     });
   });
