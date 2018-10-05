@@ -1602,3 +1602,15 @@ h1.product_title.entry-title {
 
 #header-outer li.loginout {
   display: none !important; }
+
+.updatePricing {
+  width: 200px;
+  display: flex; }
+
+.updatePricing input.partQuantityUpdate {
+  border: 1px solid #cccccc !important;
+  flex-basis: 40%;
+  text-align: center; }
+
+.updatePricing i {
+  display: block; }

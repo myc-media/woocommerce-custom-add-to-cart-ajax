@@ -1158,12 +1158,18 @@ jQuery('document').ready(function($){
         alert('Please select one or more parts to add to your cart');
       }
   }); // END ADD TO CART BUTTON CLICK
-    var object;
-  $('i.updatePricingEdit').click(function(){
+  
+
+  /******PARTS QUANTITY UPDATE*****/
+
+  
+  $('body').on('click', '.updatePricingEdit', function(){
     // $(this).closest('p').next('.updatePricing').append('Test');
     var thisDiv = $(this);
     
     var id = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a.remove').attr('data-product_id');
+    var htmlDiv = thisDiv.closest('p').next('.updatePricing');
+    var loadingImg = '<img src="/wp-content/uploads/2018/04/89-1.gif" />';
 
     console.log(id);
     
@@ -1175,13 +1181,44 @@ jQuery('document').ready(function($){
           'partId': id
       },
       success: function(response){
+          
+          var inputBox = htmlDiv.find('input');
+          var inputVal;
+
           for(var key in response){
-              if(response.hasOwnProperty(key)){
-                  if(response[key]['Quantity'] != null){
-                      console.log(response[key]['Quantity']);
-                  }
-              }
+              
+              var test = response[key];
+              
+              $(test).each(function(i, e){
+                if(e['Quantity'] != null){
+                  var num = parseInt(e['Quantity']);                 
+
+                  htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><button type="submit" class="button" name="update_cart" value="Update cart" >Update cart</button>`);
+                  htmlDiv.find('input').val(num);
+                  htmlDiv.find('input').attr('val', num);
+                  inputVal = htmlDiv.find('input').val();
+                  
+                }
+              });
+              
           }
+          $(htmlDiv).find('button').on('click', function(){
+            console.log('clicked');
+            $.ajax({
+              type: 'POST',
+              url: modalAjaxURL.ajaxurl,
+              data: {
+                'action': 'parts_post_quantity_update',
+                'partId': id
+              },
+              success: function(result){
+                console.log(result);
+              }
+            });
+          });
+      },
+      beforeSend: function(){
+        $(htmlDiv).append(loadingImg);
       }
     });
   });

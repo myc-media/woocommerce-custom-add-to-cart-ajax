@@ -323,28 +323,22 @@ class MYCAjax{
             
               header('Content-type: application/json');
               echo json_encode($meta);
-            
-            // foreach($meta as $option=>$value){            
-            //   // if(!empty($value['Quantity'])){
-            //   //   // foreach($value as $key=>$string){
-            //   //   //   if($key == 'Quantity'){
-            //   //   //     for($x = 0; $x < count($key); $x++){
-            //   //   //       $quantityArr[$x] = [$key=>$string];
-            //   //   //     }
-            //   //   //     header('Content-type: application/json');
-            //   //   //     echo json_encode($quantityArr);
-            //   //   //   } 
-            //   //   // }
-            //   //   echo $value['Quantity'];
-            //   // }
-            //   if(current_user_can('administrator') && !empty($value['Quantity'])){
-            //     echo $value['Quantity'];
-            //   }
-            // }
+              die();
           }
         }
       }
-      die(); 
+       
+    }
+
+    /*********************************
+    PARTS POST UPDATE ON CART PAGE
+    **********************************/
+    public static function parts_post_quantity_update(){
+      global $woocommerce;
+      $partId = $_POST['partId'];
+
+      echo $partId;
+      die();
     }
 
     /********************************************
@@ -1217,6 +1211,10 @@ add_filter('wp_ajax_htmlCanvas', array('MYCAjax', 'htmlCanvasFunc'));
 // PARTS CART QUANTITY UPDATE
 add_filter('wp_ajax_parts_quantity_update', array('MYCAjax', 'parts_quantity_update'));
 add_filter('wp_ajax_nopriv_parts_quantity_update', array('MYCAjax', 'parts_quantity_update'));
+
+// PARTS POST CART QUANTITY UPDATE
+add_filter('wp_ajax_parts_post_quantity_update', array('MYCAjax', 'parts_post_quantity_update'));
+add_filter('wp_ajax_nopriv_parts_post_quantity_update', array('MYCAjax', 'parts_post_quantity_update'));
 
 
 //GET ITEM FROM SESSION
