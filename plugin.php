@@ -337,8 +337,15 @@ class MYCAjax{
       global $woocommerce;
       $partId = $_POST['partId'];
 
-      echo $partId;
-      die();
+      foreach($woocommerce->cart as $k=>$v) {
+        foreach($v as $id=>$meta){
+          
+            header('Content-type: application/json');
+            echo json_encode($v);
+            die();
+          
+        }
+      }
     }
 
     /********************************************
