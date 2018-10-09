@@ -1193,7 +1193,7 @@ jQuery('document').ready(function($){
                 if(e['Quantity'] != null){
                   var num = parseInt(e['Quantity']);                 
 
-                  htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><button type="submit" class="button" name="update_cart" value="Update cart" >Update cart</button>`);
+                  htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
                   htmlDiv.find('input').val(num);
                   htmlDiv.find('input').attr('val', num);
                   inputVal = htmlDiv.find('input').val();
@@ -1202,17 +1202,23 @@ jQuery('document').ready(function($){
               });
               
           }
-          $(htmlDiv).find('button').on('click', function(){
+          $(htmlDiv).find('a.button').on('click', function(e){
+            e.preventDefault();
             console.log('clicked');
             $.ajax({
               type: 'POST',
               url: modalAjaxURL.ajaxurl,
               data: {
                 'action': 'parts_post_quantity_update',
-                'partId': id
+                'partId': parseInt(id)
               },
               success: function(result){
                 console.log(result);
+                $('.shop_table button.button').removeAttr('disabled');
+                $('.shop_table button.button').trigger('click');
+              },
+              beforeSend: function(){
+                $(htmlDiv).append(loadingImg);
               }
             });
           });

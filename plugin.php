@@ -336,16 +336,57 @@ class MYCAjax{
     public static function parts_post_quantity_update(){
       global $woocommerce;
       $partId = $_POST['partId'];
+      $testObj;
+      $count;
+      $self = new self();
+      $price = 0;
+      $quantity = 0;
+      $newPrice;
 
-      foreach($woocommerce->cart as $k=>$v) {
-        foreach($v as $id=>$meta){
-          
-            header('Content-type: application/json');
-            echo json_encode($v);
-            die();
-          
+      foreach($woocommerce->cart as $cart=>$id) {
+        // header('Content-type: application/json');
+        // echo json_encode($id[$part]['product_id']);
+        // die();
+        
+        foreach($id as $meta=>$value){
+          //check if product_id equals $partId
+          if($value['product_id'] == $partId){
+            foreach($value as $k=>$v){
+              if(strpos($k, 'custom_data_') !== false){
+                $count +=1;
+              }
+            }
+
+            for($x = 0; $x <= $count; $x++){
+              if(isset($value["custom_data_{$x}"]) && $value["custom_data_{$x}"] && $value["custom_data_{$x}"]['Quantity']!=null){
+                if($value["custom_data_${x}"]['Quantity'] > 0){
+                  // $value["custom_data_${x}"]['Quantity'] = "5";
+                  foreach($value['tmpost_data']['productData'] as $part=>$option){
+                    // header('Content-type: application/json');
+                    // echo json_encode($woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]);
+                    // die();
+                    // $option['quantity'] = "5";
+                    $price = intval($woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['Price']);
+                    $quantity = intval($woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['Quantity']);
+                    $newPrice = $price*$quantity;
+
+                    $woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['Quantity'] = "5";
+                    $woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['setPrice'] = "{$newPrice}";
+                    $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['quantity'] = "5";
+                    $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$newPrice}";
+                    $woocommerce->cart->set_session();
+                    header('Content-type: application/json');
+                    echo json_encode($woocommerce->cart->cart_contents);
+                    die();
+                    wp_die();
+                  }
+                }
+              }
+            }
+          }
         }
       }
+      die();
     }
 
     /********************************************
@@ -379,7 +420,7 @@ class MYCAjax{
                                 '.$cart_item["custom_data_{$x}"]['Quantity'].'<small> x $'.$cart_item["custom_data_{$x}"]['Price'].' = $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'<i class="fa-pencil updatePricingEdit"></i></small>
                                 </span></p><div class="updatePricing"></div>'
                 );
-              }else {
+              } else {
                 $other_data[] = array(
                   //OUTPUT FIRST FIELD (PRODUCT NAME)
                   'name' => $cart_item["custom_data_{$x}"]['Option'],
