@@ -1157,9 +1157,76 @@ jQuery('document').ready(function($){
       } else {
         alert('Please select one or more parts to add to your cart');
       }
+  }); // END ADD TO CART BUTTON CLICK
+  
 
+  /******PARTS QUANTITY UPDATE*****/
 
+  
+  $('body').on('click', '.updatePricingEdit', function(){
+    // $(this).closest('p').next('.updatePricing').append('Test');
+    var thisDiv = $(this);
+    
+    var id = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a.remove').attr('data-product_id');
+    var htmlDiv = thisDiv.closest('p').next('.updatePricing');
+    var loadingImg = '<img src="/wp-content/uploads/2018/04/89-1.gif" />';
 
+    console.log(id);
+    
+    $.ajax({
+      type: 'GET',
+      url: modalAjaxURL.ajaxurl,
+      data: {
+          'action': 'parts_quantity_update',
+          'partId': id
+      },
+      success: function(response){
+          
+          var inputBox = htmlDiv.find('input');
+          var inputVal;
+
+          for(var key in response){
+              
+              var test = response[key];
+              
+              $(test).each(function(i, e){
+                if(e['Quantity'] != null){
+                  var num = parseInt(e['Quantity']);                 
+
+                  htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
+                  htmlDiv.find('input').val(num);
+                  htmlDiv.find('input').attr('val', num);
+                  inputVal = htmlDiv.find('input').val();
+                  
+                }
+              });
+              
+          }
+          $(htmlDiv).find('a.button').on('click', function(e){
+            e.preventDefault();
+            console.log('clicked');
+            $.ajax({
+              type: 'POST',
+              url: modalAjaxURL.ajaxurl,
+              data: {
+                'action': 'parts_post_quantity_update',
+                'partId': parseInt(id)
+              },
+              success: function(result){
+                console.log(result);
+                $('.shop_table button.button').removeAttr('disabled');
+                $('.shop_table button.button').trigger('click');
+              },
+              beforeSend: function(){
+                $(htmlDiv).append(loadingImg);
+              }
+            });
+          });
+      },
+      beforeSend: function(){
+        $(htmlDiv).append(loadingImg);
+      }
+    });
   });
 
 
