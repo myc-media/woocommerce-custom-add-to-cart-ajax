@@ -1162,6 +1162,31 @@ jQuery('document').ready(function($){
 
   /******PARTS QUANTITY UPDATE*****/
 
+  var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+
+  rowWooCart.each(function(i, e){
+    console.log(e);
+    if($(e).children('.quantity').length > 0){
+      $(e).closest('tr').find('.updatePricingEdit').remove();
+      $(e).closest('tr').find('.updatePricing').remove();
+      $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+    }
+  });
+
+    $(document).ajaxStop(function () {
+      var rowWooCheckout = $('.woocommerce-checkout-review-order-table .product-container .cart_item');
+
+      rowWooCheckout.each(function(i, e){   
+        var thisQuant = $(e).find('h4 span.product-quantity');
+        function removeMetaEdit(part){
+          $(part).find('.updatePricingEdit').remove();
+          $(part).find('.updatePricing').remove();
+          $(part).find('.product-meta span.product-meta-no-image').remove();
+        }
+        var quant = thisQuant.length > 0 ? removeMetaEdit(e) : console.log('no');
+      });
+    });
+
   
   $('body').on('click', '.updatePricingEdit', function(){
     // $(this).closest('p').next('.updatePricing').append('Test');
