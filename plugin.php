@@ -456,8 +456,8 @@ class MYCAjax{
 
               }
                 $woocommerce->cart->set_session();
-                header('Content-type: application/json');
-                echo json_encode($value);
+                // header('Content-type: application/json');
+                // echo json_encode($value);
                 wp_die();
                 
             }

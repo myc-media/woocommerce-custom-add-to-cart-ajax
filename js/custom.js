@@ -1174,8 +1174,10 @@ jQuery('document').ready(function($){
     var idTwo = rawId.replace(/(https:\/\/www.mycgraphics.com\/cart\/\?remove_item=)/g, "");
     var id = idTwo.replace(/&.*/g, "");
 
-    console.log(id);
+    // console.log(id);
+
     // (https://www.mycgraphics.com/cart/\?remove_item=)|&amp;_wpnonce=.+  ->REGEX
+
     var htmlDiv = thisDiv.closest('p').next('.updatePricing');
 
     var loadingImg = '<img src="/wp-content/uploads/2018/04/89-1.gif" />';
@@ -1196,7 +1198,7 @@ jQuery('document').ready(function($){
       return inputVal;
     }
 
-    console.log(regTitle);
+    // console.log(regTitle);
     
     $.ajax({
       type: 'GET',
@@ -1207,38 +1209,16 @@ jQuery('document').ready(function($){
           'title': regTitle
       },
       success: function(response){
-          
-          
-
-          // for(var key in response){
-              
-              // var option = response[key];
-              // console.log(option);
-              // console.log(response['Quantity']);
-              
-              // $(key).each(function(i, e){
-              //   if(e['Quantity'] != null){
-              //     num = parseInt(e['Quantity']);
-              //     console.log(num);
-
-              //     htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
-
-              //     setQuantity(num);
-
-              //   }
-              // });
 
               if(response['Quantity'] != null && response['Option'] == regTitle){
                   num = parseInt(response['Quantity']);
-                  console.log(num);
+                  // console.log(num);
 
                   htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
 
                   setQuantity(num);
                   returnValue = setQuantity(num);
               }
-              
-          // }
 
           $('.updatePricing span').on('click', '.fa-plus', function(){
             num += 1;
@@ -1275,7 +1255,7 @@ jQuery('document').ready(function($){
           
           $(htmlDiv).find('a.button').on('click', function(e){
             e.preventDefault();
-            console.log('clicked');
+            // console.log('clicked');
             $.ajax({
               type: 'POST',
               url: modalAjaxURL.ajaxurl,
@@ -1286,7 +1266,7 @@ jQuery('document').ready(function($){
                 'title': regTitle
               },
               success: function(result){
-                console.log(result);
+                // console.log(result);
                 $('.shop_table button.button').removeAttr('disabled');
                 $('.shop_table button.button').trigger('click');
               },
