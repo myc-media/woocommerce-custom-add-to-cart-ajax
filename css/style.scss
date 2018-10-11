@@ -1214,8 +1214,15 @@ td.product-name a {
 		display: initial !important;
 	}
 }
-.woocommerce-checkout .cart_item a.tm-cart-edit-options {
-	display: none;
+.woocommerce-checkout {
+	.cart_item {
+		a.tm-cart-edit-options {
+			display: none;
+		}
+		.product-part {
+			display: block;
+		}
+	}
 }
 .woocommerce-cart-form__cart-item > td {
 	vertical-align: top !important;
@@ -1411,5 +1418,6 @@ h1.product_title.entry-title {
 .cpf-img-on-cart {
 	strong {
 		color: $color_alizarin_crimson_approx;
+		line-height: 24px;
 	}
 }

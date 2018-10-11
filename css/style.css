@@ -1443,6 +1443,9 @@ td.product-name a.showImage {
 .woocommerce-checkout .cart_item a.tm-cart-edit-options {
   display: none; }
 
+.woocommerce-checkout .cart_item .product-part {
+  display: block; }
+
 .woocommerce-cart-form__cart-item > td {
   vertical-align: top !important; }
 
@@ -1616,4 +1619,5 @@ h1.product_title.entry-title {
   display: block; }
 
 .cpf-img-on-cart strong {
-  color: #ed2d34; }
+  color: #ed2d34;
+  line-height: 24px; }
