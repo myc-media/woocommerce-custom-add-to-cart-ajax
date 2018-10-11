@@ -487,27 +487,16 @@ class MYCAjax{
             //VALIDATE IF PRODUCT EXISTS AND OPTION IS NOT NULL
           if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
             if($cart_item["custom_data_{$x}"]['Price'] > 0){
-              if(current_user_can('administrator')){
-                $other_data[] = array(
-                    //OUTPUT FIRST FIELD (PRODUCT NAME)
-                    'name' => $cart_item["custom_data_{$x}"]['Option'],
-                    //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
-                    'value' =>  '<p class="product-meta">
-                                <span class="cpf-img-on-cart">
-                                '.$cart_item["custom_data_{$x}"]['Image'].'<br /><span class="product-meta-no-image"><strong>Quantity:</strong> '.$cart_item["custom_data_{$x}"]['Quantity'].'<br /><strong>Price Per Part:</strong> $'.$cart_item["custom_data_{$x}"]['Price'].'<br /><strong>Total:</strong> $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</span><i class="fa-pencil updatePricingEdit"></i></span></p><div class="updatePricing"></div>'
-                );
-              } else {
-                $other_data[] = array(
+              
+              $other_data[] = array(
                   //OUTPUT FIRST FIELD (PRODUCT NAME)
                   'name' => $cart_item["custom_data_{$x}"]['Option'],
                   //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
-                  'value' =>  '<p>
+                  'value' =>  '<p class="product-meta">
                               <span class="cpf-img-on-cart">
-                              '.$cart_item["custom_data_{$x}"]['Image'].'
-                              '.$cart_item["custom_data_{$x}"]['Quantity'].'<small> x $'.$cart_item["custom_data_{$x}"]['Price'].' = $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</small>
-                              </span>'
+                              '.$cart_item["custom_data_{$x}"]['Image'].'<br /><span class="product-meta-no-image"><strong>Quantity:</strong> '.$cart_item["custom_data_{$x}"]['Quantity'].'<br /><strong>Price Per Part:</strong> $'.$cart_item["custom_data_{$x}"]['Price'].'<br /><strong>Total:</strong> $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</span><i class="fa-pencil updatePricingEdit"></i></span></p><div class="updatePricing"></div>'
               );
-              }
+              
             } else {
               //SET CUSTOM TEMPLATE OF OUTPUT
               $other_data[] = array(

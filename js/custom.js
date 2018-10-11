@@ -1168,7 +1168,7 @@ jQuery('document').ready(function($){
     console.log(e);
     if($(e).children('.quantity').length > 0){
       $(e).closest('tr').find('.updatePricingEdit').remove();
-      $(e).closest('tr').find('.updatePricing').remove();
+      $(e).closest('tr').find('.updatePricing').html("");
       $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
     }
   });
@@ -1180,7 +1180,7 @@ jQuery('document').ready(function($){
         var thisQuant = $(e).find('h4 span.product-quantity');
         function removeMetaEdit(part){
           $(part).find('.updatePricingEdit').remove();
-          $(part).find('.updatePricing').remove();
+          $(part).find('.updatePricing').html("");
           $(part).find('.product-meta span.product-meta-no-image').remove();
         }
         var quant = thisQuant.length > 0 ? removeMetaEdit(e) : console.log('no');
@@ -1235,15 +1235,20 @@ jQuery('document').ready(function($){
       },
       success: function(response){
 
-              if(response['Quantity'] != null && response['Option'] == regTitle){
-                  num = parseInt(response['Quantity']);
-                  // console.log(num);
+          if(response['Quantity'] != null && response['Option'] == regTitle){
+              num = parseInt(response['Quantity']);
+              // console.log(num);
 
-                  htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
+              htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a><span class="close">Close</span>`);
 
-                  setQuantity(num);
-                  returnValue = setQuantity(num);
-              }
+              setQuantity(num);
+              returnValue = setQuantity(num);
+          }
+
+          $(htmlDiv).on('click', 'span.close', function(){
+            $(htmlDiv).html("");
+          });
+
 
           $('.updatePricing span').on('click', '.fa-plus', function(){
             num += 1;
@@ -1292,8 +1297,21 @@ jQuery('document').ready(function($){
               },
               success: function(result){
                 // console.log(result);
+
                 $('.shop_table button.button').removeAttr('disabled');
                 $('.shop_table button.button').trigger('click');
+                $(document).ajaxStop(function(){
+                  rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+
+                  rowWooCart.each(function(i, e){
+                    // console.log(e);
+                    if($(e).children('.quantity').length > 0){
+                      $(e).closest('tr').find('.updatePricingEdit').remove();
+                      $(e).closest('tr').find('.updatePricing').html("");
+                      $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+                    }
+                  });
+                });
               },
               beforeSend: function(){
                 $(htmlDiv).append(loadingImg);

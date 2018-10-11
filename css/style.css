@@ -83,6 +83,9 @@ div#product-4285 div.quantity {
 .woocommerce form .form-row.woocommerce-invalid label {
   color: #ed2d34 !important; }
 
+.woocommerce #order_review .updatePricingEdit {
+  display: none; }
+
 .set .ajaxColumnLink > a {
   z-index: 1000; }
 
@@ -856,6 +859,11 @@ body:not([data-header-format="left-header"]) header#top nav > ul > li.megamenu >
 .ModalRow.parts .tm-final-totals {
   display: none !important; }
 
+.ModalRow h2.onlyOvation {
+  text-transform: uppercase;
+  font-weight: bold;
+  text-decoration: underline; }
+
 ul.wc-item-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1608,7 +1616,8 @@ h1.product_title.entry-title {
 
 .updatePricing {
   width: 200px;
-  display: flex; }
+  display: flex;
+  position: relative; }
 
 .updatePricing input.partQuantityUpdate {
   border: 1px solid #cccccc !important;
@@ -1618,6 +1627,19 @@ h1.product_title.entry-title {
 .updatePricing i {
   display: block; }
 
+.updatePricing span.close {
+  background: #ed2d34;
+  position: absolute;
+  right: -50%;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4%;
+  color: white;
+  cursor: pointer; }
+
 .cpf-img-on-cart strong {
   color: #ed2d34;
   line-height: 24px; }
+
+.cpf-img-on-cart i {
+  cursor: pointer; }
