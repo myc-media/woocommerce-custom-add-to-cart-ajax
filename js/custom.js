@@ -1166,42 +1166,113 @@ jQuery('document').ready(function($){
   $('body').on('click', '.updatePricingEdit', function(){
     // $(this).closest('p').next('.updatePricing').append('Test');
     var thisDiv = $(this);
-    
-    var id = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a.remove').attr('data-product_id');
-    var htmlDiv = thisDiv.closest('p').next('.updatePricing');
-    var loadingImg = '<img src="/wp-content/uploads/2018/04/89-1.gif" />';
+
+    var title = $(this).closest('dd').prev('dt').text();
+    var regTitle = title.replace(/[:]+/g, '');
+
+    var rawId = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a').attr('href');
+    var idTwo = rawId.replace(/(https:\/\/www.mycgraphics.com\/cart\/\?remove_item=)/g, "");
+    var id = idTwo.replace(/&.*/g, "");
 
     console.log(id);
+    // (https://www.mycgraphics.com/cart/\?remove_item=)|&amp;_wpnonce=.+  ->REGEX
+    var htmlDiv = thisDiv.closest('p').next('.updatePricing');
+
+    var loadingImg = '<img src="/wp-content/uploads/2018/04/89-1.gif" />';
+
+    var inputBox = htmlDiv.find('input');
+
+    var inputVal;
+    var num;
+    var returnValue;
+
+    $('.updatePricing').html('');
+
+    function setQuantity(num){
+      htmlDiv.find('input').val(num);
+      htmlDiv.find('input').attr('val', num);
+      inputVal = htmlDiv.find('input').val();
+      // console.log(inputVal);
+      return inputVal;
+    }
+
+    console.log(regTitle);
     
     $.ajax({
       type: 'GET',
       url: modalAjaxURL.ajaxurl,
       data: {
           'action': 'parts_quantity_update',
-          'partId': id
+          'partId': id,
+          'title': regTitle
       },
       success: function(response){
           
-          var inputBox = htmlDiv.find('input');
-          var inputVal;
+          
 
-          for(var key in response){
+          // for(var key in response){
               
-              var test = response[key];
+              // var option = response[key];
+              // console.log(option);
+              // console.log(response['Quantity']);
               
-              $(test).each(function(i, e){
-                if(e['Quantity'] != null){
-                  var num = parseInt(e['Quantity']);                 
+              // $(key).each(function(i, e){
+              //   if(e['Quantity'] != null){
+              //     num = parseInt(e['Quantity']);
+              //     console.log(num);
+
+              //     htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
+
+              //     setQuantity(num);
+
+              //   }
+              // });
+
+              if(response['Quantity'] != null && response['Option'] == regTitle){
+                  num = parseInt(response['Quantity']);
+                  console.log(num);
 
                   htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a>`);
-                  htmlDiv.find('input').val(num);
-                  htmlDiv.find('input').attr('val', num);
-                  inputVal = htmlDiv.find('input').val();
-                  
-                }
-              });
+
+                  setQuantity(num);
+                  returnValue = setQuantity(num);
+              }
               
-          }
+          // }
+
+          $('.updatePricing span').on('click', '.fa-plus', function(){
+            num += 1;
+            
+            setQuantity(num);
+            
+            returnValue = setQuantity(num);
+            // console.log(returnValue);
+            
+          });
+          $('.updatePricing span').on('click', '.fa-minus', function(){
+            if(num >= 1 && inputVal >= 1){
+              num -= 1;
+              if(num > 0){
+                setQuantity(num);
+                returnValue = setQuantity(num);
+                // console.log(returnValue);
+              }
+            }else {
+              num = 1;
+              setQuantity(num);
+              returnValue = setQuantity(num);
+              // console.log(returnValue);
+            }
+          });
+
+          $('.updatePricing input').on('keypress keyup blur', function(event){
+            // $(this).val($(this).val().replace(/^[0+\.][a-zA-z+\.]*$/g, ''));
+            $(this).val($(this).val().replace(/(?:^0|[1-9][.]+|[a-zA-Z])/g, ''));
+            if((event.which != 46 || $(this).val().indexOf('.') != -1 ) && (event.which < 48 || event.which > 57)){
+              event.preventDefault();
+            }
+          });
+          
           $(htmlDiv).find('a.button').on('click', function(e){
             e.preventDefault();
             console.log('clicked');
@@ -1210,7 +1281,9 @@ jQuery('document').ready(function($){
               url: modalAjaxURL.ajaxurl,
               data: {
                 'action': 'parts_post_quantity_update',
-                'partId': parseInt(id)
+                'partId': id,
+                'partQuantity': returnValue,
+                'title': regTitle
               },
               success: function(result){
                 console.log(result);

@@ -1614,3 +1614,6 @@ h1.product_title.entry-title {
 
 .updatePricing i {
   display: block; }
+
+.cpf-img-on-cart strong {
+  color: #ed2d34; }

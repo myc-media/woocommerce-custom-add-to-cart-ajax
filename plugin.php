@@ -312,18 +312,30 @@ class MYCAjax{
     public static function parts_quantity_update(){
 
       $partId = $_GET['partId'];
+      $title = $_GET['title'];
+      $count;
       
       global $woocommerce;
 
       $quantityArr = array();
       
-      foreach($woocommerce->cart as $k=>$v) {
-        foreach($v as $id=>$meta){
-          if($meta['product_id'] == $partId){
-            
-              header('Content-type: application/json');
-              echo json_encode($meta);
-              die();
+      foreach($woocommerce->cart as $cart=>$id) {
+        foreach($id as $meta=>$value){
+          if($value['key'] == $partId){
+
+            foreach($value as $k=>$v){
+              if(strpos($k, 'custom_data_') !== false && $v['Quantity'] != null){
+                $count +=1;
+              }
+            }
+
+            for($x = 0; $x <= $count; $x++){
+              if($value["custom_data_{$x}"]['Option'] == $title){
+                header('Content-type: application/json');
+                echo json_encode($value["custom_data_{$x}"]);
+                die();
+              }
+            }
           }
         }
       }
@@ -336,12 +348,17 @@ class MYCAjax{
     public static function parts_post_quantity_update(){
       global $woocommerce;
       $partId = $_POST['partId'];
+      $partQuantity = $_POST['partQuantity'];
       $testObj;
       $count;
       $self = new self();
       $price = 0;
       $quantity = 0;
       $newPrice;
+      $title = $_POST['title'];
+      $priceArr = array();
+
+      
 
       foreach($woocommerce->cart as $cart=>$id) {
         // header('Content-type: application/json');
@@ -350,38 +367,99 @@ class MYCAjax{
         
         foreach($id as $meta=>$value){
           //check if product_id equals $partId
-          if($value['product_id'] == $partId){
+          if($value['key'] == $partId){
             foreach($value as $k=>$v){
-              if(strpos($k, 'custom_data_') !== false){
+              if(strpos($k, 'custom_data_') !== false && $v['Quantity'] != null){
                 $count +=1;
               }
             }
 
-            for($x = 0; $x <= $count; $x++){
-              if(isset($value["custom_data_{$x}"]) && $value["custom_data_{$x}"] && $value["custom_data_{$x}"]['Quantity']!=null){
-                if($value["custom_data_${x}"]['Quantity'] > 0){
-                  // $value["custom_data_${x}"]['Quantity'] = "5";
+            if($count == 1){
+              for($x = 0; $x <= $count; $x++){
+                if($value['key'] == $partId && $value["custom_data_{$x}"]['Option'] == $title){
                   foreach($value['tmpost_data']['productData'] as $part=>$option){
-                    // header('Content-type: application/json');
-                    // echo json_encode($woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]);
-                    // die();
-                    // $option['quantity'] = "5";
-                    $price = intval($woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['Price']);
-                    $quantity = intval($woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['Quantity']);
-                    $newPrice = $price*$quantity;
+                    if($option['label'] == $title){
+                      $price = floatval($woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Price']);
 
-                    $woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['Quantity'] = "5";
-                    $woocommerce->cart->cart_contents[$meta]["custom_data_${x}"]['setPrice'] = "{$newPrice}";
-                    $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['quantity'] = "5";
-                    $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$newPrice}";
-                    $woocommerce->cart->set_session();
-                    header('Content-type: application/json');
-                    echo json_encode($woocommerce->cart->cart_contents);
-                    die();
-                    wp_die();
+                      $subPrice = $price * $partQuantity;
+
+                      $prePrice += $subPrice;
+
+                      $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Quantity'] = "{$partQuantity}";
+
+                      $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['quantity'] = "{$partQuantity}";
+
+                      $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['setPrice'] = "{$prePrice}";
+
+                      $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$prePrice}";
+
+                      $woocommerce->cart->set_session();
+                      header('Content-type: application/json');
+                      echo json_encode($woocommerce->cart->cart_contents);
+                      wp_die();
+
+                    }
                   }
                 }
               }
+            } elseif ($count > 1) {
+              for($x = 0; $x < $count; $x++){
+                if($value['key'] == $partId && $value["custom_data_{$x}"]["Option"] == $title){
+                  
+                  $price = floatval($woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Price']);
+                  $subPrice = $price * $partQuantity;
+                  $priceArr[] = $subPrice;
+
+                  foreach($value['tmpost_data']['productData'] as $part=>$option){
+                    if($option['label'] == $value["custom_data_{$x}"]["Option"]){
+                      $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Quantity'] = "{$partQuantity}";
+                      $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['setPrice'] = "{$subPrice}";
+                      $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['quantity'] = "{$partQuantity}";
+                      $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$subPrice}";
+                      // $woocommerce->cart->set_session();
+                      // wp_die();
+                    }
+                  }
+
+                }elseif($value['key'] == $partId && $value["custom_data_{$x}"]["Option"] != $title) {
+                  $price = floatval($woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Price']);
+                  $subPrice = $price * $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Quantity'];
+                  $priceArr[] = $subPrice;
+
+                  $otherQuantity = $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Quantity'];
+
+                  foreach($value['tmpost_data']['productData'] as $part=>$option){
+                    if($option['label'] == $value["custom_data_{$x}"]["Option"]){
+                      $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Quantity'] = "{$otherQuantity}";
+                      $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['setPrice'] = "{$subPrice}";
+                      $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['quantity'] = "{$otherQuantity}";
+                      $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$subPrice}";
+                      // $woocommerce->cart->set_session();
+                      // wp_die();
+                    }
+                  }
+                }
+
+                $total = array_sum($priceArr);
+
+                foreach($value['tmpost_data']['productData'] as $part=>$option){
+                  if($value['key'] == $partId){
+                    $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$total}";
+                    // $woocommerce->cart->set_session();
+                    // wp_die();
+                  }
+                }              
+
+                // echo ("Price: {$price}\nQuantity: {$partQuantity}\nsubPrice: {$subPrice}\nPrePrice: ");
+                // echo json_encode($priceArr);
+                // echo ("\nTotal: {$total}\n");
+
+              }
+                $woocommerce->cart->set_session();
+                header('Content-type: application/json');
+                echo json_encode($value);
+                wp_die();
+                
             }
           }
         }
@@ -408,7 +486,7 @@ class MYCAjax{
         for($x = 0; $x <= $countVar; $x++){
             //VALIDATE IF PRODUCT EXISTS AND OPTION IS NOT NULL
           if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
-            if($cart_item["custom_data_${x}"]['Price'] > 0){
+            if($cart_item["custom_data_{$x}"]['Price'] > 0){
               if(current_user_can('administrator')){
                 $other_data[] = array(
                     //OUTPUT FIRST FIELD (PRODUCT NAME)
