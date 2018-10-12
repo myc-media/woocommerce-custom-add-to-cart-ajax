@@ -77,6 +77,12 @@ div#product-4285 div.quantity {
   max-width: 100px !important;
   width: auto !important; }
 
+.woocommerce table.cart .woocommerce-cart-form__cart-item .woocommerce-Price-amount.amount {
+  background: #333 !important;
+  color: white !important;
+  padding: 5% !important;
+  box-sizing: border-box; }
+
 .woocommerce ul.products li.product {
   width: 100% !important; }
 
@@ -1451,6 +1457,11 @@ td.product-name a.showImage {
 .woocommerce-checkout .cart_item a.tm-cart-edit-options {
   display: none; }
 
+.woocommerce-checkout .cart_item .variation ~ span.woocommerce-Price-amount.amount {
+  background: #333 !important;
+  color: white !important;
+  padding: 1% !important; }
+
 .woocommerce-checkout .cart_item .product-part {
   display: block; }
 
@@ -1637,9 +1648,52 @@ h1.product_title.entry-title {
   color: white;
   cursor: pointer; }
 
+.cpf-img-on-cart {
+  border: none; }
+
 .cpf-img-on-cart strong {
+  color: #333;
+  line-height: 24px;
+  font-weight: bold; }
+
+.cpf-img-on-cart span.product-meta-no-image {
+  display: block;
+  background: #e8e8e8;
   color: #ed2d34;
-  line-height: 24px; }
+  font-weight: bold !important;
+  padding: 1%;
+  max-width: 150px; }
 
 .cpf-img-on-cart i {
   cursor: pointer; }
+
+dd[class*='variation'] {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.2); }
+
+.widget .mini_cart_item .updatePricing {
+  flex-wrap: wrap;
+  width: 150px; }
+
+.widget .mini_cart_item .updatePricing input.partQuantityUpdate {
+  flex-basis: 78% !important;
+  margin-bottom: 10px !important; }
+
+.widget .mini_cart_item .updatePricing span.close {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-top: 20px; }
+
+.widget .mini_cart_item .updatePricing a.button {
+  flex-basis: 100%;
+  color: white !important; }
+
+.widget .mini_cart_item .updatePricing img[src*='gif'] {
+  height: 100% !important; }
+
+.widget .mini_cart_item .quantity {
+  background: #333 !important;
+  color: white !important;
+  padding: 6% !important;
+  text-align: center;
+  box-sizing: border-box; }

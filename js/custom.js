@@ -1162,29 +1162,87 @@ jQuery('document').ready(function($){
 
   /******PARTS QUANTITY UPDATE*****/
 
-  var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+  // var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
 
-  rowWooCart.each(function(i, e){
-    console.log(e);
-    if($(e).children('.quantity').length > 0){
-      $(e).closest('tr').find('.updatePricingEdit').remove();
-      $(e).closest('tr').find('.updatePricing').html("");
-      $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+  // rowWooCart.each(function(i, e){
+  //   console.log(e);
+  //   if($(e).children('.quantity').length > 0){
+  //     $(e).closest('tr').find('.updatePricingEdit').remove();
+  //     $(e).closest('tr').find('.updatePricing').html("");
+  //     $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+  //   }
+  // });
+
+  async function waitLoad(){
+    while(!document.querySelector(".mini_cart_item span.product-meta-no-image")) {
+      await new Promise(r => setTimeout(r, 500));
     }
-  });
+    $('.mini_cart_item').each(function(i, e){
+      var thisImg = $(e).find('a').find('img');
+      if($(thisImg).hasClass('wp-post-image')){
+
+      } else {
+        $(e).find('.updatePricingEdit').remove();
+        $(e).find('.product-meta-no-image').remove();
+      }
+    });
+  }
+
+  async function waitCartLoad(){
+    while(!$('.updatePricingEdit')){
+      await new Promise(r => setTimeout(r, 500));
+    }
+
+    var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+
+    rowWooCart.each(function(i, e){
+      console.log(e);
+      if($(e).children('.quantity').length > 0){
+        $(e).closest('tr').find('.updatePricingEdit').remove();
+        $(e).closest('tr').find('.updatePricing').html("");
+        $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+      }
+    });
+  }
+
+  async function waitCheckoutLoad(){
+    while(!$('updatePricingEdit')){
+      await new Promise(r=> setTimeout(r, 500));
+    }
+    var rowWooCheckout = $('.woocommerce-checkout-review-order-table .product-container .cart_item');
+    rowWooCheckout.each(function(i, e){
+      var thisQuant = $(e).find('h4 span.product-quantity');
+      function removeMetaEdit(part){
+        $(part).find('.updatePricingEdit').remove();
+        $(part).find('.updatePricing').html("");
+        $(part).find('.product-meta span.product-meta-no-image').remove();
+      }
+      var quant = thisQuant.length > 0 ? removeMetaEdit(e) : console.log('no');
+    });
+  }
+
+  waitLoad();
+  waitCartLoad();
+  waitCheckoutLoad();
 
     $(document).ajaxStop(function () {
-      var rowWooCheckout = $('.woocommerce-checkout-review-order-table .product-container .cart_item');
 
-      rowWooCheckout.each(function(i, e){   
-        var thisQuant = $(e).find('h4 span.product-quantity');
-        function removeMetaEdit(part){
-          $(part).find('.updatePricingEdit').remove();
-          $(part).find('.updatePricing').html("");
-          $(part).find('.product-meta span.product-meta-no-image').remove();
-        }
-        var quant = thisQuant.length > 0 ? removeMetaEdit(e) : console.log('no');
-      });
+        waitCartLoad();
+
+          // var rowWooCheckout = $('.woocommerce-checkout-review-order-table .product-container .cart_item');
+          // rowWooCheckout.each(function(i, e){
+          //   var thisQuant = $(e).find('h4 span.product-quantity');
+          //   function removeMetaEdit(part){
+          //     $(part).find('.updatePricingEdit').remove();
+          //     $(part).find('.updatePricing').html("");
+          //     $(part).find('.product-meta span.product-meta-no-image').remove();
+          //   }
+          //   var quant = thisQuant.length > 0 ? removeMetaEdit(e) : console.log('no');
+          // });
+
+          waitLoad();
+          waitCheckoutLoad();
+
     });
 
   
@@ -1194,8 +1252,14 @@ jQuery('document').ready(function($){
 
     var title = $(this).closest('dd').prev('dt').text();
     var regTitle = title.replace(/[:]+/g, '');
+    var rawId;
 
-    var rawId = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a').attr('href');
+    if(thisDiv.closest('tr.woocommerce-cart-form__cart-item').length > 0){
+        rawId = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a').attr('href');
+    }else {
+        rawId = thisDiv.closest('.woocommerce-mini-cart-item.mini_cart_item').find('a.remove.remove_from_cart_button').attr('href');
+    }
+    // var rawId = thisDiv.closest('tr.woocommerce-cart-form__cart-item').find('.product-remove a').attr('href');
     var idTwo = rawId.replace(/(https:\/\/www.mycgraphics.com\/cart\/\?remove_item=)/g, "");
     var id = idTwo.replace(/&.*/g, "");
 
@@ -1312,6 +1376,25 @@ jQuery('document').ready(function($){
                     }
                   });
                 });
+
+              $.ajax({
+                  type: 'GET',
+                  url: modalAjaxURL.ajaxurl,
+                  /************************
+                   AJAX MINI CART DATA
+                   ************************/
+                  data: {
+                      'action': 'custom_mini_cart_update'
+                  },
+                  /************************
+                   AJAX MINI CART SUCCESS
+                   ************************/
+                  success: function(response){
+
+                      $('.widget_shopping_cart_content').html(response);
+                  }
+              });
+
               },
               beforeSend: function(){
                 $(htmlDiv).append(loadingImg);

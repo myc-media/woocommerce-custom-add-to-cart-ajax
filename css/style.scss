@@ -188,10 +188,22 @@ div {
 }
 .woocommerce {
 	table.cart {
-		.woocommerce-cart-form__cart-item td img {
-			height: auto !important;
-			max-width: 100px !important;
-			width: auto !important;
+		.woocommerce-cart-form__cart-item {
+			td {
+				img {
+					height: auto !important;
+					max-width: 100px !important;
+					width: auto !important;
+				}
+			}
+			.woocommerce-Price-amount {
+				&.amount {
+					background: #333 !important;
+					color: $white !important;
+					padding: 5% !important;
+					box-sizing: border-box;
+				}
+			}
 		}
 	}
 	ul.products li.product {
@@ -1228,6 +1240,13 @@ td.product-name a {
 	.cart_item {
 		a.tm-cart-edit-options {
 			display: none;
+			}
+		.variation ~ span.woocommerce-Price-amount {
+			&.amount {
+				background: #333 !important;
+				color: $white !important;
+				padding: 1% !important;
+			}
 		}
 		.product-part {
 			display: block;
@@ -1437,11 +1456,62 @@ h1.product_title.entry-title {
 	}
 }
 .cpf-img-on-cart {
+	border: none;
 	strong {
-		color: $color_alizarin_crimson_approx;
+		color: #333;
 		line-height: 24px;
+		font-weight: bold;
+	}
+	span.product-meta-no-image {
+		display: block;
+		background: #e8e8e8;
+		color:$color_alizarin_crimson_approx;
+		font-weight: bold !important;
+		padding: 1%;
+		max-width: 150px;
 	}
 	i {
 		cursor: pointer;
+	}
+}
+
+dd[class*='variation'] {
+    border-bottom: 1px dotted rgba(0,0,0,0.2);
+}
+
+.widget{
+	.mini_cart_item {
+		.updatePricing {
+			flex-wrap: wrap;
+			width: 150px;
+			input.partQuantityUpdate {
+				flex-basis: 78% !important;
+				margin-bottom: 10px !important;
+			}
+			span.close {
+				position: relative;
+				top: auto;
+				right: auto;
+				margin-top: 20px;
+			}
+			a.button {
+				flex-basis: 100%;
+				color: $white !important;
+			}
+			img[src*='gif'] {
+				height: 100% !important;
+			}
+		}
+		.quantity {
+			// .woocommerce-Price-amount {
+			// 	&.amount {
+				background: #333 !important;
+				color: $white !important;
+				padding: 6% !important;
+				text-align: center;
+				box-sizing: border-box;
+			// 	}
+			// }
+		}
 	}
 }
