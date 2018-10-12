@@ -279,6 +279,7 @@ class MYCAjax{
         foreach($cart_object->cart_contents as $key=>$value){
           $count = count($value['tmpost_data']['productData']);
             //ITERATE THROUGH PRODUCT DATA
+
             
             foreach($value['tmpost_data']['productData'] as $k=>$v){
               $setPrice = $v['setPrice'];
@@ -289,7 +290,7 @@ class MYCAjax{
               $partNewQuantity = $v['quantity'];
 
                 // if($v['setPrice'] > 100){
-                  if($count > 2){
+                  if($value['canvas'] != null){
 
                     // $product = $v['setPrice'] / $value['quantity'];
                     $product = $onePrice + $price;

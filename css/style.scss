@@ -198,7 +198,7 @@ div {
 			}
 			.woocommerce-Price-amount {
 				&.amount {
-					background: #333 !important;
+					background: $color_alizarin_crimson_approx !important;
 					color: $white !important;
 					padding: 5% !important;
 					box-sizing: border-box;
@@ -944,6 +944,30 @@ body {
 		.syncSelectBottom {
 			display: none;
 		}
+		.pumpNumber {
+			ul.tmcp-ul-wrap.tmcp-elements.tm-extra-product-options-radio {
+				justify-content: center;
+			}
+		}
+		&[data-product-id="5455"], &[data-product-id="5457"] {
+			div.tm-extra-product-options-inner {
+				flex-basis: 100% !important;
+			}
+			div.tm-field-display {
+				label {
+					display: flex !important;
+					flex-wrap: wrap !important;
+					justify-content: center;
+					align-items: center;
+					* {
+						flex-basis: 100% !important;
+					}
+					input.tmcp-checkbox {
+						top: 0 !important;
+					}
+				}
+			}
+		}
 	}
 	a {
 		&.yith-wcqv-button.button {
@@ -1230,10 +1254,27 @@ body[data-dropdown-style="minimal"] {
 table.ui-datepicker-calendar {
 	width: 200px;
 }
-td.product-name a {
-	display: none;
-	&.showImage {
-		display: initial !important;
+td.product-name, div.product-info, li.mini_cart_item {
+	a {
+		display: none;
+		&.showImage {
+			display: initial !important;
+		}
+	}
+	dl.variation {
+		display: flex !important;
+		flex-wrap: wrap;
+		align-items: center;
+		dt {
+			flex-basis: 50% !important;
+			float: none !important;
+			margin: 0 !important;
+		}
+		dd {
+			flex-basis: 50% !important;
+			float: none !important;
+			margin: 0 !important;
+		}
 	}
 }
 .woocommerce-checkout {
@@ -1243,7 +1284,7 @@ td.product-name a {
 			}
 		.variation ~ span.woocommerce-Price-amount {
 			&.amount {
-				background: #333 !important;
+				background: $color_alizarin_crimson_approx !important;
 				color: $white !important;
 				padding: 1% !important;
 			}
@@ -1488,6 +1529,11 @@ dd[class*='variation'] {
 				flex-basis: 78% !important;
 				margin-bottom: 10px !important;
 			}
+			span {
+				i {
+					cursor: pointer !important;
+				}
+			}
 			span.close {
 				position: relative;
 				top: auto;
@@ -1505,7 +1551,7 @@ dd[class*='variation'] {
 		.quantity {
 			// .woocommerce-Price-amount {
 			// 	&.amount {
-				background: #333 !important;
+				background: $color_alizarin_crimson_approx !important;
 				color: $white !important;
 				padding: 6% !important;
 				text-align: center;

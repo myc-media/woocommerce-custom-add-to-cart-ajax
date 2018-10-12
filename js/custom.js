@@ -1189,13 +1189,12 @@ jQuery('document').ready(function($){
     var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
 
     rowWooCart.each(function(i, e){
-      
+      console.log(e);
       if($(e).children('.quantity').length > 0){
         $(e).closest('tr').find('.updatePricingEdit').remove();
         $(e).closest('tr').find('.updatePricing').html("");
         $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
       }
-      
     });
   }
 
@@ -1357,7 +1356,7 @@ jQuery('document').ready(function($){
             }
           });
           
-          //AJAX POST TO UPDATE CART ON SERVER AFTER CLICKING UPDATE CART BUTTON
+          //AJAX POST TO UPDATE CART ON SERVER AFTER CLICKING UPDATE CART
           $(htmlDiv).find('a.button').on('click', function(e){
             e.preventDefault();
             $.ajax({
