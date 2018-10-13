@@ -1484,6 +1484,7 @@ h1.product_title.entry-title {
 	}
 	i {
 		display: block;
+		cursor: pointer;
 	}
 	span.close {
 		background: $color_alizarin_crimson_approx;
@@ -1509,7 +1510,7 @@ h1.product_title.entry-title {
 		color:$color_alizarin_crimson_approx;
 		font-weight: bold !important;
 		padding: 1%;
-		max-width: 150px;
+		max-width: 200px;
 	}
 	i {
 		cursor: pointer;

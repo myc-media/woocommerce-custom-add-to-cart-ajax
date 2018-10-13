@@ -308,7 +308,7 @@ class MYCAjax{
         }
     }
 
-    /*****TEST PARTS UPDATE ON CART PAGE ****/
+    /*****GET PARTS QUANTITY ON CART PAGE EDIT BUTTON CLICK ****/
 
     public static function parts_quantity_update(){
 
@@ -319,22 +319,35 @@ class MYCAjax{
       global $woocommerce;
 
       $quantityArr = array();
+
+      
       
       foreach($woocommerce->cart as $cart=>$id) {
         foreach($id as $meta=>$value){
-          if($value['key'] == $partId){
 
+          if($value['key'] == $partId){
+            
             foreach($value as $k=>$v){
-              if(strpos($k, 'custom_data_') !== false && $v['Quantity'] != null){
+              if(strpos($k, 'custom_data_') !== false){
+                // DONT ADD ANY OTHER VALIDATION TO ABOVE CONDITIONAL AS IT WILL FAIL SINCE custom_data_ corresponds
+                // to number of total parts in product versus array position of actual part chosen while the other parts
+                // that are not chose will create empty custom_data_ spots 
                 $count +=1;
               }
             }
+            
 
             for($x = 0; $x <= $count; $x++){
               if($value["custom_data_{$x}"]['Option'] == $title){
-                header('Content-type: application/json');
-                echo json_encode($value["custom_data_{$x}"]);
-                die();
+                if($value['canvas']!=null){
+                  header('Content-type: application/json');
+                  echo json_encode($value);
+                  die();
+                }else {
+                  header('Content-type: application/json');
+                  echo json_encode($value["custom_data_{$x}"]);
+                  die();
+                }
               }
             }
           }
@@ -370,14 +383,14 @@ class MYCAjax{
           //check if product_id equals $partId
           if($value['key'] == $partId){
             foreach($value as $k=>$v){
-              if(strpos($k, 'custom_data_') !== false && $v['Quantity'] != null){
+              if(strpos($k, 'custom_data_') !== false){
                 $count +=1;
               }
             }
 
             if($count == 1){
               for($x = 0; $x <= $count; $x++){
-                if($value['key'] == $partId && $value["custom_data_{$x}"]['Option'] == $title){
+                if($value['key'] == $partId && $value["custom_data_{$x}"]['Option'] == $title && $value['canvas'] == null){
                   foreach($value['tmpost_data']['productData'] as $part=>$option){
                     if($option['label'] == $title){
                       $price = floatval($woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Price']);
@@ -404,8 +417,8 @@ class MYCAjax{
                 }
               }
             } elseif ($count > 1) {
-              for($x = 0; $x < $count; $x++){
-                if($value['key'] == $partId && $value["custom_data_{$x}"]["Option"] == $title){
+              for($x = 0; $x <= $count; $x++){
+                if($value['key'] == $partId && $value["custom_data_{$x}"]["Option"] == $title && $value['canvas'] == null){
                   
                   $price = floatval($woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Price']);
                   $subPrice = $price * $partQuantity;
@@ -422,7 +435,7 @@ class MYCAjax{
                     }
                   }
 
-                }elseif($value['key'] == $partId && $value["custom_data_{$x}"]["Option"] != $title) {
+                } elseif($value['key'] == $partId && $value["custom_data_{$x}"]["Option"] != $title && $value['canvas'] == null) {
                   $price = floatval($woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Price']);
                   $subPrice = $price * $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['Quantity'];
                   $priceArr[] = $subPrice;
@@ -438,28 +451,35 @@ class MYCAjax{
                       // $woocommerce->cart->set_session();
                       // wp_die();
                     }
-                  }
-                }
-
-                $total = array_sum($priceArr);
-
-                foreach($value['tmpost_data']['productData'] as $part=>$option){
-                  if($value['key'] == $partId){
-                    $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$total}";
-                    // $woocommerce->cart->set_session();
-                    // wp_die();
-                  }
-                }              
+                  };
+                }elseif($value['key'] == $partId && $value['canvas'] != null && $value["custom_data_{$x}"]["Option"] != null){
+                  
+                  
+                  foreach($value['tmpost_data']['productData'] as $part=>$option){
+                    $woocommerce->cart->cart_contents[$meta]['quantity'] = $partQuantity;
+                    // $woocommerce->cart->cart_contents[$meta]["custom_data_{$x}"]['setPrice'] = "{$subSetPrice}";
+                    // $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$subSetPrice}";
+                  };
+                }         
 
                 // echo ("Price: {$price}\nQuantity: {$partQuantity}\nsubPrice: {$subPrice}\nPrePrice: ");
                 // echo json_encode($priceArr);
                 // echo ("\nTotal: {$total}\n");
 
               }
-                $woocommerce->cart->set_session();
-                // header('Content-type: application/json');
-                // echo json_encode($value);
-                wp_die();
+              $total = array_sum($priceArr);
+
+              foreach($value['tmpost_data']['productData'] as $part=>$option){
+                if($value['key'] == $partId){
+                  $woocommerce->cart->cart_contents[$meta]['tmpost_data']['productData'][$part]['setPrice'] = "{$total}";
+                  // $woocommerce->cart->set_session();
+                  // wp_die();
+                }
+              }
+              $woocommerce->cart->set_session();
+              // header('Content-type: application/json');
+              // echo json_encode($value);
+              wp_die();
                 
             }
           }
@@ -487,7 +507,7 @@ class MYCAjax{
         for($x = 0; $x <= $countVar; $x++){
             //VALIDATE IF PRODUCT EXISTS AND OPTION IS NOT NULL
           if(isset($cart_item["custom_data_{$x}"]) && $cart_item["custom_data_{$x}"] && $cart_item["custom_data_{$x}"]['Option']!=null){
-            if($cart_item["custom_data_{$x}"]['Price'] > 0){
+            if($cart_item["custom_data_{$x}"]['Price'] > 0 && $cart_item['canvas'] == null){
               
               $other_data[] = array(
                   //OUTPUT FIRST FIELD (PRODUCT NAME)
@@ -498,7 +518,16 @@ class MYCAjax{
                               '.$cart_item["custom_data_{$x}"]['Image'].'<br /><span class="product-meta-no-image"><strong>Quantity:</strong> '.$cart_item["custom_data_{$x}"]['Quantity'].'<br /><strong>Price Per Part:</strong> $'.$cart_item["custom_data_{$x}"]['Price'].'<br /><strong>Total:</strong> $'.$cart_item["custom_data_{$x}"]['Quantity']*$cart_item["custom_data_{$x}"]['Price'].'</span><i class="fa-pencil updatePricingEdit"></i></span></p><div class="updatePricing"></div>'
               );
               
-            } else {
+            } elseif($cart_item["custom_data_{$x}"]['Price'] > 0 && $cart_item['canvas'] != null){
+                $other_data[] = array(
+                    //OUTPUT FIRST FIELD (PRODUCT NAME)
+                    'name' => $cart_item["custom_data_{$x}"]['Option'],
+                    //OUTPUT EVERYTHING ELSE AND SET IT TO THE VALUE of 'value' KEY
+                    'value' =>  '<p class="product-meta">
+                                <span class="cpf-img-on-cart">
+                                '.$cart_item["custom_data_{$x}"]['Image'].'<br /><span class="product-meta-no-image"><strong>Quantity:</strong> '.$cart_item['quantity'].'<br /><strong>Price Per Set:</strong> $'.$cart_item["custom_data_{$x}"]['setPrice'].'<br /><strong>Total:</strong> $'.$cart_item['quantity']*$cart_item["custom_data_{$x}"]['setPrice'].'</span><i class="fa-pencil updatePricingEdit"></i></span></p><div class="updatePricing"></div>'
+                );
+            }else {
               //SET CUSTOM TEMPLATE OF OUTPUT
               $other_data[] = array(
                   //OUTPUT FIRST FIELD (PRODUCT NAME)

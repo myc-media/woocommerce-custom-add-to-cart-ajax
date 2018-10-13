@@ -1669,7 +1669,8 @@ h1.product_title.entry-title {
   text-align: center; }
 
 .updatePricing i {
-  display: block; }
+  display: block;
+  cursor: pointer; }
 
 .updatePricing span.close {
   background: #ed2d34;
@@ -1695,7 +1696,7 @@ h1.product_title.entry-title {
   color: #ed2d34;
   font-weight: bold !important;
   padding: 1%;
-  max-width: 150px; }
+  max-width: 200px; }
 
 .cpf-img-on-cart i {
   cursor: pointer; }
