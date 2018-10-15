@@ -1426,7 +1426,7 @@ jQuery('document').ready(function($){
                 'title': regTitle
               },
               success: function(result){
-
+                console.dir(result);
                 $('.shop_table button.button').removeAttr('disabled');
                 $('.shop_table button.button[name="update_cart"]').trigger('click');
                 // $(document).ajaxStop(function(){
