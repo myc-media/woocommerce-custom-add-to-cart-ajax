@@ -1085,7 +1085,7 @@ jQuery('document').ready(function($){
                   $('.redLoader').removeClass('loaderPosition');
               },
               error: function(){
-                console.log('error');
+                ('error');console.log
               }
             });
           });
@@ -1165,38 +1165,38 @@ jQuery('document').ready(function($){
   ********************/
 
   // HIDE EDIT OPTIONS ON MINICART FOR SETS
-  async function waitLoad(){
-    while(!document.querySelector(".mini_cart_item span.product-meta-no-image")) {
-      await new Promise(r => setTimeout(r, 500));
-    }
-    $('.mini_cart_item').each(function(i, e){
-      var thisImg = $(e).find('a').find('img');
-      if($(thisImg).hasClass('wp-post-image')){
-
-      } else {
-        $(e).find('.updatePricingEdit').remove();
-        $(e).find('.product-meta-no-image').remove();
-      }
-    });
-  }
+  // async function waitLoad(){
+  //   while(!document.querySelector(".mini_cart_item span.product-meta-no-image")) {
+  //     await new Promise(r => setTimeout(r, 500));
+  //   }
+  //   $('.mini_cart_item').each(function(i, e){
+  //     var thisImg = $(e).find('a').find('img');
+  //     if($(thisImg).hasClass('wp-post-image')){
+  //
+  //     } else {
+  //       $(e).find('.updatePricingEdit').remove();
+  //       $(e).find('.product-meta-no-image').remove();
+  //     }
+  //   });
+  // }
 
   // HIDE EDIT OPTIONS ON CART FOR SETS
-  async function waitCartLoad(){
-    while(!$('.updatePricingEdit')){
-      await new Promise(r => setTimeout(r, 500));
-    }
-
-    var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
-
-    rowWooCart.each(function(i, e){
-      console.log(e);
-      if($(e).children('.quantity').length > 0){
-        $(e).closest('tr').find('.updatePricingEdit').remove();
-        $(e).closest('tr').find('.updatePricing').html("");
-        $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
-      }
-    });
-  }
+  // async function waitCartLoad(){
+  //   while(!$('.updatePricingEdit')){
+  //     await new Promise(r => setTimeout(r, 500));
+  //   }
+  //
+  //   var rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+  //
+  //   rowWooCart.each(function(i, e){
+  //     // console.log(e);
+  //     if($(e).children('.quantity').length > 0){
+  //       $(e).closest('tr').find('.updatePricingEdit').remove();
+  //       $(e).closest('tr').find('.updatePricing').html("");
+  //       $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+  //     }
+  //   });
+  // }
 
   // HIDE EDIT OPTIONS ON CHECKOUT FOR SETS AND PARTS
   async function waitCheckoutLoad(){
@@ -1216,15 +1216,15 @@ jQuery('document').ready(function($){
   }
 
   //CALL FUNCTIONS FOR HIDING SETS/PARTS ON MINICART, CART, & CHECKOUT
-  waitLoad();
-  waitCartLoad();
+  // waitLoad();
+  // waitCartLoad();
   waitCheckoutLoad();
 
   // WAIT FOR ALL AJAX REQUESTS TO STOP AND RUN FUNCTIONS FOR HIDING SETS/PARTS ON MINICART, CART & CHECKOUT
   $(document).ajaxStop(function () {
 
-      waitCartLoad();
-      waitLoad();
+      // waitCartLoad();
+      // waitLoad();
       waitCheckoutLoad();
 
   });
@@ -1270,6 +1270,7 @@ jQuery('document').ready(function($){
     var inputVal;//VALUE OF INPUT FOR QUANTITY INPUT BOX
     var num;// VALUE OF QUANTITY FROM AJAX RESPONSE
     var returnValue;//RETURN INPUT VALUE FROM FUNCTION
+    var setPrice; //VARIABLE FOR GETTING SET PRICE FROM AJAX GET REQUEST
 
     // SETS DEFAULT FOR DIV THAT CONTAINS UPDATE ELEMENTS AS BLANK
     $('.updatePricing').html('');
@@ -1294,21 +1295,25 @@ jQuery('document').ready(function($){
       },
       success: function(response){
           //SETS num IF RESPONSE RETURNS NON NILL QUANTITY AND RENDERS UPDATE ELEMENTS
-          if(response['Quantity'] != null && response['Option'] == regTitle){
+          if(response['Quantity'] != null && response['Option'] == regTitle) {
 
               //SETS QUANTITY RECEIVED FROM AJAX GET REQUEST FROM SERVER
               num = parseInt(response['Quantity']);
-
-              //RENDER ELEMENTS FOR UPDATE OPTIONS
-              htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a><span class="close">Close</span>`);
-
-              //PASSES QUANTITY RECEIVED FROM AJAX REQUEST TO FUNCTION FOR PROCESSISNG QUANTITY
-              setQuantity(num);
-              
-              //SETS QUANTITY VALUE FROM FUNCTION TO SEND TO POST AJAX
-              returnValue = setQuantity(num);
-
+          } else {
+              num = parseInt(response['quantity']);
+              // $(response).each(function(key, value){
+              //     setPrice = value.line_total / response['quantity'];
+              // });
           }
+
+          //RENDER ELEMENTS FOR UPDATE OPTIONS
+          htmlDiv.html(`<input class="partQuantityUpdate" type="text" val="" /><span><i class="fa-plus"></i><i class="fa-minus"></i></span><a class="button" href="#">Update cart</a><span class="close">Close</span>`);
+
+          //PASSES QUANTITY RECEIVED FROM AJAX REQUEST TO FUNCTION FOR PROCESSISNG QUANTITY
+          setQuantity(num);
+
+          //SETS QUANTITY VALUE FROM FUNCTION TO SEND TO POST AJAX
+          returnValue = setQuantity(num);
 
           //REMOVES ELEMENTS FROM updatePricing DIV IF CLOSE IS CLICKED
           $(htmlDiv).on('click', 'span.close', function(){
@@ -1347,14 +1352,66 @@ jQuery('document').ready(function($){
           });
 
           //UPDATE PRICING BASED ON USER KEYBOARD INPUT AND CHECK WITH REGEX FOR INVALID INPUTS
-          $('.updatePricing input').on('keypress keyup blur', function(event){
+          $('.updatePricing').on('keyup', 'input', function(event){
             // $(this).val($(this).val().replace(/^[0+\.][a-zA-z+\.]*$/g, '')); -> REGEX
             // REGEX OUT INVALID USER INPUTS
             $(this).val($(this).val().replace(/(?:^0|[1-9][.]+|[a-zA-Z])/g, ''));
             if((event.which != 46 || $(this).val().indexOf('.') != -1 ) && (event.which < 48 || event.which > 57)){
               event.preventDefault();
             }
+            setQuantity(htmlDiv.find('input').val());
+            returnValue = setQuantity(htmlDiv.find('input').val());
+            if(event.keyCode === 13){
+                // $(htmlDiv).find('a.button').on('click', function(e){
+                    event.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: modalAjaxURL.ajaxurl,
+                        data: {
+                            'action': 'parts_post_quantity_update',
+                            'partId': id,
+                            'partQuantity': returnValue,
+                            'title': regTitle
+                        },
+                        success: function(result){
+
+                            $('.shop_table button.button').removeAttr('disabled');
+                            $('.shop_table button.button[name="update_cart"]').trigger('click');
+                            // $(document).ajaxStop(function(){
+                            //     rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+                            //
+                            //     rowWooCart.each(function(i, e){
+                            //         if($(e).children('.quantity').length > 0){
+                            //             $(e).closest('tr').find('.updatePricingEdit').remove();
+                            //             $(e).closest('tr').find('.updatePricing').html("");
+                            //             $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+                            //         }
+                            //     });
+                            // });
+
+                            $.ajax({
+                                type: 'GET',
+                                url: modalAjaxURL.ajaxurl,
+                                data: {
+                                    'action': 'custom_mini_cart_update'
+                                },
+                                success: function(response){
+
+                                    $('.widget_shopping_cart_content').html(response);
+                                    $('.nectar-slide-in-cart.open, .woocommerce-cart-form__cart-item').removeClass('ajaxLoading');
+                                }
+                            });
+
+                        },
+                        beforeSend: function(){
+                            $(htmlDiv).append(loadingImg);
+                            $('.nectar-slide-in-cart.open, .woocommerce-cart-form__cart-item').addClass('ajaxLoading');
+                        }
+                    });
+                // });
+            }
           });
+
           
           //AJAX POST TO UPDATE CART ON SERVER AFTER CLICKING UPDATE CART
           $(htmlDiv).find('a.button').on('click', function(e){
@@ -1371,18 +1428,18 @@ jQuery('document').ready(function($){
               success: function(result){
 
                 $('.shop_table button.button').removeAttr('disabled');
-                $('.shop_table button.button').trigger('click');
-                $(document).ajaxStop(function(){
-                  rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
-
-                  rowWooCart.each(function(i, e){
-                    if($(e).children('.quantity').length > 0){
-                      $(e).closest('tr').find('.updatePricingEdit').remove();
-                      $(e).closest('tr').find('.updatePricing').html("");
-                      $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
-                    }
-                  });
-                });
+                $('.shop_table button.button[name="update_cart"]').trigger('click');
+                // $(document).ajaxStop(function(){
+                //   rowWooCart = $('tr.woocommerce-cart-form__cart-item td.product-quantity');
+                //
+                //   rowWooCart.each(function(i, e){
+                //     if($(e).children('.quantity').length > 0){
+                //       $(e).closest('tr').find('.updatePricingEdit').remove();
+                //       $(e).closest('tr').find('.updatePricing').html("");
+                //       $(e).closest('tr').find('.product-meta span.product-meta-no-image').remove();
+                //     }
+                //   });
+                // });
 
               $.ajax({
                   type: 'GET',
@@ -1393,12 +1450,14 @@ jQuery('document').ready(function($){
                   success: function(response){
 
                       $('.widget_shopping_cart_content').html(response);
+                      $('.nectar-slide-in-cart.open, .woocommerce-cart-form__cart-item').removeClass('ajaxLoading');
                   }
               });
 
               },
               beforeSend: function(){
                 $(htmlDiv).append(loadingImg);
+                $('.nectar-slide-in-cart.open, .woocommerce-cart-form__cart-item').addClass('ajaxLoading');
               }
             });
           });
