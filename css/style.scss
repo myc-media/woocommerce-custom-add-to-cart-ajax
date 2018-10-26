@@ -117,8 +117,16 @@ body {
 		header#top {
 			nav {
 				&>ul {
+					li.loginout {
+						display: none !important;
+					}
 					&>li.megamenu {
 						&>ul {
+							&.sub-menu {
+								left: -7.7% !important;
+								//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+								transform: translateX(0) !important;
+							}
 							li {
 								&.mobilMenuHead ul li a:hover {
 									background: $color_mariner_approx !important;
@@ -817,14 +825,25 @@ body {
 				padding: 1%;
 				ul {
 					margin-left: 0 !important;
-					&.menu li a {
-						padding: 1% 5% !important;
-						font-weight: bold;
-						color: $white;
+					&.menu {
+						li {
+							a {
+								padding: 1% 5% !important;
+								font-weight: bold;
+								color: $white;
+							}
+						}
 					}
 				}
-				.widgetHeading a {
+				.widgetHeading {
+					list-style: none !important;
+					font-size: 1.3em !important;
+					font-weight: bold;
+					background: transparent !important;
 					color: $black !important;
+					a {
+						color: $black !important;
+					}
 				}
 			}
 		}
@@ -928,6 +947,71 @@ body {
 						//Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
 						transition: .3s all ease-out;
 					}
+				}
+			}
+		}
+		.updatePricing {
+			width: 200px;
+			display: flex;
+			position: relative;
+			input.partQuantityUpdate {
+				border: 1px solid #cccccc !important;
+				flex-basis: 40%;
+				text-align: center;
+			}
+			i {
+				display: block;
+				cursor: pointer;
+			}
+			span.close {
+				background: $color_alizarin_crimson_approx;
+				position: absolute;
+				right: -50%;
+				top: 50%;
+				transform: translateY(-50%);
+				padding: 4%;
+				color: $white;
+				cursor: pointer;
+			}
+		}
+		&.widget{
+			.mini_cart_item {
+				.updatePricing {
+					flex-wrap: wrap;
+					width: 150px;
+					input.partQuantityUpdate {
+						flex-basis: 78% !important;
+						margin-bottom: 10px !important;
+					}
+					span {
+						i {
+							cursor: pointer !important;
+						}
+					}
+					span.close {
+						position: relative;
+						top: auto;
+						right: auto;
+						margin-top: 20px;
+					}
+					a.button {
+						flex-basis: 100%;
+						color: $white !important;
+					}
+					img[src*='gif'] {
+						height: 100% !important;
+					}
+				}
+				.quantity {
+					// .woocommerce-Price-amount {
+					// 	&.amount {
+						background: $color_alizarin_crimson_approx !important;
+						color: $white !important;
+						padding: 6% !important;
+						text-align: center;
+						box-sizing: border-box;
+					// 	}
+					// }
 				}
 			}
 		}
@@ -1068,7 +1152,7 @@ body {
 						}
 					}
 					&:before {
-						z-index: 0;
+						z-index: -1;
 						width: 100%;
 						height: 100%;
 						display: block;
@@ -1284,43 +1368,49 @@ body {
 	}
 	/************ESSO**********/
 	&.page-template-page-esso-parts-left-sidebar {
-		.ModalRow {
-			&.row {
-				h1:not(.entry-title) {
-					color: $color_alizarin_crimson_approx;
-				}
-			}
-		}
-		.tabbed {
-			&>ul {
-				li {
-					a.active-tab {
-						background-color: $color_alizarin_crimson_approx !important;
-						border-color: $color_alizarin_crimson_approx !important;
+		.container.main-content {
+			max-width: 1920px !important;
+			.ModalRow {
+				&.row {
+					h1:not(.entry-title) {
+						color: $color_alizarin_crimson_approx;
 					}
 				}
 			}
-		}
-		#sidebar {
-			@include sidebar($white, 1%, 2em, 1%, 3% 1%, $color_alizarin_crimson_approx, $color_alizarin_crimson_approx, 2%, 2%, $color_monza_approx, 1% 5%, $black, transparent);
+			.tabbed {
+				&>ul {
+					li {
+						a.active-tab {
+							background-color: $color_alizarin_crimson_approx !important;
+							border-color: $color_alizarin_crimson_approx !important;
+						}
+					}
+				}
+			}
+			#sidebar {
+				@include sidebar($white, 1%, 2em, 1%, 3% 1%, $color_alizarin_crimson_approx, $color_alizarin_crimson_approx, 2%, 2%, $color_monza_approx, 1% 5%, $black, transparent);
+			}
 		}
 	}
 	&.page-template-page-esso-left-sidebar {
-		h1 {
-			color: $color_alizarin_crimson_approx;
-		}
-		.tabbed {
-			&>ul {
-				li {
-					a.active-tab {
-						background-color: $color_alizarin_crimson_approx !important;
-						border-color: $color_alizarin_crimson_approx !important;
+		.container.main-content {
+			max-width: 1920px !important;
+			h1 {
+				color: $color_alizarin_crimson_approx;
+			}
+			.tabbed {
+				&>ul {
+					li {
+						a.active-tab {
+							background-color: $color_alizarin_crimson_approx !important;
+							border-color: $color_alizarin_crimson_approx !important;
+						}
 					}
 				}
 			}
-		}
-		#sidebar {
-			@include sidebar($white, 1%, 2em, 1%, 3% 1%, $color_alizarin_crimson_approx, $color_alizarin_crimson_approx, 2%, 2%, $color_monza_approx, 1% 5%, $black, transparent);
+			#sidebar {
+				@include sidebar($white, 1%, 2em, 1%, 3% 1%, $color_alizarin_crimson_approx, $color_alizarin_crimson_approx, 2%, 2%, $color_monza_approx, 1% 5%, $black, transparent);
+			}
 		}
 	}
 }
@@ -1401,120 +1491,12 @@ body {
 	}
 }
 
-
-
-
-
 .hide_cart_widget_if_empty {
 	max-height: 200px !important;
 	overflow: scroll;
 }
 
-// .ajaxColumnLink canvas {
-// 	width: 100px !important;
-// 	height: auto !important;
-// 	position: fixed;
-// 	right: 4%;
-// 	top: 20%;
-// }
-// .woocommerce-page .widget.woocommerce ul.product_list_widget li img {
-// 	float: none !important;
-// 	height: auto !important;
-// 	width: 62px !important;
-// }
 
-// .wc-item-meta li {
-// 	flex-basis: 100%;
-// 	&:last-of-type {
-// 		display: flex;
-// 		flex-wrap: wrap;
-// 		p {
-// 			flex-basis: 100%;
-// 		}
-// 	}
-// 	p {
-// 		padding-bottom: 0;
-// 	}
-// }
-
-
-.page-template-page-esso-left-sidebar .container.main-content {
-	max-width: 1920px !important;
-}
-.page-template-page-esso-parts-left-sidebar .container.main-content {
-	max-width: 1920px !important;
-}
-.row #sidebar ~ .widget .widgetHeading {
-	list-style: none !important;
-	font-size: 1.3em !important;
-	font-weight: bold;
-	background: transparent !important;
-	color: $black !important;
-}
-.page-template-page-rdr-left-sidebar #sidebar {
-	h4 {
-		color: $black !important;
-	}
-	ul li {
-		background: $black !important;
-		&:hover {
-			background: $color_shark_approx !important;
-		}
-		&.widgetHeading a:not([href^='myc']) {
-			color: $color_pizazz_approx!important;
-		}
-	}
-}
-.page-template-page-rdr-parts-left-sidebar #sidebar {
-	h4 {
-		color: $black !important;
-	}
-	ul li {
-		background: $black !important;
-		&:hover {
-			background: $color_shark_approx !important;
-		}
-		&.widgetHeading a:not([href^='myc']) {
-			color: $color_pizazz_approx!important;
-		}
-	}
-}
-// .woocommerce-mini-cart li img {
-// 	width: 25% !important;
-// }
-.sf-menu ul.sub-menu {
-	left: -8.5% !important;
-	//Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-	transform: translateX(0) !important;
-}
-#header-outer li.loginout {
-	display: none !important;
-}
-
-.updatePricing {
-	width: 200px;
-	display: flex;
-	position: relative;
-	input.partQuantityUpdate {
-		border: 1px solid #cccccc !important;
-		flex-basis: 40%;
-		text-align: center;
-	}
-	i {
-		display: block;
-		cursor: pointer;
-	}
-	span.close {
-		background: $color_alizarin_crimson_approx;
-		position: absolute;
-		right: -50%;
-		top: 50%;
-		transform: translateY(-50%);
-		padding: 4%;
-		color: $white;
-		cursor: pointer;
-	}
-}
 .cpf-img-on-cart {
 	border: none;
 	strong {
@@ -1537,46 +1519,4 @@ body {
 
 dd[class*='variation'] {
     border-bottom: 1px dotted rgba(0,0,0,0.2);
-}
-
-.widget{
-	.mini_cart_item {
-		.updatePricing {
-			flex-wrap: wrap;
-			width: 150px;
-			input.partQuantityUpdate {
-				flex-basis: 78% !important;
-				margin-bottom: 10px !important;
-			}
-			span {
-				i {
-					cursor: pointer !important;
-				}
-			}
-			span.close {
-				position: relative;
-				top: auto;
-				right: auto;
-				margin-top: 20px;
-			}
-			a.button {
-				flex-basis: 100%;
-				color: $white !important;
-			}
-			img[src*='gif'] {
-				height: 100% !important;
-			}
-		}
-		.quantity {
-			// .woocommerce-Price-amount {
-			// 	&.amount {
-				background: $color_alizarin_crimson_approx !important;
-				color: $white !important;
-				padding: 6% !important;
-				text-align: center;
-				box-sizing: border-box;
-			// 	}
-			// }
-		}
-	}
 }
