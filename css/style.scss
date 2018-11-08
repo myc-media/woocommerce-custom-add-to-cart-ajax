@@ -849,6 +849,34 @@ body {
 		}
 	}
 	.woocommerce {
+		// .cart {
+		// 	& > thead, & > tbody {
+		// 		& > tr, & > tr.cart_item {
+		// 			display: grid;
+		// 			grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 2fr 2fr 2fr 2fr;
+		// 			& > td, & > th {
+		// 				&.product-remove {
+		// 					grid-area: remove;
+		// 				}
+		// 				&.product-thumbnail {
+		// 					grid-area: thumb;
+		// 				}
+		// 				&.product-name {
+		// 					grid-area: name;
+		// 				}
+		// 				&.product-price {
+		// 					grid-area: price;
+		// 				}
+		// 				&.product-quantity {
+		// 					grid-area: quantity;
+		// 				}
+		// 				&.product-subtotal {
+		// 					grid-area: sub;
+		// 				}
+		// 			}
+		// 		}	
+		// 	}
+		// }
 		td.product-name {
 			a {
 				display: none;
@@ -1130,6 +1158,13 @@ body {
 							height: auto !important;
 							max-width: 100px !important;
 							width: auto !important;
+						}
+						&.product-name {
+							dl.variation {
+								img {
+									max-width: 80px !important;
+								}
+							}
 						}
 					}
 					&.ajaxLoading{
@@ -1473,6 +1508,108 @@ body {
 			#sidebar {
 				~ .widget {
 					width: 100% !important;
+				}
+			}
+		}
+	}
+}
+
+@media all and (min-width: 769px){
+	body {
+		&.woocommerce-cart {
+			.woocommerce {
+				.cart {
+					& > thead {
+						& > tr{
+							display: grid;
+							grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 2fr 2fr 2fr 2fr;
+							& > th {
+								&.product-remove {
+									grid-area: remove;
+								}
+								&.product-thumbnail {
+									grid-area: thumb;
+								}
+								&.product-name {
+									grid-area: name;
+								}
+								&.product-price {
+									grid-area: price;
+								}
+								&.product-quantity {
+									grid-area: quantity;
+								}
+								&.product-subtotal {
+									grid-area: sub;
+								}
+							}
+						}	
+					}
+					& > tbody {
+						& > tr.cart_item {
+							display: grid;
+							grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 2fr 2fr 2fr 2fr;
+							& > td {
+								&.product-remove {
+									grid-area: remove;
+								}
+								&.product-thumbnail {
+									grid-area: thumb;
+								}
+								&.product-name {
+									grid-area: name;
+								}
+								&.product-price {
+									grid-area: price;
+								}
+								&.product-quantity {
+									grid-area: quantity;
+								}
+								&.product-subtotal {
+									grid-area: sub;
+								}
+								dl.variation {
+									dd {
+										padding-left: 0;
+									}
+								}
+							}
+						}	
+					}
+				}
+			}
+		}
+		&.woocommerce-checkout {
+			.woocommerce {
+				form.checkout {
+					.cart_item {
+						dl.variation {
+							dd {
+								padding-left: 0 !important;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+@media all and (max-width: 768px){
+	body {
+		&.woocommerce-cart {
+			.woocommerce {
+				.cart {
+					& > thead, & > tbody {
+						& > tr, & > tr.cart_item {
+							& > td, & > th {
+								&.product-name {
+									dl.variation {
+										justify-content: flex-end;
+									}
+								}
+							}
+						}	
+					}
 				}
 			}
 		}
