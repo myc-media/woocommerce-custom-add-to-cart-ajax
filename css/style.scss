@@ -1448,6 +1448,14 @@ body {
 			}
 		}
 	}
+	&.page-template-page-mobil-parts-left-sidebar {
+		.container.main-content {
+			max-width: 1920px !important; }
+	}
+	&.page-template-page-mobil-left-sidebar {
+		.container.main-content {
+			max-width: 1920px !important; }
+	}
 }
 /*******MEDIA QUERY************/
 @media all and(max-width: 1000px) {
@@ -1522,8 +1530,9 @@ body {
 					& > thead {
 						& > tr{
 							display: grid;
-							grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 2fr 2fr 2fr 2fr;
+							grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 4fr 2fr 2fr 2fr;
 							& > th {
+								padding: 5% !important;
 								&.product-remove {
 									grid-area: remove;
 								}
@@ -1548,8 +1557,9 @@ body {
 					& > tbody {
 						& > tr.cart_item {
 							display: grid;
-							grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 2fr 2fr 2fr 2fr;
+							grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/ 1fr 1fr 4fr 2fr 2fr 2fr;
 							& > td {
+								padding: 5% !important;
 								&.product-remove {
 									grid-area: remove;
 								}
@@ -1571,6 +1581,7 @@ body {
 								dl.variation {
 									dd {
 										padding-left: 0;
+										text-align: right;
 									}
 								}
 							}

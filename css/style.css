@@ -1325,6 +1325,12 @@ body.page-template-page-esso-left-sidebar .container.main-content #sidebar ~ .wi
 body.page-template-page-esso-left-sidebar .container.main-content #sidebar ~ .widget .widgetHeading a {
   color: black !important; }
 
+body.page-template-page-mobil-parts-left-sidebar .container.main-content {
+  max-width: 1920px !important; }
+
+body.page-template-page-mobil-left-sidebar .container.main-content {
+  max-width: 1920px !important; }
+
 /*******MEDIA QUERY************/
 @media all and (max-width: 1000px) {
   body.page-template .productMobileFlex {
@@ -1361,7 +1367,9 @@ body.page-template-page-esso-left-sidebar .container.main-content #sidebar ~ .wi
 @media all and (min-width: 769px) {
   body.woocommerce-cart .woocommerce .cart > thead > tr {
     display: grid;
-    grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/1fr 1fr 2fr 2fr 2fr 2fr; }
+    grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/1fr 1fr 4fr 2fr 2fr 2fr; }
+  body.woocommerce-cart .woocommerce .cart > thead > tr > th {
+    padding: 5% !important; }
   body.woocommerce-cart .woocommerce .cart > thead > tr > th.product-remove {
     grid-area: remove; }
   body.woocommerce-cart .woocommerce .cart > thead > tr > th.product-thumbnail {
@@ -1376,7 +1384,9 @@ body.page-template-page-esso-left-sidebar .container.main-content #sidebar ~ .wi
     grid-area: sub; }
   body.woocommerce-cart .woocommerce .cart > tbody > tr.cart_item {
     display: grid;
-    grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/1fr 1fr 2fr 2fr 2fr 2fr; }
+    grid-template: "remove thumb name price quantity sub" minmax(100px, auto)/1fr 1fr 4fr 2fr 2fr 2fr; }
+  body.woocommerce-cart .woocommerce .cart > tbody > tr.cart_item > td {
+    padding: 5% !important; }
   body.woocommerce-cart .woocommerce .cart > tbody > tr.cart_item > td.product-remove {
     grid-area: remove; }
   body.woocommerce-cart .woocommerce .cart > tbody > tr.cart_item > td.product-thumbnail {
@@ -1390,7 +1400,8 @@ body.page-template-page-esso-left-sidebar .container.main-content #sidebar ~ .wi
   body.woocommerce-cart .woocommerce .cart > tbody > tr.cart_item > td.product-subtotal {
     grid-area: sub; }
   body.woocommerce-cart .woocommerce .cart > tbody > tr.cart_item > td dl.variation dd {
-    padding-left: 0; }
+    padding-left: 0;
+    text-align: right; }
   body.woocommerce-checkout .woocommerce form.checkout .cart_item dl.variation dd {
     padding-left: 0 !important; } }
 
