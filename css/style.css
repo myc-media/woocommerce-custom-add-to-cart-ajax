@@ -1269,6 +1269,9 @@ body.page-template-page-esso-left-sidebar .container.main-content #sidebar ul.me
   margin: 2%;
   padding: 2%; }
 
+body.page-template-page-esso-left-sidebar .container.main-content #sidebar ul.menu li.current-menu-item {
+  background: #cc0c14 !important; }
+
 body.page-template-page-esso-left-sidebar .container.main-content #sidebar ul.menu li:not(.widgetHeading):hover {
   background: #cc0c14 !important;
   transition: all .1s linear; }
